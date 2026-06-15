@@ -89,6 +89,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--brand2);box-shadow:0 
 .mgr-card{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px;margin-bottom:8px}
 .mgr-card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
 .mgr-card-name{font-weight:600;font-size:13px}
+.editable-cell:hover{background:var(--bg);border-radius:4px;outline:1px solid var(--border2)}
 /* Charts */
 .charts-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
 .chart-box{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px}
@@ -193,7 +194,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--brand2);box-shadow:0 
   <div class="card">
     <div class="table-wrap"><table>
       <thead><tr>
-        <th>Дата</th><th>Магазин</th><th>Замовл.</th><th>Відмови</th><th>Виручка</th><th>Оплати</th><th>Закупка</th><th>Реклама $</th><th>Штраф</th><th>З/П</th><th>Чистий прибуток</th><th>CPO план $</th><th>CPO факт $</th><th>Всього замовл.</th><th>КЦ</th><th>Дії</th>
+        <th>Дата</th><th>Магазин</th><th>Всього</th><th>Підтв.</th><th>Відмови</th><th>Виручка</th><th>Оплати</th><th>Закупка</th><th>Реклама $</th><th>Штраф</th><th>З/П</th><th>Чистий прибуток</th><th>CPO план $</th><th>CPO факт $</th><th>КЦ</th><th>Дії</th>
       </tr></thead>
       <tbody id="daily-tbody"><tr><td colspan="10" class="loading">Завантаження...</td></tr></tbody>
     </table></div>
@@ -877,23 +878,18 @@ async function loadDaily() {
     return `<tr>
       <td>${fdate(r.report_date)}</td>
       <td>${mkBadge(r.stores?.name || storeName(r.store_id))}</td>
+      <td class="td-right">${totalOrders>0?num(totalOrders):'—'}</td>
       <td class="td-right">${num(r.confirmed_orders)}</td>
       <td class="td-right">${r.refusals>0?`<span style="color:var(--red)">${num(r.refusals)}</span>`:'0'}</td>
       <td class="td-right">${uah(Number(r.revenue))}</td>
-      <td class="td-right">
-        <div style="display:flex;align-items:center;justify-content:flex-end;gap:4px">
-          <span id="payments-view-${r.id}">${uah(Number(r.card_payments))}</span>
-          <button class="btn btn-ghost btn-sm" style="padding:2px 6px" onclick="editPayments('${r.id}', ${Number(r.card_payments)})" title="Редагувати">✏️</button>
-        </div>
-      </td>
+      <td class="td-right editable-cell" id="payments-view-${r.id}" onclick="editPayments('${r.id}', ${Number(r.card_payments)})" title="Натисни щоб редагувати" style="cursor:pointer">${uah(Number(r.card_payments))}</td>
       <td class="td-right">${uah(Number(r.purchase_cost))}</td>
-      <td class="td-right">${usd(Number(r.ads_budget_usd))}</td>
+      <td class="td-right editable-cell" id="ads-view-${r.id}" onclick="editAds('${r.id}', ${Number(r.ads_budget_usd)})" title="Натисни щоб редагувати" style="cursor:pointer">${usd(Number(r.ads_budget_usd))}</td>
       <td class="td-right" style="color:var(--red)">${penaltyR>0?'-'+uah(penaltyR):'—'}</td>
       <td class="td-right" style="color:var(--red)">${mgrSal>0?'-'+uah(mgrSal):'—'}</td>
       <td class="td-right">${profitBadge(profit)}</td>
       <td class="td-right">${cpoFixedUsd!==null?usd(cpoFixedUsd):'—'}</td>
       <td class="td-right">${r.ads_budget_usd>0?usd(cpoFact):'—'}</td>
-      <td class="td-right">${totalOrders>0?num(totalOrders):'—'}</td>
       <td class="td-right">${kc!==null?pct(kc):'—'}</td>
       <td><button class="btn btn-danger btn-sm" onclick="deleteDaily('${r.id}')">🗑</button></td>
     </tr>`
@@ -909,15 +905,41 @@ async function deleteDaily(id) {
 
 function editPayments(id, current) {
   const cell = document.getElementById('payments-view-' + id)
-  cell.innerHTML = `<input type="number" id="payments-input-${id}" value="${current}" style="width:90px;padding:4px 6px;font-size:12px;border:1px solid var(--border2);border-radius:4px;text-align:right" onkeydown="if(event.key==='Enter')savePayments('${id}')">
-    <button class="btn btn-primary btn-sm" style="padding:2px 8px;margin-left:4px" onclick="savePayments('${id}')">✓</button>`
+  if (cell.querySelector('input')) return
+  cell.innerHTML = `<input type="number" id="payments-input-${id}" value="${current}" style="width:80px;padding:3px 6px;font-size:12px;border:1px solid var(--brand);border-radius:4px;text-align:right" onkeydown="if(event.key==='Enter')savePayments('${id}');if(event.key==='Escape')loadDaily()" onblur="savePayments('${id}')">`
   document.getElementById('payments-input-'+id).focus()
+  document.getElementById('payments-input-'+id).select()
 }
 
 async function savePayments(id) {
   const input = document.getElementById('payments-input-' + id)
+  if (!input) return
   const value = Number(input.value) || 0
   await db.from('daily_reports').update({ card_payments: value }).eq('id', id)
+  toast('Збережено')
+  loadDaily()
+}
+
+function editAds(id, current) {
+  const cell = document.getElementById('ads-view-' + id)
+  if (cell.querySelector('input')) return
+  cell.innerHTML = `<input type="number" id="ads-input-${id}" value="${current}" step="0.01" style="width:70px;padding:3px 6px;font-size:12px;border:1px solid var(--brand);border-radius:4px;text-align:right" onkeydown="if(event.key==='Enter')saveAds('${id}');if(event.key==='Escape')loadDaily()" onblur="saveAds('${id}')">`
+  document.getElementById('ads-input-'+id).focus()
+  document.getElementById('ads-input-'+id).select()
+}
+
+async function saveAds(id) {
+  const input = document.getElementById('ads-input-' + id)
+  if (!input) return
+  const value = Number(input.value) || 0
+  const { data: existing } = await db.from('daily_reports').select('confirmed_orders, cpo_fixed').eq('id', id).single()
+  const orders = existing?.confirmed_orders || 0
+  const hasFixedCpo = existing?.cpo_fixed !== null && existing?.cpo_fixed !== undefined
+  const update = { ads_budget_usd: value, updated_at: new Date().toISOString() }
+  if (!hasFixedCpo && value > 0 && orders > 0) {
+    update.cpo_fixed = (value * USD_RATE) / orders
+  }
+  await db.from('daily_reports').update(update).eq('id', id)
   toast('Збережено')
   loadDaily()
 }
@@ -1699,15 +1721,17 @@ async function syncQuick() {
   const btn = document.getElementById('sync-btn')
   if (btn) { btn.textContent = '⏳...'; btn.setAttribute('disabled','true') }
   try {
+    const to = new Date().toISOString().split('T')[0]
+    const from = new Date(Date.now()-7*24*60*60*1000).toISOString().split('T')[0]
     const res = await fetch('https://lvyssuomgbccjmksetof.supabase.co/functions/v1/salesdrive-sync', {
       method: 'POST',
       headers: { 'Authorization': `Bearer ${sk}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify({})
+      body: JSON.stringify({dateFrom: from, dateTo: to})
     })
     const data = await res.json()
-    toast(data.success ? '✓ ' + data.message : 'Помилка: ' + data.error, data.success)
+    toast(data.success ? '✓ ' + data.message : 'Помилка: ' + (data.error||'невідома'), data.success)
     if (data.success) loadDashboard()
-  } catch(e) { toast('Помилка', false) }
+  } catch(e) { toast('Помилка з\'єднання', false) }
   if (btn) { btn.textContent = '🔄 Оновити з Sales Drive'; btn.removeAttribute('disabled') }
 }
 
