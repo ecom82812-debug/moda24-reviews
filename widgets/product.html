@@ -54,6 +54,7 @@
 .m24r-th img.ok{opacity:1}
 .m24r-rp{grid-area:r;padding:12px 14px;border-radius:12px;background:#F6F3F4;font-size:14px;line-height:1.5;color:#3A3235}
 .m24r-rp b{display:block;font-size:12px;font-weight:600;color:var(--soft);margin-bottom:4px}
+.m24r-feed.na .m24r-fc{animation:none}
 .m24r-ft{grid-area:ft;display:flex;align-items:center;gap:6px;font-size:13px;color:var(--soft)}
 .m24r-ft span{margin-right:auto}
 .m24r-vote{all:unset;box-sizing:border-box;cursor:pointer;display:inline-flex;align-items:center;gap:5px;height:34px;padding:0 11px;border-radius:10px;background:#F6F3F4;color:var(--ink);font-size:13px;font-weight:600;transition:background .2s,color .2s}
@@ -252,7 +253,7 @@
   var THUMB = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M7 10v10H4V10z"/><path d="M7 10l4-7c1.4 0 2.4 1.2 2.1 2.6L12.5 9H18a2 2 0 0 1 2 2.3l-1.2 7A2 2 0 0 1 16.8 20H7"/></svg>';
   var THUMB_D = THUMB.replace('<svg', '<svg style="transform:scaleY(-1)"');
   var votes = (function () { try { return JSON.parse(localStorage.getItem('m24r:votes') || '{}'); } catch (e) { return {}; } })();
-  var all = [], shown = 0, ver = null;
+  var all = [], shown = 0, ver = null, drawn = false;
   function perPage() { return innerWidth >= 981 ? 8 : innerWidth >= 700 ? 6 : 4; }
 
   function apply(items) {
@@ -297,7 +298,8 @@
     }
     $('.m24r-sum').innerHTML = s; $('.m24r-sum').hidden = false;
     var list = all.slice(0, shown);
-    var html = '<div class="m24r-feed ' + LAYOUT + '">' + list.map(function (r, i) {
+    // плавна поява — лише вперше; оновлення (голос, свіжі дані) без мерехтіння
+    var html = '<div class="m24r-feed ' + LAYOUT + (drawn ? ' na' : '') + '">' + list.map(function (r, i) {
       var name = (r.author_name || '').trim() || 'Покупець', my = votes[r.id] || 0;
       var up = (r.up || 0), dn = (r.down || 0);
       return '<article class="m24r-fc" style="animation-delay:' + Math.min(i, 8) * 40 + 'ms">' +
@@ -313,6 +315,7 @@
     var rest = n - shown;
     if (rest > 0) html += '<button type="button" class="m24r-more">' + (rest <= perPage() ? 'Показати ще ' + rest + ' ' + plural(rest, 'відгук', 'відгуки', 'відгуків') : 'Показати ще · залишилось ' + rest) + '</button>';
     $('.m24r-body').innerHTML = html;
+    drawn = true;
   }
 
   /* ---------- перегляд відгуку ---------- */
