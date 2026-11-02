@@ -48,6 +48,7 @@ body { background: #F4F2EF; color: var(--ink); font-family: var(--ff); font-weig
 .login-field input:focus { border-color:var(--ink); background:#fff; }
 .btn-login { width:100%; padding:13px; background:var(--ink); color:#fff; font-family:var(--ff); font-size:10px; font-weight:500; letter-spacing:.18em; text-transform:uppercase; border:none; cursor:pointer; margin-top:8px; transition:background .2s; }
 .btn-login:hover { background:#333; }
+.login-forgot { display:block; margin:14px auto 0; background:none; border:0; font-family:var(--ff); font-size:12px; color:var(--ink); text-decoration:underline; text-underline-offset:3px; cursor:pointer; }
 .login-err { font-size:12px; color:var(--err); text-align:center; margin-top:12px; min-height:18px; }
 
 /* ── APP ───────────────────────────────── */
@@ -230,7 +231,16 @@ body { background: #F4F2EF; color: var(--ink); font-family: var(--ff); font-weig
       <input type="password" id="pwd-input" placeholder="••••••••" autocomplete="current-password">
     </div>
     <button class="btn-login" onclick="tryLogin()">Увійти</button>
+    <button class="login-forgot" type="button" onclick="forgotPassword()">Забули пароль?</button>
     <div class="login-err" id="login-err"></div>
+  </div>
+  <div class="login-box" id="newpwd-box" style="display:none">
+    <div class="login-eyebrow">Новий пароль</div>
+    <div class="login-title">Задайте пароль для входу</div>
+    <div class="login-field"><label>Пароль (мінімум 10 символів)</label><input type="password" id="np1" autocomplete="new-password"></div>
+    <div class="login-field"><label>Повторіть пароль</label><input type="password" id="np2" autocomplete="new-password"></div>
+    <button class="btn-login" onclick="saveNewPassword()">Зберегти й увійти</button>
+    <div class="login-err" id="np-err"></div>
   </div>
 </div>
 
@@ -484,8 +494,48 @@ async function changePassword() {
     toast('Пароль змінено ✓', 'ok');
   } catch (e) { toast('Помилка: ' + e.message, 'err'); }
 }
+/* «Забули пароль?»: Supabase надсилає лист із посиланням назад на цю сторінку */
+async function forgotPassword() {
+  const email = document.getElementById('email-input').value.trim();
+  const err = document.getElementById('login-err');
+  if (!email) { err.textContent = 'Впишіть email і натисніть ще раз'; return; }
+  const back = location.origin + location.pathname;
+  const r = await fetch(`${SB_URL}/auth/v1/recover?redirect_to=${encodeURIComponent(back)}`, {
+    method: 'POST', headers: { 'apikey': SB_PUB, 'Content-Type': 'application/json' }, body: JSON.stringify({ email })
+  }).catch(() => null);
+  err.style.color = r && r.ok ? 'var(--ink)' : '';
+  err.textContent = r && r.ok ? 'Лист надіслано. Відкрийте посилання з листа на цьому ж пристрої.' : 'Не вдалося надіслати лист. Спробуйте за хвилину.';
+}
+/* перехід із листа: у адресі є токен відновлення — просимо задати новий пароль */
+let recovery = false;
+(function () {
+  const h = new URLSearchParams(location.hash.slice(1));
+  if (h.get('access_token') && h.get('type') === 'recovery') {
+    saveSession({ access_token: h.get('access_token'), refresh_token: h.get('refresh_token'), expires_in: +h.get('expires_in') || 3600 });
+    history.replaceState(null, '', location.pathname);
+    recovery = true;
+    document.querySelector('#login-screen .login-box').style.display = 'none';
+    document.getElementById('newpwd-box').style.display = '';
+  } else if (h.get('error_description')) {
+    history.replaceState(null, '', location.pathname);
+    document.getElementById('login-err').textContent = 'Посилання з листа застаріло. Натисніть «Забули пароль?» ще раз.';
+  }
+})();
+async function saveNewPassword() {
+  const p1 = document.getElementById('np1').value, p2 = document.getElementById('np2').value;
+  const err = document.getElementById('np-err'); err.textContent = '';
+  if (p1.length < 10) { err.textContent = 'Пароль має бути не коротший за 10 символів'; return; }
+  if (p1 !== p2) { err.textContent = 'Паролі не збігаються'; return; }
+  try {
+    const r = await fetch(`${SB_URL}/auth/v1/user`, { method: 'PUT', headers: await H({ 'Content-Type': 'application/json' }), body: JSON.stringify({ password: p1 }) });
+    if (!r.ok) throw new Error((await r.json()).msg || 'Не вдалося зберегти пароль');
+    const ok = await sbRpc('is_admin');
+    if (ok !== true) throw new Error('Немає прав адміністратора');
+    recovery = false; showApp(); init();
+  } catch (e) { err.textContent = e.message; }
+}
 document.getElementById('pwd-input').addEventListener('keydown', e => { if (e.key === 'Enter') tryLogin(); });
-if (session) showApp();
+if (session && !recovery) showApp();
 
 /* ══════════════════════════════════════════
    API
@@ -973,7 +1023,7 @@ function toast(msg,type='ok'){
 /* ══════════════════════════════════════════
    AUTO-INIT
 ══════════════════════════════════════════ */
-if (session) init();
+if (session && !recovery) init();
 </script>
 </body>
 </html>

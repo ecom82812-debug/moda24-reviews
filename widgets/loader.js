@@ -7,7 +7,7 @@
 (function () {
   if (window.__m24Loader) { window.__m24Loader(); return; }
   var BASE = 'https://ecom82812-debug.github.io/moda24-reviews/widgets/';
-  var VERSION = '4'; // міняється при кожному оновленні віджетів
+  var VERSION = '5'; // міняється при кожному оновленні віджетів
 
   function mount(host) {
     if (host.dataset.mounted) return;

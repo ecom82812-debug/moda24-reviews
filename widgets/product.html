@@ -50,6 +50,13 @@
 .m24r-name{font-size:14px;font-weight:600;line-height:1.3;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .m24r-fitl{font-size:12px;color:var(--soft);margin-top:-5px}
 .m24r-txt{font-size:14px;line-height:1.55;color:#3A3235;margin:0;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden;overflow-wrap:anywhere}
+/* відгук без фото: текст на місці фото */
+.m24r-quote{position:relative;aspect-ratio:3/4;border-radius:10px;background:var(--tint);padding:34px 14px 14px;display:flex;overflow:hidden}
+.m24r-quote::before{content:"\201C";position:absolute;left:12px;top:2px;font-family:var(--hd);font-size:54px;line-height:1;color:var(--acc)}
+.m24r-quote span{font-family:var(--hd);font-size:17px;font-weight:500;line-height:1.3;color:var(--ink);display:-webkit-box;-webkit-line-clamp:9;-webkit-box-orient:vertical;overflow:hidden;overflow-wrap:anywhere}
+@media (min-width:981px){.m24r-quote{padding:40px 18px 18px}.m24r-quote span{font-size:19px}}
+.m24r-view.nop{grid-template-columns:1fr}.m24r-view.nop .m24r-gal{display:none}
+.m24r-view.nop .m24r-vtx{padding-top:56px}
 .m24r-more{all:unset;box-sizing:border-box;cursor:pointer;display:flex;justify-content:center;align-items:center;width:100%;margin-top:28px;height:48px;border-radius:8px;background:var(--tint);font-size:14px;font-weight:600;color:var(--ink)}
 .m24r-more:hover{background:#EFE8EB}
 .m24r-sk{display:block;border-radius:10px;background:linear-gradient(100deg,#F3EEF0 35%,#FAF7F8 50%,#F3EEF0 65%) 0 0/250% 100%;animation:m24rSh 1.3s linear infinite}
@@ -104,7 +111,7 @@
 
 /* форма */
 .m24r-form{padding:26px 20px 28px;display:grid;gap:20px}
-@media (min-width:760px){.m24r-sh .m24r-box{max-width:560px}.m24r-form{padding:34px 34px 30px}}
+@media (min-width:760px){.m24r-vw .m24r-box:has(.nop){max-width:560px}.m24r-sh .m24r-box{max-width:560px}.m24r-form{padding:34px 34px 30px}}
 .m24r-fh h3{font-family:var(--hd);font-weight:500;font-size:30px;line-height:1.05;margin:0 40px 4px 0}
 .m24r-fh p{margin:0;font-size:13px;color:var(--soft)}
 .m24r-f{display:grid;gap:8px;font-size:13px;font-weight:600}
@@ -262,11 +269,12 @@
     var html = '<div class="m24r-grid">' + list.map(function (r, i) {
       var name = (r.author_name || '').trim() || 'Покупець', p = r._p;
       return '<button type="button" class="m24r-card" data-i="' + i + '" style="animation-delay:' + Math.min(i, 8) * 40 + 'ms" aria-label="Відгук: ' + esc(name) + '">' +
-        '<span class="m24r-pic">' + (p[0] ? img(small(p[0]), p[0]) : '') + (p.length > 1 ? '<span class="m24r-cnt">' + CAM + p.length + '</span>' : '') + '</span>' +
+        (p[0] ? '<span class="m24r-pic">' + img(small(p[0]), p[0]) + (p.length > 1 ? '<span class="m24r-cnt">' + CAM + p.length + '</span>' : '') + '</span>'
+              : '<span class="m24r-quote"><span>' + esc(r.body) + '</span></span>') +
         '<span class="m24r-meta">' + stars(+r.rating || 0) + '<small>' + fmtD(r.created_at, true) + '</small></span>' +
         '<span class="m24r-name">' + esc(name) + '</span>' +
         (r.size_fit && FIT[r.size_fit] ? '<span class="m24r-fitl">' + FIT[r.size_fit] + '</span>' : '') +
-        '<span class="m24r-txt">' + esc(r.body) + '</span></button>';
+        (p[0] ? '<span class="m24r-txt">' + esc(r.body) + '</span>' : '') + '</button>';
     }).join('') + '</div>';
     var rest = n - shown;
     if (rest > 0) html += '<button type="button" class="m24r-more">Показати ще ' + Math.min(rest, perPage()) + ' з ' + rest + '</button>';
@@ -295,6 +303,7 @@
       ((r.size_fit && FIT[r.size_fit]) || r.verified ? '<div class="m24r-tags">' + (r.size_fit && FIT[r.size_fit] ? '<span>' + FIT[r.size_fit] + '</span>' : '') + (r.verified ? '<span>✓ Покупка підтверджена</span>' : '') + '</div>' : '') +
       (r.title ? '<p style="font-weight:600">' + esc(r.title) + '</p>' : '') + '<p>' + esc(r.body) + '</p>' +
       (r.reply_text ? '<div class="m24r-reply"><b>Відповідь Moda24</b>' + esc(r.reply_text) + '</div>' : '');
+    vw.querySelector('.m24r-view').classList.toggle('nop', !r._p.length);
     photo(0);
     vw.classList.add('on'); document.documentElement.style.overflow = 'hidden'; vw.querySelector('.m24r-x').focus();
   }
