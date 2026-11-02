@@ -277,7 +277,7 @@
         (p[0] ? '<span class="m24r-txt">' + esc(r.body) + '</span>' : '') + '</button>';
     }).join('') + '</div>';
     var rest = n - shown;
-    if (rest > 0) html += '<button type="button" class="m24r-more">Показати ще ' + Math.min(rest, perPage()) + ' з ' + rest + '</button>';
+    if (rest > 0) html += '<button type="button" class="m24r-more">' + (rest <= perPage() ? 'Показати ще ' + rest + ' ' + plural(rest, 'відгук', 'відгуки', 'відгуків') : 'Показати ще · залишилось ' + rest) + '</button>';
     $('.m24r-body').innerHTML = html;
   }
 
