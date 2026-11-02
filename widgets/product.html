@@ -33,7 +33,7 @@
 .m24r-add:hover{background:var(--ink);color:#fff}
 .m24r-add svg{width:16px;height:16px}
 
-/* стрічка відгуків: три варіанти для тесту (v1 «картка», v2 «компакт», v3 «фото зверху») */
+/* стрічка відгуків: картки з аватаром, текстом, фото, відповіддю магазину і «Відгук корисний?» */
 @keyframes m24rIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 .m24r-feed{display:grid;gap:12px;margin-top:24px}
 .m24r-fc{display:grid;gap:12px;padding:16px;border:1px solid #F0EAED;border-radius:16px;background:#fff;box-shadow:0 2px 14px rgba(30,26,27,.05);animation:m24rIn .4s ease both;align-content:start;min-width:0;
@@ -50,8 +50,7 @@
 .m24r-thumbs{grid-area:p;display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
 .m24r-thumbs::-webkit-scrollbar{display:none}
 .m24r-th{all:unset;cursor:pointer;flex:none;width:72px;aspect-ratio:3/4;border-radius:10px;overflow:hidden;background:var(--tint)}
-.m24r-th img{width:100%;height:100%;object-fit:cover;display:block;opacity:0;transition:opacity .3s}
-.m24r-th img.ok{opacity:1}
+.m24r-th img{width:100%;height:100%;object-fit:cover;display:block}
 .m24r-rp{grid-area:r;padding:12px 14px;border-radius:12px;background:#F6F3F4;font-size:14px;line-height:1.5;color:#3A3235}
 .m24r-rp b{display:block;font-size:12px;font-weight:600;color:var(--soft);margin-bottom:4px}
 .m24r-feed.na .m24r-fc{animation:none}
@@ -62,23 +61,10 @@
 .m24r-vote em{font-style:normal}
 .m24r-vote:hover{background:#EFE8EB}
 .m24r-vote.on{background:var(--acc);color:#fff}
-/* v2 «компакт»: текст ліворуч, фото праворуч */
-.m24r-feed.v2 .m24r-fc{grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"h h" "t p" "r r" "ft ft";column-gap:14px}
-.m24r-feed.v2 .m24r-thumbs{align-self:start;gap:0;overflow:visible}
-.m24r-feed.v2 .m24r-th{width:54px;border-radius:8px;box-shadow:0 0 0 2px #fff}
-.m24r-feed.v2 .m24r-th+.m24r-th{margin-left:-18px}
-.m24r-feed.v2 .m24r-th:nth-child(n+4){display:none}
-.m24r-feed.v2 .m24r-fc{border-radius:12px;box-shadow:none;border-color:var(--line)}
-/* v3 «фото зверху»: фото перед текстом, крупніше */
-.m24r-feed.v3 .m24r-fc{grid-template-areas:"h" "p" "t" "r" "ft"}
-.m24r-feed.v3 .m24r-th{width:96px;border-radius:12px}
-@media (min-width:700px){.m24r-feed{grid-template-columns:repeat(2,minmax(0,1fr))}.m24r-feed.v2{grid-template-columns:minmax(0,1fr)}}
+@media (min-width:700px){.m24r-feed{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (min-width:981px){
   .m24r-fc{padding:22px 22px 18px}
   .m24r-th{width:84px}
-  .m24r-feed.v2 .m24r-th{width:68px}
-  .m24r-feed.v3 .m24r-th{width:110px}
-  .m24r-feed.v2{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
 .m24r-more{all:unset;box-sizing:border-box;cursor:pointer;display:flex;justify-content:center;align-items:center;width:100%;margin-top:28px;height:48px;border-radius:8px;background:var(--tint);font-size:14px;font-weight:600;color:var(--ink)}
 .m24r-more:hover{background:#EFE8EB}
@@ -244,12 +230,6 @@
   function med(u) { return u + '.m.webp'; }
   function img(src, orig) { return '<img src="' + esc(src) + '" loading="lazy" decoding="async" alt="" onload="this.classList.add(\'ok\');this.parentNode.classList.add(\'ok\')" onerror="if(this.src!==\'' + esc(orig) + '\')this.src=\'' + esc(orig) + '\'">'; }
 
-  /* вигляд стрічки (тест): ?rlayout=v1 | v2 | v3 — запам'ятовується в браузері */
-  var LAYOUT = (function () {
-    var q = new URLSearchParams(location.search).get('rlayout');
-    try { if (q) localStorage.setItem('m24rLayout', q); q = localStorage.getItem('m24rLayout'); } catch (e) {}
-    return /^v[123]$/.test(q || '') ? q : 'v1';
-  })();
   var THUMB = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M7 10v10H4V10z"/><path d="M7 10l4-7c1.4 0 2.4 1.2 2.1 2.6L12.5 9H18a2 2 0 0 1 2 2.3l-1.2 7A2 2 0 0 1 16.8 20H7"/></svg>';
   var THUMB_D = THUMB.replace('<svg', '<svg style="transform:scaleY(-1)"');
   var votes = (function () { try { return JSON.parse(localStorage.getItem('m24r:votes') || '{}'); } catch (e) { return {}; } })();
@@ -299,7 +279,7 @@
     $('.m24r-sum').innerHTML = s; $('.m24r-sum').hidden = false;
     var list = all.slice(0, shown);
     // плавна поява — лише вперше; оновлення (голос, свіжі дані) без мерехтіння
-    var html = '<div class="m24r-feed ' + LAYOUT + (drawn ? ' na' : '') + '">' + list.map(function (r, i) {
+    var html = '<div class="m24r-feed' + (drawn ? ' na' : '') + '">' + list.map(function (r, i) {
       var name = (r.author_name || '').trim() || 'Покупець', my = votes[r.id] || 0;
       var up = (r.up || 0), dn = (r.down || 0);
       return '<article class="m24r-fc" style="animation-delay:' + Math.min(i, 8) * 40 + 'ms">' +
@@ -462,17 +442,27 @@
   function vote(btn) {
     var id = btn.getAttribute('data-id'), v = +btn.getAttribute('data-vote'), r = null;
     all.forEach(function (x) { if (x.id === id) r = x; });
-    if (!r || btn.disabled) return;
+    if (!r) return;
     var prev = votes[id] || 0, next = prev === v ? 0 : v;
-    // одразу показуємо результат, сервер підтверджує
+    // одразу показуємо результат, сервер підтверджує; список не перебудовуємо — фото не перезавантажуються
     if (prev === 1) r.up = Math.max(0, (r.up || 0) - 1); if (prev === -1) r.down = Math.max(0, (r.down || 0) - 1);
     if (next === 1) r.up = (r.up || 0) + 1; if (next === -1) r.down = (r.down || 0) + 1;
     if (next) votes[id] = next; else delete votes[id];
     try { localStorage.setItem('m24r:votes', JSON.stringify(votes)); } catch (e) {}
-    render();
+    paintVote(r);
     fetchT(API + '?a=vote', { method: 'POST', headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify({ id: id, v: next }) }, 10000)
-      .then(function (d) { if (d && d.ok) { r.up = d.up; r.down = d.down; render(); } })
+      .then(function (d) { if (d && d.ok) { r.up = d.up; r.down = d.down; paintVote(r); } })
       .catch(function () {});
+  }
+  function paintVote(r) {
+    var my = votes[r.id] || 0;
+    root.querySelectorAll('.m24r-vote[data-id="' + r.id + '"]').forEach(function (b) {
+      var v = +b.getAttribute('data-vote'), n = v === 1 ? (r.up || 0) : (r.down || 0);
+      b.classList.toggle('on', my === v);
+      var em = b.querySelector('em');
+      if (n) { if (!em) { em = document.createElement('em'); b.appendChild(em); } em.textContent = n; }
+      else if (em) em.remove();
+    });
   }
 
   /* ---------- події ---------- */
