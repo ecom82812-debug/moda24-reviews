@@ -223,26 +223,35 @@ Deno.serve(async (req) => {
         const { count } = await db.from("review_photos").select("id", { count: "exact", head: true }).eq("review_id", id);
         if ((count ?? 0) >= MAX_PHOTOS) return reply({ error: "too_many" }, 400, origin);
 
+        // три копії, стиснені в браузері: full (до 1600 px), mid (1080 px, для перегляду), thumb (240×320).
+        // Імена: <фото>.<ext>, <фото>.<ext>.m.webp, <фото>.<ext>.t.webp — віджет знаходить копії за адресою фото.
         const fd = await req.formData();
         const full = fd.get("full");
+        const mid = fd.get("mid");
         const thumb = fd.get("thumb");
         const okType = (f: unknown): f is File =>
           f instanceof File && ["image/webp", "image/jpeg", "image/png"].includes(f.type);
         if (!okType(full) || full.size > 3_000_000) return reply({ error: "bad_file" }, 400, origin);
+        if (mid && (!okType(mid) || mid.size > 1_500_000)) return reply({ error: "bad_file" }, 400, origin);
         if (thumb && (!okType(thumb) || thumb.size > 400_000)) return reply({ error: "bad_file" }, 400, origin);
 
         const ext = full.type === "image/webp" ? "webp" : full.type === "image/png" ? "png" : "jpg";
-        const base = `${rev.product_uid}/${id}/${Date.now()}`;
+        const main = `${rev.product_uid}/${id}/${Date.now()}.${ext}`;
         const opts = { contentType: full.type, cacheControl: "31536000", upsert: false };
-        const up = await db.storage.from(BUCKET).upload(`${base}.${ext}`, full, opts);
+        const pub = (p: string) => db.storage.from(BUCKET).getPublicUrl(p).data.publicUrl;
+        const up = await db.storage.from(BUCKET).upload(main, full, opts);
         if (up.error) throw up.error;
-        let thumbUrl: string | null = null;
+        let thumbUrl: string | null = null, midUrl: string | null = null;
         if (okType(thumb)) {
-          const ut = await db.storage.from(BUCKET).upload(`${base}_t.${ext}`, thumb, { ...opts, contentType: thumb.type });
-          if (!ut.error) thumbUrl = db.storage.from(BUCKET).getPublicUrl(`${base}_t.${ext}`).data.publicUrl;
+          const ut = await db.storage.from(BUCKET).upload(`${main}.t.webp`, thumb, { ...opts, contentType: thumb.type });
+          if (!ut.error) thumbUrl = pub(`${main}.t.webp`);
         }
-        const fullUrl = db.storage.from(BUCKET).getPublicUrl(`${base}.${ext}`).data.publicUrl;
-        const ins = await db.from("review_photos").insert({ review_id: id, url: fullUrl, thumb_url: thumbUrl });
+        if (okType(mid)) {
+          const um = await db.storage.from(BUCKET).upload(`${main}.m.webp`, mid, { ...opts, contentType: mid.type });
+          if (!um.error) midUrl = pub(`${main}.m.webp`);
+        }
+        // orig_url тут — копія для перегляду: адмінка видаляє url, thumb_url і orig_url разом
+        const ins = await db.from("review_photos").insert({ review_id: id, url: pub(main), thumb_url: thumbUrl, orig_url: midUrl });
         if (ins.error) throw ins.error;
         return reply({ ok: true }, 200, origin);
       }

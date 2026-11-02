@@ -11,6 +11,23 @@
 4. Раз на хвилину (лише якщо щось змінилось) функція `reviews-snapshot` збирає готові JSON-файли у сховищі `review-cache`.
    Сайт читає ці файли, а не базу, тому відгуки не навантажують сторінку.
 
+## Файли
+
+| Файл | Що це |
+|---|---|
+| `admin.html` | Адмінка: вхід, схвалення, редагування, відповіді, видалення. https://ecom82812-debug.github.io/moda24-reviews/admin.html |
+| `widgets/loader.js` | Підключається в Тільді, підтягує віджет з GitHub |
+| `widgets/product.html` | Блок «Відгуки» на сторінці товару (перед «З цим також купують») |
+
+У Тільді (підвал сторінок товарів) стоїть лише:
+
+```html
+<div data-m24-widget="product"></div>
+<script src="https://ecom82812-debug.github.io/moda24-reviews/widgets/loader.js?v=1" defer></script>
+```
+
+Після змін у `widgets/*.html` збільшити `VERSION` у `loader.js`; після змін у `loader.js` — `?v=` у Тільді.
+
 ## Supabase
 
 Проєкт `lvyssuomgbccjmksetof` (`https://lvyssuomgbccjmksetof.supabase.co`).
