@@ -431,7 +431,7 @@
     if (!body) return note('Напишіть кілька слів про товар', 'err');
     if (!files.length) return note('Додайте хоча б одне фото', 'err');
     var btn = sh.querySelector('.m24r-send'); btn.disabled = true; btn.textContent = 'Надсилаємо…'; note('');
-    var nameEl = document.querySelector('.t-store__prod-popup__name, .js-store-prod-name, .t-store__prod-title, h1.t-heading');
+    var nameEl = document.querySelector('h1.js-catalog-prod-name, .js-product-name, .js-store-prod-name');
     var sent = 0, failed = 0;
     // спершу перевіряємо, що фото відкриваються (HEIC на старих телефонах — ні), і тільки тоді надсилаємо відгук
     Promise.all(files.map(function (f) { return prepare(f).then(function () { return true; }, function () { return false; }); })).then(function (ok) {
