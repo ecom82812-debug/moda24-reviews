@@ -27,7 +27,8 @@
 .m24r-sum b{font-size:15px;color:var(--ink);font-weight:700;margin-right:2px}
 .m24r-sum .m24r-st svg{width:14px;height:14px}
 .m24r-sum span{display:inline-flex;align-items:center;gap:6px}
-.m24r-sum i{width:1px;height:14px;background:var(--line);display:inline-block}
+.m24r-sum em{font-style:normal;margin-left:6px}
+.m24r-fitsum{padding:5px 11px;border-radius:999px;background:var(--tint);color:var(--ink);font-size:12px;font-weight:500}
 .m24r-add{all:unset;box-sizing:border-box;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:8px;height:44px;padding:0 20px;border:1px solid var(--ink);border-radius:8px;font-size:14px;font-weight:600;color:var(--ink);transition:background .2s,color .2s}
 .m24r-add:hover{background:var(--ink);color:#fff}
 .m24r-add svg{width:16px;height:16px}
@@ -251,11 +252,10 @@
     }
     var sum = 0, fit = { small: 0, 'true': 0, large: 0 }, fn = 0;
     all.forEach(function (r) { sum += +r.rating || 0; if (fit.hasOwnProperty(r.size_fit)) { fit[r.size_fit]++; fn++; } });
-    var avg = sum / n, s = '<span><b>' + avg.toFixed(1).replace('.', ',') + '</b>' + stars(Math.round(avg)) + '</span>';
-    s += '<i></i><span>' + n + ' ' + plural(n, 'відгук', 'відгуки', 'відгуків') + '</span>';
+    var avg = sum / n, s = '<span><b>' + avg.toFixed(1).replace('.', ',') + '</b>' + stars(Math.round(avg)) + '<em>' + n + ' ' + plural(n, 'відгук', 'відгуки', 'відгуків') + '</em></span>';
     if (fn) {
       var top = ['true', 'small', 'large'].sort(function (a, b) { return fit[b] - fit[a]; })[0];
-      s += '<i></i><span>' + FIT[top] + ' · ' + Math.round(fit[top] / fn * 100) + '%</span>';
+      s += '<span class="m24r-fitsum">' + FIT[top] + ' — ' + Math.round(fit[top] / fn * 100) + '% покупців</span>';
     }
     $('.m24r-sum').innerHTML = s; $('.m24r-sum').hidden = false;
     var list = all.slice(0, shown);
