@@ -14,12 +14,12 @@
   var css = document.createElement('style');
   css.textContent =
     '.m24rc-b{position:absolute;left:8px;bottom:8px;z-index:3;display:inline-flex;align-items:center;gap:4px;padding:4px 8px 4px 7px;border-radius:999px;background:rgba(255,255,255,.94);box-shadow:0 1px 4px rgba(30,26,27,.08);font:600 11px/1 Manrope,Arial,sans-serif;color:#1E1A1B;pointer-events:none}' +
-    '.m24rc-b svg,.m24rc-p svg{width:12px;height:12px;color:#8B5A6B;flex:none}' +
+    '.m24rc-b svg,.m24rc-p svg{width:12px;height:12px;color:#1E1A1B;flex:none}' +
     '.m24rc-b small{font-size:11px;font-weight:500;color:#8E8186}' +
     '.m24rc-p{all:unset;box-sizing:border-box;cursor:pointer;display:inline-flex;align-items:center;gap:7px;margin:10px 0 2px;font:500 13px/1.2 Manrope,Arial,sans-serif;color:#1E1A1B}' +
     '.m24rc-p svg{width:15px;height:15px}' +
     '.m24rc-p b{font-weight:700}' +
-    '.m24rc-p span{color:#8E8186;border-bottom:1px solid #D6CCD0;padding-bottom:1px}' +
+    '.m24rc-p span{color:#8E8186;border-bottom:1px solid #D4D4D2;padding-bottom:1px}' +
     '.m24rc-p:hover span{color:#1E1A1B;border-color:#1E1A1B}' +
     '@media (min-width:981px){.m24rc-b{left:10px;bottom:10px;font-size:12px;padding:5px 9px 5px 8px}}';
   document.head.appendChild(css);

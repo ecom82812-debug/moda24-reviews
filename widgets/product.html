@@ -9,15 +9,15 @@
 <link rel="preconnect" href="https://lvyssuomgbccjmksetof.supabase.co" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-.m24r{--ink:#1E1A1B;--soft:#8E8186;--line:#ECE6E9;--tint:#F7F3F5;--acc:#8B5A6B;--hd:'Cormorant Garamond',Georgia,serif;
+.m24r{--ink:#1E1A1B;--soft:#8E8186;--line:#EBEBEA;--tint:#F5F5F4;--acc:#1E1A1B;--hd:'Cormorant Garamond',Georgia,serif;
   font-family:'Manrope',Arial,sans-serif;color:var(--ink);max-width:1160px;margin:0 auto;padding:44px 20px 52px;box-sizing:border-box;-webkit-font-smoothing:antialiased}
 .m24r *,.m24r-ov *{box-sizing:border-box}
 .m24r [hidden],.m24r-ov [hidden]{display:none!important}
 .m24r button,.m24r-ov button{font-family:inherit}
-.m24r :focus-visible,.m24r-ov :focus-visible{outline:2px solid #B9AEB3;outline-offset:2px}
+.m24r :focus-visible,.m24r-ov :focus-visible{outline:2px solid #B5B5B3;outline-offset:2px}
 .m24r-st{display:inline-flex;gap:1px;color:var(--acc);vertical-align:middle}
 .m24r-st svg{width:13px;height:13px;display:block}
-.m24r-st .e{color:#E3DADE}
+.m24r-st .e{color:#DADAD8}
 
 /* шапка: назва і коротке зведення в один рядок */
 .m24r-head{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:18px 24px;padding-bottom:22px;border-bottom:1px solid var(--line)}
@@ -36,7 +36,7 @@
 /* стрічка відгуків: картки з аватаром, текстом, фото, відповіддю магазину і «Відгук корисний?» */
 @keyframes m24rIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 .m24r-feed{display:grid;gap:12px;margin-top:24px}
-.m24r-fc{display:grid;gap:12px;padding:16px;border:1px solid #F0EAED;border-radius:16px;background:#fff;box-shadow:0 2px 14px rgba(30,26,27,.05);animation:m24rIn .4s ease both;align-content:start;min-width:0;
+.m24r-fc{display:grid;gap:12px;padding:16px;border:1px solid #EBEBEA;border-radius:16px;background:#fff;box-shadow:0 2px 14px rgba(30,26,27,.05);animation:m24rIn .4s ease both;align-content:start;min-width:0;
   grid-template-columns:minmax(0,1fr);grid-template-areas:"h" "t" "p" "r" "ft"}
 .m24r-h{grid-area:h;display:flex;align-items:center;gap:10px;min-width:0}
 .m24r-ava{width:36px;height:36px;border-radius:50%;background:var(--tint);display:grid;place-items:center;font-family:var(--hd);font-size:18px;color:var(--ink);flex:none;text-transform:uppercase}
@@ -51,15 +51,15 @@
 .m24r-thumbs::-webkit-scrollbar{display:none}
 .m24r-th{all:unset;cursor:pointer;flex:none;width:72px;aspect-ratio:3/4;border-radius:10px;overflow:hidden;background:var(--tint)}
 .m24r-th img{width:100%;height:100%;object-fit:cover;display:block}
-.m24r-rp{grid-area:r;padding:12px 14px;border-radius:12px;background:#F6F3F4;font-size:14px;line-height:1.5;color:#3A3235}
+.m24r-rp{grid-area:r;padding:12px 14px;border-radius:12px;background:#F5F5F4;font-size:14px;line-height:1.5;color:#3A3235}
 .m24r-rp b{display:block;font-size:12px;font-weight:600;color:var(--soft);margin-bottom:4px}
 .m24r-feed.na .m24r-fc{animation:none}
 .m24r-ft{grid-area:ft;display:flex;align-items:center;gap:6px;font-size:13px;color:var(--soft)}
 .m24r-ft span{margin-right:auto}
-.m24r-vote{all:unset;box-sizing:border-box;cursor:pointer;display:inline-flex;align-items:center;gap:5px;height:34px;padding:0 11px;border-radius:10px;background:#F6F3F4;color:var(--ink);font-size:13px;font-weight:600;transition:background .2s,color .2s}
+.m24r-vote{all:unset;box-sizing:border-box;cursor:pointer;display:inline-flex;align-items:center;gap:5px;height:34px;padding:0 11px;border-radius:10px;background:#F5F5F4;color:var(--ink);font-size:13px;font-weight:600;transition:background .2s,color .2s}
 .m24r-vote svg{width:17px;height:17px}
 .m24r-vote em{font-style:normal}
-.m24r-vote:hover{background:#EFE8EB}
+.m24r-vote:hover{background:#ECECEA}
 .m24r-vote.on{background:var(--acc);color:#fff}
 @media (min-width:700px){.m24r-feed{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (min-width:981px){
@@ -67,8 +67,8 @@
   .m24r-th{width:84px}
 }
 .m24r-more{all:unset;box-sizing:border-box;cursor:pointer;display:flex;justify-content:center;align-items:center;width:100%;margin-top:28px;height:48px;border-radius:8px;background:var(--tint);font-size:14px;font-weight:600;color:var(--ink)}
-.m24r-more:hover{background:#EFE8EB}
-.m24r-sk{display:block;border-radius:10px;background:linear-gradient(100deg,#F3EEF0 35%,#FAF7F8 50%,#F3EEF0 65%) 0 0/250% 100%;animation:m24rSh 1.3s linear infinite}
+.m24r-more:hover{background:#ECECEA}
+.m24r-sk{display:block;border-radius:10px;background:linear-gradient(100deg,#F1F1F0 35%,#FAFAF9 50%,#F1F1F0 65%) 0 0/250% 100%;animation:m24rSh 1.3s linear infinite}
 .m24r-skg{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:24px}
 .m24r-skc{display:grid;gap:9px}.m24r-skc .a{aspect-ratio:3/4}.m24r-skc .b{height:11px;width:60%}.m24r-skc .c{height:11px;width:90%}
 
@@ -88,7 +88,7 @@
 }
 
 /* вікна: перегляд відгуку і форма */
-.m24r-ov{position:fixed;inset:0;z-index:100000;display:none;align-items:flex-end;justify-content:center;background:rgba(24,20,21,.5);font-family:'Manrope',Arial,sans-serif;--ink:#1E1A1B;--soft:#8E8186;--line:#ECE6E9;--tint:#F7F3F5;--acc:#8B5A6B;--hd:'Cormorant Garamond',Georgia,serif;color:var(--ink)}
+.m24r-ov{position:fixed;inset:0;z-index:100000;display:none;align-items:flex-end;justify-content:center;background:rgba(24,20,21,.5);font-family:'Manrope',Arial,sans-serif;--ink:#1E1A1B;--soft:#8E8186;--line:#EBEBEA;--tint:#F5F5F4;--acc:#1E1A1B;--hd:'Cormorant Garamond',Georgia,serif;color:var(--ink)}
 .m24r-ov.on{display:flex}
 .m24r-box{position:relative;background:#fff;width:100%;max-height:94vh;overflow:auto;border-radius:18px 18px 0 0;animation:m24rUp .3s cubic-bezier(.2,.8,.2,1)}
 @keyframes m24rUp{from{transform:translateY(24px);opacity:.6}to{transform:none;opacity:1}}
@@ -125,7 +125,7 @@
 .m24r-fh p{margin:0;font-size:13px;color:var(--soft)}
 .m24r-f{display:grid;gap:8px;font-size:13px;font-weight:600}
 .m24r-f small{font-weight:400;color:var(--soft)}
-.m24r-f input,.m24r-f textarea{font:inherit;font-size:16px;font-weight:400;color:var(--ink);border:1px solid #DDD3D7;border-radius:8px;padding:12px 14px;background:#fff;width:100%;outline:none;transition:border-color .2s}
+.m24r-f input,.m24r-f textarea{font:inherit;font-size:16px;font-weight:400;color:var(--ink);border:1px solid #D9D9D7;border-radius:8px;padding:12px 14px;background:#fff;width:100%;outline:none;transition:border-color .2s}
 .m24r-f input:focus,.m24r-f textarea:focus{border-color:var(--ink)}
 .m24r-f textarea{min-height:110px;resize:vertical}
 .m24r-f.err input,.m24r-f.err textarea,.m24r-f.err .m24r-tile.add{border-color:#C0392B}
@@ -134,16 +134,16 @@
 .m24r-tile{position:relative;aspect-ratio:3/4;border-radius:8px;overflow:hidden;background:var(--tint)}
 .m24r-tile img{width:100%;height:100%;object-fit:cover}
 .m24r-tile button{all:unset;cursor:pointer;position:absolute;top:4px;right:4px;width:22px;height:22px;border-radius:50%;background:rgba(0,0,0,.55);color:#fff;font-size:11px;display:grid;place-items:center}
-.m24r-tile.add{display:grid;place-items:center;align-content:center;gap:4px;border:1px dashed #C9BEC3;background:#fff;cursor:pointer;font-size:12px;font-weight:600;text-align:center;color:var(--ink)}
+.m24r-tile.add{display:grid;place-items:center;align-content:center;gap:4px;border:1px dashed #C8C8C6;background:#fff;cursor:pointer;font-size:12px;font-weight:600;text-align:center;color:var(--ink)}
 .m24r-tile.add svg{width:22px;height:22px;color:var(--acc)}
 .m24r-tile.add input{display:none}
-.m24r-rate{display:flex;align-items:center;gap:4px;color:#E3DADE}
+.m24r-rate{display:flex;align-items:center;gap:4px;color:#DADAD8}
 .m24r-rate button{all:unset;cursor:pointer;color:inherit}
 .m24r-rate button.on{color:var(--acc)}
 .m24r-rate svg{width:34px;height:34px;display:block}
 .m24r-rate em{font-style:normal;font-size:13px;font-weight:500;color:var(--soft);margin-left:8px}
 .m24r-seg{display:flex;flex-wrap:wrap;gap:6px}
-.m24r-seg button{all:unset;cursor:pointer;padding:9px 14px;border:1px solid #DDD3D7;border-radius:999px;font-size:13px;font-weight:500}
+.m24r-seg button{all:unset;cursor:pointer;padding:9px 14px;border:1px solid #D9D9D7;border-radius:999px;font-size:13px;font-weight:500}
 .m24r-seg button.on{border-color:var(--ink);background:var(--ink);color:#fff}
 .m24r-send{all:unset;cursor:pointer;text-align:center;height:52px;line-height:52px;border-radius:8px;background:var(--ink);color:#fff;font-size:15px;font-weight:600}
 .m24r-send[disabled]{opacity:.5;cursor:default}
