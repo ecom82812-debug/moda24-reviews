@@ -3,172 +3,154 @@
 <head>
 <meta charset="UTF-8">
 <title>Відгуки — сторінка товару</title>
-<!-- moda24.online: відгуки на сторінці товару.
+<!-- moda24.online: відгуки на сторінці товару — сітка карток «фото + враження».
      Читає готові файли зі сховища review-cache (база на перегляд не навантажується).
      Відгук і фото надсилаються через функцію reviews-api. Фото обов'язкові. -->
 <link rel="preconnect" href="https://lvyssuomgbccjmksetof.supabase.co" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-.m24r{--ink:#1E1A1B;--soft:#8E8186;--rule:rgba(30,26,27,.1);--tint:#F6F3F4;--hd:'Cormorant Garamond',Georgia,serif;
-  font-family:'Manrope',Arial,sans-serif;color:var(--ink);max-width:1160px;margin:0 auto;padding:40px 20px 48px;box-sizing:border-box;-webkit-font-smoothing:antialiased}
+.m24r{--ink:#1E1A1B;--soft:#8E8186;--line:#ECE6E9;--tint:#F7F3F5;--acc:#8B5A6B;--hd:'Cormorant Garamond',Georgia,serif;
+  font-family:'Manrope',Arial,sans-serif;color:var(--ink);max-width:1160px;margin:0 auto;padding:44px 20px 52px;box-sizing:border-box;-webkit-font-smoothing:antialiased}
 .m24r *,.m24r-ov *{box-sizing:border-box}
 .m24r [hidden],.m24r-ov [hidden]{display:none!important}
 .m24r button,.m24r-ov button{font-family:inherit}
-.m24r-top{display:grid;gap:22px}
-.m24r-title{font-family:var(--hd);font-weight:500;font-size:34px;line-height:1.05;margin:0;color:var(--ink)}
-.m24r-score{display:flex;align-items:center;gap:16px}
-.m24r-num{font-family:var(--hd);font-size:56px;font-weight:500;line-height:.9}
-.m24r-stars{display:inline-flex;gap:2px;color:var(--ink);vertical-align:middle}
-.m24r-stars svg{width:15px;height:15px;display:block}
-.m24r-stars.sm svg{width:12px;height:12px}
-.m24r-stars .e{color:#DDD6D9}
-.m24r-cnt{font-size:13px;color:var(--soft);margin-top:4px}
-.m24r-bars{display:grid;gap:7px}
-.m24r-bar{all:unset;display:grid;grid-template-columns:30px minmax(0,1fr) 24px;align-items:center;gap:10px;font-size:12px;color:var(--soft);font-variant-numeric:tabular-nums;cursor:pointer}
-.m24r-bar i{display:block;height:4px;border-radius:4px;background:#EEEAEC;overflow:hidden}
-.m24r-bar i b{display:block;height:100%;width:0;background:var(--ink);border-radius:4px;transition:width .7s cubic-bezier(.22,.61,.36,1)}
-.m24r-bar span:last-child{text-align:right}
-.m24r-fit{display:grid;gap:8px}
-.m24r-fit-h{display:flex;justify-content:space-between;font-size:12px;color:var(--soft)}
-.m24r-fit-h strong{color:var(--ink);font-weight:600}
-.m24r-fit-s{position:relative;height:4px;border-radius:4px;background:#EEEAEC}
-.m24r-fit-s::before,.m24r-fit-s::after{content:"";position:absolute;top:-3px;width:1px;height:10px;background:#D2CBCE}
-.m24r-fit-s::before{left:33.3%}.m24r-fit-s::after{left:66.6%}
-.m24r-fit-d{position:absolute;top:50%;width:14px;height:14px;border-radius:50%;background:var(--ink);border:3px solid #fff;box-shadow:0 0 0 1px var(--ink);transform:translate(-50%,-50%);transition:left .6s ease}
-.m24r-fit-l{display:flex;justify-content:space-between;font-size:11px;color:var(--soft)}
-.m24r-write{all:unset;box-sizing:border-box;cursor:pointer;display:flex;align-items:center;justify-content:center;height:50px;border-radius:8px;background:var(--ink);font-size:14px;font-weight:600;color:#fff;transition:background .2s}
-.m24r-write:hover{background:#3A3235}
 .m24r :focus-visible,.m24r-ov :focus-visible{outline:2px solid #B9AEB3;outline-offset:2px}
+.m24r-st{display:inline-flex;gap:1px;color:var(--acc);vertical-align:middle}
+.m24r-st svg{width:13px;height:13px;display:block}
+.m24r-st .e{color:#E3DADE}
 
-.m24r-strip-w{margin-top:30px}
-.m24r-strip-h{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:12px}
-.m24r-strip-h b{font-size:14px;font-weight:600}
-.m24r-strip-h span{font-size:12px;color:var(--soft)}
-.m24r-strip{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;margin:0 -20px;padding:0 20px;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch}
-.m24r-strip::-webkit-scrollbar{display:none}
-.m24r-th{all:unset;cursor:pointer;flex:none;width:92px;aspect-ratio:3/4;scroll-snap-align:start;border-radius:8px;overflow:hidden}
-.m24r-th,.m24r-sk{background:linear-gradient(100deg,#F3EFF1 35%,#FBF9FA 50%,#F3EFF1 65%) 0 0/250% 100%;animation:m24rSh 1.3s linear infinite}
-.m24r-th.ok{animation:none;background:var(--tint)}
+/* шапка: назва і коротке зведення в один рядок */
+.m24r-head{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:18px 24px;padding-bottom:22px;border-bottom:1px solid var(--line)}
+.m24r-title{font-family:var(--hd);font-weight:500;font-size:34px;line-height:1;margin:0;display:flex;align-items:flex-start;gap:6px}
+.m24r-title sup{font-family:'Manrope',Arial,sans-serif;font-size:13px;font-weight:600;color:var(--soft);line-height:1;margin-top:4px}
+.m24r-sum{display:flex;flex-wrap:wrap;align-items:center;gap:8px 18px;font-size:13px;color:var(--soft)}
+.m24r-sum b{font-size:15px;color:var(--ink);font-weight:700;margin-right:2px}
+.m24r-sum .m24r-st svg{width:14px;height:14px}
+.m24r-sum span{display:inline-flex;align-items:center;gap:6px}
+.m24r-sum i{width:1px;height:14px;background:var(--line);display:inline-block}
+.m24r-add{all:unset;box-sizing:border-box;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:8px;height:44px;padding:0 20px;border:1px solid var(--ink);border-radius:8px;font-size:14px;font-weight:600;color:var(--ink);transition:background .2s,color .2s}
+.m24r-add:hover{background:var(--ink);color:#fff}
+.m24r-add svg{width:16px;height:16px}
+
+/* сітка карток */
+.m24r-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px 12px;margin-top:24px}
+.m24r-card{all:unset;box-sizing:border-box;cursor:pointer;display:flex;flex-direction:column;gap:9px;min-width:0;animation:m24rIn .4s ease both}
+@keyframes m24rIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.m24r-pic{position:relative;aspect-ratio:3/4;border-radius:10px;overflow:hidden;background:linear-gradient(100deg,#F3EEF0 35%,#FAF7F8 50%,#F3EEF0 65%) 0 0/250% 100%;animation:m24rSh 1.3s linear infinite}
+.m24r-pic.ok{animation:none;background:var(--tint)}
 @keyframes m24rSh{to{background-position:-150% 0}}
-.m24r-th img{width:100%;height:100%;object-fit:cover;display:block;opacity:0;transition:opacity .35s ease,transform .35s ease}
-.m24r-th img.ok{opacity:1}
-.m24r-th:hover img{transform:scale(1.04)}
+.m24r-pic img{width:100%;height:100%;object-fit:cover;display:block;opacity:0;transition:opacity .35s ease,transform .5s ease}
+.m24r-pic img.ok{opacity:1}
+.m24r-card:hover .m24r-pic img{transform:scale(1.03)}
+.m24r-cnt{position:absolute;right:8px;top:8px;display:inline-flex;align-items:center;gap:4px;padding:4px 8px;border-radius:999px;background:rgba(255,255,255,.92);font-size:11px;font-weight:600;color:var(--ink)}
+.m24r-cnt svg{width:12px;height:12px}
+.m24r-meta{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.m24r-meta small{font-size:11px;color:var(--soft);white-space:nowrap}
+.m24r-name{font-size:14px;font-weight:600;line-height:1.3;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.m24r-fitl{font-size:12px;color:var(--soft);margin-top:-5px}
+.m24r-txt{font-size:14px;line-height:1.55;color:#3A3235;margin:0;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden;overflow-wrap:anywhere}
+.m24r-more{all:unset;box-sizing:border-box;cursor:pointer;display:flex;justify-content:center;align-items:center;width:100%;margin-top:28px;height:48px;border-radius:8px;background:var(--tint);font-size:14px;font-weight:600;color:var(--ink)}
+.m24r-more:hover{background:#EFE8EB}
+.m24r-sk{display:block;border-radius:10px;background:linear-gradient(100deg,#F3EEF0 35%,#FAF7F8 50%,#F3EEF0 65%) 0 0/250% 100%;animation:m24rSh 1.3s linear infinite}
+.m24r-skc{display:grid;gap:9px}.m24r-skc .a{aspect-ratio:3/4}.m24r-skc .b{height:11px;width:60%}.m24r-skc .c{height:11px;width:90%}
 
-.m24r-chips{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;margin:26px -20px 0;padding:0 20px}
-.m24r-chips::-webkit-scrollbar{display:none}
-.m24r-chip{all:unset;cursor:pointer;flex:none;font-size:13px;font-weight:500;padding:8px 14px;border:1px solid var(--rule);border-radius:999px;color:var(--ink);white-space:nowrap;transition:background .2s,color .2s,border-color .2s}
-.m24r-chip.on{background:var(--ink);color:#fff;border-color:var(--ink)}
-.m24r-chip small{opacity:.6;margin-left:4px;font-size:11px}
+/* порожньо */
+.m24r-empty{margin-top:24px;display:grid;justify-items:center;gap:10px;padding:36px 20px;border-radius:14px;background:var(--tint);text-align:center}
+.m24r-empty svg{width:34px;height:34px;color:var(--acc)}
+.m24r-empty b{font-family:var(--hd);font-weight:500;font-size:24px;line-height:1.1}
+.m24r-empty p{margin:0;font-size:14px;color:var(--soft);max-width:340px}
+.m24r-empty .m24r-add{margin-top:6px;background:var(--ink);color:#fff}
+.m24r-retry{all:unset;cursor:pointer;font-size:13px;font-weight:600;border-bottom:1px solid var(--ink)}
 
-.m24r-list{margin-top:8px}
-.m24r-item{padding:22px 0;border-bottom:1px solid var(--rule);display:grid;gap:10px;animation:m24rIn .35s ease both}
-@keyframes m24rIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
-.m24r-ih{display:flex;align-items:center;justify-content:space-between;gap:10px}
-.m24r-who{display:flex;align-items:center;gap:10px;min-width:0}
-.m24r-ava{width:36px;height:36px;border-radius:50%;background:var(--tint);display:grid;place-items:center;font-family:var(--hd);font-size:18px;color:var(--ink);flex:none;text-transform:uppercase}
-.m24r-who b{display:block;font-size:14px;font-weight:600;line-height:1.25;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.m24r-who small{display:block;font-size:12px;color:var(--soft)}
-.m24r-pills{display:flex;gap:6px;flex-wrap:wrap}
-.m24r-pill{font-size:11px;font-weight:600;color:var(--soft);background:var(--tint);padding:5px 10px;border-radius:999px;white-space:nowrap}
-.m24r-rt{font-family:var(--hd);font-size:20px;font-weight:500;line-height:1.25;margin:0}
-.m24r-tx{font-size:15px;line-height:1.6;margin:0;color:#3A3235;white-space:pre-line;overflow-wrap:anywhere}
-.m24r-reply{margin:4px 0 0;padding:12px 14px;border-left:2px solid var(--ink);background:var(--tint);border-radius:0 8px 8px 0;font-size:14px;line-height:1.55}
-.m24r-reply b{display:block;font-size:12px;margin-bottom:2px}
-.m24r-ph{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
-.m24r-ph::-webkit-scrollbar{display:none}
-.m24r-ph .m24r-th{width:84px}
-.m24r-more{all:unset;box-sizing:border-box;cursor:pointer;display:flex;justify-content:center;align-items:center;width:100%;margin-top:22px;height:48px;border:1px solid var(--rule);border-radius:8px;font-size:14px;font-weight:600;color:var(--ink)}
-.m24r-more:hover{border-color:var(--ink)}
-.m24r-empty{padding:36px 0;text-align:center;font-size:15px;color:var(--soft);margin:0}
-.m24r-retry{all:unset;cursor:pointer;display:block;margin:12px auto 0;font-size:13px;font-weight:600;color:var(--ink);border-bottom:1px solid var(--ink)}
-.m24r-skw{padding:22px 0;border-bottom:1px solid var(--rule);display:grid;gap:10px}
-.m24r-sk{display:block;height:12px;border-radius:3px}
-.m24r-sk.a{width:36px;height:36px;border-radius:50%}
-.m24r-sk.w4{width:40%}.m24r-sk.w9{width:92%}.m24r-sk.w7{width:70%}
-
+@media (min-width:700px){.m24r-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media (min-width:981px){
-  .m24r{display:grid;grid-template-columns:300px minmax(0,1fr);gap:0 64px;padding:72px 0 80px}
-  .m24r-top{position:sticky;top:96px;align-self:start}
-  .m24r-main{min-width:0}
-  .m24r-strip-w{margin-top:0}
-  .m24r-strip{margin:0;padding:0}
-  .m24r-th{width:104px}
-  .m24r-chips{margin:28px 0 0;padding:0}
-  .m24r-ph .m24r-th{width:96px}
-  .m24r-item{grid-template-columns:180px minmax(0,1fr);gap:8px 28px;padding:26px 0}
-  .m24r-item > *:not(.m24r-ih){grid-column:2}
-  .m24r-ih{display:block;grid-row:1 / span 5}
-  .m24r-ih .m24r-pills{margin-top:12px}
-  .m24r-title{font-size:44px}
+  .m24r{padding:80px 0 88px}
+  .m24r-title{font-size:46px}
+  .m24r-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:34px 22px;margin-top:32px}
+  .m24r-more{width:auto;padding:0 40px;margin:36px auto 0}
 }
 
-/* лайтбокс і форма (додаються в body) */
-.m24r-ov{position:fixed;inset:0;z-index:100000;display:none;font-family:'Manrope',Arial,sans-serif;--ink:#1E1A1B;--soft:#8E8186;--rule:rgba(30,26,27,.14);--hd:'Cormorant Garamond',Georgia,serif}
+/* вікна: перегляд відгуку і форма */
+.m24r-ov{position:fixed;inset:0;z-index:100000;display:none;align-items:flex-end;justify-content:center;background:rgba(24,20,21,.5);font-family:'Manrope',Arial,sans-serif;--ink:#1E1A1B;--soft:#8E8186;--line:#ECE6E9;--tint:#F7F3F5;--acc:#8B5A6B;--hd:'Cormorant Garamond',Georgia,serif;color:var(--ink)}
 .m24r-ov.on{display:flex}
-.m24r-lb{background:rgba(18,15,16,.95);flex-direction:column;color:#fff}
-.m24r-lb-top{display:flex;justify-content:space-between;align-items:center;padding:14px 18px;font-size:13px;color:rgba(255,255,255,.7)}
-.m24r-x{all:unset;cursor:pointer;width:38px;height:38px;display:grid;place-items:center;border-radius:50%;background:rgba(255,255,255,.12);color:#fff;font-size:15px}
-.m24r-lb-im{flex:1;min-height:0;display:flex;align-items:center;justify-content:center;padding:0 12px;position:relative}
-.m24r-lb-im img{max-width:100%;max-height:100%;object-fit:contain;border-radius:2px;opacity:0;transition:opacity .25s ease}
-.m24r-lb-im img.ok{opacity:1}
-.m24r-lb-sp{position:absolute;left:50%;top:50%;width:24px;height:24px;margin:-12px 0 0 -12px;border:1.5px solid rgba(255,255,255,.2);border-top-color:#fff;border-radius:50%;animation:m24rSpin .7s linear infinite}
-@keyframes m24rSpin{to{transform:rotate(360deg)}}
-.m24r-lb-im img.ok + .m24r-lb-sp{display:none}
-.m24r-nav{all:unset;cursor:pointer;position:absolute;top:50%;transform:translateY(-50%);width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.12);display:grid;place-items:center;color:#fff}
-.m24r-nav.p{left:14px}.m24r-nav.n{right:14px}
+.m24r-box{position:relative;background:#fff;width:100%;max-height:94vh;overflow:auto;border-radius:18px 18px 0 0;animation:m24rUp .3s cubic-bezier(.2,.8,.2,1)}
+@keyframes m24rUp{from{transform:translateY(24px);opacity:.6}to{transform:none;opacity:1}}
+@media (min-width:760px){.m24r-ov{align-items:center;padding:24px}.m24r-box{border-radius:16px;max-width:980px;max-height:88vh}}
+.m24r-x{all:unset;cursor:pointer;position:absolute;right:12px;top:12px;z-index:3;width:38px;height:38px;display:grid;place-items:center;border-radius:50%;background:rgba(255,255,255,.94);box-shadow:0 2px 10px rgba(0,0,0,.08);color:var(--ink);font-size:15px}
+
+.m24r-view{display:grid}
+.m24r-gal{position:relative;background:var(--tint);aspect-ratio:3/4;max-height:62vh;width:100%}
+.m24r-gal img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;opacity:0;transition:opacity .25s}
+.m24r-gal img.ok{opacity:1}
+.m24r-dots{position:absolute;left:0;right:0;bottom:12px;display:flex;justify-content:center;gap:6px}
+.m24r-dots b{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.55)}
+.m24r-dots b.on{background:#fff}
+.m24r-nav{all:unset;cursor:pointer;position:absolute;top:50%;transform:translateY(-50%);width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.9);display:grid;place-items:center;color:var(--ink)}
+.m24r-nav.p{left:12px}.m24r-nav.n{right:12px}
 .m24r-nav svg{width:16px;height:16px}
-@media (max-width:640px){.m24r-nav{display:none}}
-.m24r-lb-cap{padding:14px 18px 24px;display:grid;gap:6px;max-width:720px;width:100%;margin:0 auto;max-height:30vh;overflow:auto}
-.m24r-lb-cap p{margin:0;font-size:14px;line-height:1.55;color:rgba(255,255,255,.88)}
-.m24r-lb-cap .m24r-stars{color:#fff}.m24r-lb-cap .m24r-stars .e{color:rgba(255,255,255,.3)}
-.m24r-sh{background:rgba(18,15,16,.45);align-items:flex-end;justify-content:center}
-.m24r-sh-in{background:#fff;color:var(--ink);width:100%;max-width:560px;border-radius:18px 18px 0 0;padding:22px 20px 26px;display:grid;gap:16px;max-height:92vh;overflow:auto}
-@media (min-width:700px){.m24r-sh{align-items:center}.m24r-sh-in{border-radius:14px;padding:28px}}
-.m24r-sh-h{display:flex;justify-content:space-between;align-items:center}
-.m24r-sh-h h3{font-family:var(--hd);font-weight:500;font-size:30px;margin:0}
-.m24r-sh .m24r-x{background:#F3EFF1;color:var(--ink)}
-.m24r-f{display:grid;gap:6px;font-size:13px;font-weight:600;color:var(--ink)}
-.m24r-f input,.m24r-f textarea{font:inherit;font-size:16px;font-weight:400;color:var(--ink);border:1px solid #DDD3D7;border-radius:8px;padding:12px;background:#fff;width:100%;outline:none}
+.m24r-vtx{padding:22px 20px 28px;display:grid;gap:12px;align-content:start}
+.m24r-vtx .m24r-name{font-size:16px;white-space:normal}
+.m24r-vtx p{margin:0;font-size:15px;line-height:1.65;color:#3A3235;white-space:pre-line;overflow-wrap:anywhere}
+.m24r-tags{display:flex;flex-wrap:wrap;gap:6px}
+.m24r-tags span{font-size:12px;font-weight:600;padding:5px 10px;border-radius:999px;background:var(--tint);color:var(--ink)}
+.m24r-reply{padding:14px 16px;border-radius:10px;background:var(--tint);font-size:14px;line-height:1.55}
+.m24r-reply b{display:block;font-size:12px;color:var(--acc);margin-bottom:4px}
+@media (min-width:760px){
+  .m24r-view{grid-template-columns:1.1fr 1fr}
+  .m24r-gal{max-height:88vh;height:100%;aspect-ratio:auto;min-height:520px}
+  .m24r-vtx{padding:48px 36px 36px;max-height:88vh;overflow:auto}
+}
+
+/* форма */
+.m24r-form{padding:26px 20px 28px;display:grid;gap:20px}
+@media (min-width:760px){.m24r-sh .m24r-box{max-width:560px}.m24r-form{padding:34px 34px 30px}}
+.m24r-fh h3{font-family:var(--hd);font-weight:500;font-size:30px;line-height:1.05;margin:0 40px 4px 0}
+.m24r-fh p{margin:0;font-size:13px;color:var(--soft)}
+.m24r-f{display:grid;gap:8px;font-size:13px;font-weight:600}
+.m24r-f small{font-weight:400;color:var(--soft)}
+.m24r-f input,.m24r-f textarea{font:inherit;font-size:16px;font-weight:400;color:var(--ink);border:1px solid #DDD3D7;border-radius:8px;padding:12px 14px;background:#fff;width:100%;outline:none;transition:border-color .2s}
 .m24r-f input:focus,.m24r-f textarea:focus{border-color:var(--ink)}
-.m24r-f textarea{min-height:100px;resize:vertical}
-.m24r-f.err input,.m24r-f.err textarea,.m24r-f.err .m24r-drop{border-color:#C0392B}
-.m24r-rate{display:flex;gap:6px}
-.m24r-rate button{all:unset;cursor:pointer;color:#D9D2D5}.m24r-rate button.on{color:var(--ink)}
-.m24r-rate svg{width:32px;height:32px;display:block}
-.m24r-seg{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid #DDD3D7;border-radius:8px;overflow:hidden}
-.m24r-seg button{all:unset;cursor:pointer;text-align:center;padding:11px 4px;font-size:13px;font-weight:500;color:var(--ink)}
-.m24r-seg button+button{border-left:1px solid #DDD3D7}
-.m24r-seg button.on{background:var(--ink);color:#fff}
-.m24r-drop{display:flex;align-items:center;justify-content:center;gap:8px;border:1px dashed #C9C0C4;border-radius:8px;padding:18px;text-align:center;font-size:14px;font-weight:500;color:var(--ink);cursor:pointer}
-.m24r-drop input{display:none}
-.m24r-drop small{display:block;font-size:12px;font-weight:400;color:var(--soft)}
-.m24r-prev{display:flex;gap:6px;flex-wrap:wrap}
-.m24r-prev div{position:relative;width:64px;height:80px}
-.m24r-prev img{width:100%;height:100%;object-fit:cover;border-radius:6px}
-.m24r-prev button{all:unset;cursor:pointer;position:absolute;top:3px;right:3px;width:20px;height:20px;border-radius:50%;background:rgba(0,0,0,.55);color:#fff;font-size:10px;display:grid;place-items:center}
+.m24r-f textarea{min-height:110px;resize:vertical}
+.m24r-f.err input,.m24r-f.err textarea,.m24r-f.err .m24r-tile.add{border-color:#C0392B}
+.m24r-f.err .m24r-rate{color:#C0392B}
+.m24r-tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.m24r-tile{position:relative;aspect-ratio:3/4;border-radius:8px;overflow:hidden;background:var(--tint)}
+.m24r-tile img{width:100%;height:100%;object-fit:cover}
+.m24r-tile button{all:unset;cursor:pointer;position:absolute;top:4px;right:4px;width:22px;height:22px;border-radius:50%;background:rgba(0,0,0,.55);color:#fff;font-size:11px;display:grid;place-items:center}
+.m24r-tile.add{display:grid;place-items:center;align-content:center;gap:4px;border:1px dashed #C9BEC3;background:#fff;cursor:pointer;font-size:12px;font-weight:600;text-align:center;color:var(--ink)}
+.m24r-tile.add svg{width:22px;height:22px;color:var(--acc)}
+.m24r-tile.add input{display:none}
+.m24r-rate{display:flex;align-items:center;gap:4px;color:#E3DADE}
+.m24r-rate button{all:unset;cursor:pointer;color:inherit}
+.m24r-rate button.on{color:var(--acc)}
+.m24r-rate svg{width:34px;height:34px;display:block}
+.m24r-rate em{font-style:normal;font-size:13px;font-weight:500;color:var(--soft);margin-left:8px}
+.m24r-seg{display:flex;flex-wrap:wrap;gap:6px}
+.m24r-seg button{all:unset;cursor:pointer;padding:9px 14px;border:1px solid #DDD3D7;border-radius:999px;font-size:13px;font-weight:500}
+.m24r-seg button.on{border-color:var(--ink);background:var(--ink);color:#fff}
 .m24r-send{all:unset;cursor:pointer;text-align:center;height:52px;line-height:52px;border-radius:8px;background:var(--ink);color:#fff;font-size:15px;font-weight:600}
 .m24r-send[disabled]{opacity:.5;cursor:default}
-.m24r-note{font-size:13px;text-align:center;min-height:18px}
+.m24r-note{font-size:13px;text-align:center;min-height:18px;margin-top:-8px}
 .m24r-note.ok{color:#2F6B45}.m24r-note.err{color:#C0392B}
+.m24r-done{display:grid;justify-items:center;gap:10px;text-align:center;padding:30px 10px 10px}
+.m24r-done svg{width:44px;height:44px;color:var(--acc)}
+.m24r-done b{font-family:var(--hd);font-weight:500;font-size:28px}
+.m24r-done p{margin:0;font-size:14px;color:var(--soft)}
 .m24r-hp{position:absolute!important;left:-9999px!important;width:1px;height:1px;opacity:0}
 @media (prefers-reduced-motion:reduce){.m24r *,.m24r-ov *{animation:none!important;transition:none!important}}
 </style>
 </head>
 <body>
 <section class="m24r" id="m24-reviews" aria-label="Відгуки">
-  <div class="m24r-top">
-    <h2 class="m24r-title">Відгуки</h2>
-    <div class="m24r-score" hidden><span class="m24r-num"></span><div><span class="m24r-stars m24r-sstars"></span><div class="m24r-cnt"></div></div></div>
-    <div class="m24r-bars" hidden></div>
-    <div class="m24r-fit" hidden><div class="m24r-fit-h"><span>Розмір</span><strong></strong></div><div class="m24r-fit-s"><span class="m24r-fit-d" style="left:50%"></span></div><div class="m24r-fit-l"><span>Маломірить</span><span>Великомірить</span></div></div>
-    <button type="button" class="m24r-write">Залишити відгук</button>
+  <div class="m24r-head">
+    <h2 class="m24r-title">Відгуки<sup class="m24r-n"></sup></h2>
+    <div class="m24r-sum" hidden></div>
+    <button type="button" class="m24r-add" data-add hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 1 1 3 3L7 19l-4 1 1-4z"/></svg>Написати відгук</button>
   </div>
-  <div class="m24r-main">
-    <div class="m24r-strip-w" hidden><div class="m24r-strip-h"><b>Фото покупців</b><span></span></div><div class="m24r-strip"></div></div>
-    <div class="m24r-chips" hidden></div>
-    <div class="m24r-list"><div class="m24r-skw"><span class="m24r-sk a"></span><span class="m24r-sk w4"></span><span class="m24r-sk w9"></span><span class="m24r-sk w7"></span></div><div class="m24r-skw"><span class="m24r-sk a"></span><span class="m24r-sk w4"></span><span class="m24r-sk w9"></span><span class="m24r-sk w7"></span></div></div>
-    <button type="button" class="m24r-more" hidden></button>
-  </div>
+  <div class="m24r-body"><div class="m24r-grid">
+    <div class="m24r-skc"><span class="m24r-sk a"></span><span class="m24r-sk b"></span><span class="m24r-sk c"></span></div>
+    <div class="m24r-skc"><span class="m24r-sk a"></span><span class="m24r-sk b"></span><span class="m24r-sk c"></span></div>
+  </div></div>
 </section>
 
 <script>
@@ -178,9 +160,8 @@
   var SB = 'https://lvyssuomgbccjmksetof.supabase.co';
   var API = SB + '/functions/v1/reviews-api';
   var SNAP = SB + '/storage/v1/object/public/review-cache/v1/';
-  var PAGE = 5;          // скільки відгуків показувати за раз
   var MAX_PHOTOS = 5;
-  var TIMEOUT = 8000;    // мс; потім — ще одна спроба
+  var TIMEOUT = 8000;    // мс; читання повторюється один раз
   /* ======================== */
 
   var root = document.getElementById('m24-reviews');
@@ -201,15 +182,17 @@
     if (n < 40) setTimeout(function () { place(n + 1); }, 250);
   })(0);
 
-  var STAR = '<svg viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 1.2l1.9 4.1 4.5.5-3.4 3 1 4.4L8 11l-4 2.2 1-4.4-3.4-3 4.5-.5z"/></svg>';
+  var STAR = '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2.8c.4 0 .7.2.9.6l2.3 4.7 5.2.8c.8.1 1.1 1.1.5 1.7l-3.8 3.7.9 5.2c.1.8-.7 1.4-1.4 1L12 18l-4.6 2.5c-.7.4-1.6-.2-1.4-1l.9-5.2-3.8-3.7c-.6-.6-.3-1.6.5-1.7l5.2-.8 2.3-4.7c.2-.4.5-.6.9-.6z"/></svg>';
   var STAR_E = STAR.replace('<svg', '<svg class="e"');
-  function stars(n, sm) { var s = ''; for (var i = 1; i <= 5; i++) s += i <= n ? STAR : STAR_E; return '<span class="m24r-stars' + (sm ? ' sm' : '') + '" aria-label="' + n + ' з 5">' + s + '</span>'; }
+  var CAM = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>';
+  var ARR_L = '<svg viewBox="0 0 18 18" fill="none"><path d="M11 4 6 9l5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  var ARR_R = '<svg viewBox="0 0 18 18" fill="none"><path d="m7 4 5 5-5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  function stars(n) { var s = ''; for (var i = 1; i <= 5; i++) s += i <= n ? STAR : STAR_E; return '<span class="m24r-st" aria-label="' + n + ' з 5">' + s + '</span>'; }
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
-  function fmtD(iso) { try { return new Date(iso).toLocaleDateString('uk-UA', { day: 'numeric', month: 'long', year: 'numeric' }); } catch (e) { return ''; } }
+  function fmtD(iso, short) { try { return new Date(iso).toLocaleDateString('uk-UA', short ? { day: 'numeric', month: 'short' } : { day: 'numeric', month: 'long', year: 'numeric' }); } catch (e) { return ''; } }
   function plural(n, a, b, c) { var m10 = n % 10, m100 = n % 100; return m10 === 1 && m100 !== 11 ? a : (m10 >= 2 && m10 <= 4 && (m100 < 12 || m100 > 14) ? b : c); }
-  var FIT = { small: 'Маломірить', 'true': 'По розміру', large: 'Великомірить' };
-  var ARR_L = '<svg viewBox="0 0 18 18" fill="none"><path d="M15 9H3m0 0 4.5-4.5M3 9l4.5 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-  var ARR_R = '<svg viewBox="0 0 18 18" fill="none"><path d="M3 9h12m0 0-4.5-4.5M15 9l-4.5 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  var FIT = { small: 'Маломірить', 'true': 'Розмір відповідає', large: 'Великомірить' };
+  var RATE_TXT = ['', 'Погано', 'Так собі', 'Нормально', 'Добре', 'Чудово'];
 
   function fetchT(url, opts, ms) {
     function once() {
@@ -225,25 +208,23 @@
   function lsGet(k) { try { return JSON.parse(localStorage.getItem(k) || 'null'); } catch (e) { return null; } }
   function lsSet(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
 
-  /* Біля кожного фото лежать копії <фото>.t.webp (мініатюра) і <фото>.m.webp (для перегляду). */
+  /* біля кожного фото лежать копії <фото>.t.webp (мініатюра) і <фото>.m.webp (для перегляду) */
   function small(u) { return u + '.t.webp'; }
   function med(u) { return u + '.m.webp'; }
-  function img(src, orig) { return '<img src="' + esc(src) + '" loading="lazy" decoding="async" alt="" width="240" height="320" onload="this.classList.add(\'ok\');this.parentNode.classList.add(\'ok\')" onerror="if(this.src!==\'' + esc(orig) + '\')this.src=\'' + esc(orig) + '\'">'; }
+  function img(src, orig) { return '<img src="' + esc(src) + '" loading="lazy" decoding="async" alt="" onload="this.classList.add(\'ok\');this.parentNode.classList.add(\'ok\')" onerror="if(this.src!==\'' + esc(orig) + '\')this.src=\'' + esc(orig) + '\'">'; }
 
-  var all = [], photos = [], filter = 'all', shown = PAGE, ver = null;
+  var all = [], shown = 0, ver = null;
+  function perPage() { return innerWidth >= 981 ? 8 : innerWidth >= 700 ? 6 : 4; }
 
   function apply(items) {
     all = (items || []).map(function (r) { r._p = r.photos || []; return r; });
-    photos = []; all.forEach(function (r) { r._p.forEach(function (u, k) { photos.push({ u: u, r: r, k: k }); }); });
-    renderSummary(); renderStrip(); renderChips(); renderList();
+    shown = perPage();
+    render();
   }
   function fail() {
     if (all.length) return;
-    $('.m24r-list').innerHTML = '<p class="m24r-empty">Відгуки тимчасово не завантажились.<button type="button" class="m24r-retry">Спробувати ще</button></p>';
+    $('.m24r-body').innerHTML = '<div class="m24r-empty"><p>Відгуки тимчасово не завантажились.</p><button type="button" class="m24r-retry">Спробувати ще</button></div>';
   }
-  /* 1) показуємо те, що браузер пам'ятає з минулого візиту;
-     2) ratings.json (один маленький файл) каже, чи є відгуки і яка версія свіжа;
-     3) якщо версія змінилась — тягнемо файл товару. */
   function load() {
     var key = 'm24r:p:' + UID, c = lsGet(key);
     if (c && c.items) { ver = c.v; apply(c.items); }
@@ -259,107 +240,73 @@
     }).catch(fail);
   }
 
-  function renderSummary() {
-    if (!all.length) { $('.m24r-score').hidden = $('.m24r-bars').hidden = $('.m24r-fit').hidden = true; return; }
-    var sum = 0, d = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
-    all.forEach(function (r) { sum += +r.rating || 0; d[r.rating] = (d[r.rating] || 0) + 1; });
-    var avg = (sum / all.length).toFixed(1), n = all.length;
-    $('.m24r-num').textContent = avg;
-    $('.m24r-sstars').outerHTML = stars(Math.round(avg)).replace('m24r-stars', 'm24r-stars m24r-sstars');
-    $('.m24r-cnt').textContent = n + ' ' + plural(n, 'відгук', 'відгуки', 'відгуків');
-    $('.m24r-score').hidden = false;
-    $('.m24r-bars').innerHTML = [5, 4, 3, 2, 1].map(function (s) {
-      return '<button type="button" class="m24r-bar" data-f="' + s + '"><span>' + s + ' ★</span><i><b data-w="' + (d[s] / n * 100) + '"></b></i><span>' + d[s] + '</span></button>';
-    }).join('');
-    $('.m24r-bars').hidden = false;
-    setTimeout(function () { root.querySelectorAll('.m24r-bar b').forEach(function (b) { b.style.width = b.getAttribute('data-w') + '%'; }); }, 120);
-    var f = { small: 0, 'true': 0, large: 0 }, fn = 0;
-    all.forEach(function (r) { if (f.hasOwnProperty(r.size_fit)) { f[r.size_fit]++; fn++; } });
-    if (fn) {
-      var pos = 50 + (f.large - f.small) / fn * 50;  // 0 — маломірить, 100 — великомірить
-      $('.m24r-fit-h strong').textContent = pos < 38 ? 'Маломірить' : pos > 62 ? 'Великомірить' : 'По розміру';
-      $('.m24r-fit').hidden = false;
-      setTimeout(function () { $('.m24r-fit-d').style.left = Math.max(4, Math.min(96, pos)) + '%'; }, 120);
+  function render() {
+    var n = all.length;
+    $('.m24r-n').textContent = n ? n : '';
+    $('[data-add]').hidden = !n;
+    if (!n) {
+      $('.m24r-sum').hidden = true;
+      $('.m24r-body').innerHTML = '<div class="m24r-empty">' + CAM + '<b>Відгуків поки немає</b><p>Поділіться враженням і фото — це допоможе іншим обрати розмір.</p><button type="button" class="m24r-add" data-add>Написати відгук</button></div>';
+      return;
     }
+    var sum = 0, fit = { small: 0, 'true': 0, large: 0 }, fn = 0;
+    all.forEach(function (r) { sum += +r.rating || 0; if (fit.hasOwnProperty(r.size_fit)) { fit[r.size_fit]++; fn++; } });
+    var avg = sum / n, s = '<span><b>' + avg.toFixed(1).replace('.', ',') + '</b>' + stars(Math.round(avg)) + '</span>';
+    s += '<i></i><span>' + n + ' ' + plural(n, 'відгук', 'відгуки', 'відгуків') + '</span>';
+    if (fn) {
+      var top = ['true', 'small', 'large'].sort(function (a, b) { return fit[b] - fit[a]; })[0];
+      s += '<i></i><span>' + FIT[top] + ' · ' + Math.round(fit[top] / fn * 100) + '%</span>';
+    }
+    $('.m24r-sum').innerHTML = s; $('.m24r-sum').hidden = false;
+    var list = all.slice(0, shown);
+    var html = '<div class="m24r-grid">' + list.map(function (r, i) {
+      var name = (r.author_name || '').trim() || 'Покупець', p = r._p;
+      return '<button type="button" class="m24r-card" data-i="' + i + '" style="animation-delay:' + Math.min(i, 8) * 40 + 'ms" aria-label="Відгук: ' + esc(name) + '">' +
+        '<span class="m24r-pic">' + (p[0] ? img(small(p[0]), p[0]) : '') + (p.length > 1 ? '<span class="m24r-cnt">' + CAM + p.length + '</span>' : '') + '</span>' +
+        '<span class="m24r-meta">' + stars(+r.rating || 0) + '<small>' + fmtD(r.created_at, true) + '</small></span>' +
+        '<span class="m24r-name">' + esc(name) + '</span>' +
+        (r.size_fit && FIT[r.size_fit] ? '<span class="m24r-fitl">' + FIT[r.size_fit] + '</span>' : '') +
+        '<span class="m24r-txt">' + esc(r.body) + '</span></button>';
+    }).join('') + '</div>';
+    var rest = n - shown;
+    if (rest > 0) html += '<button type="button" class="m24r-more">Показати ще ' + Math.min(rest, perPage()) + ' з ' + rest + '</button>';
+    $('.m24r-body').innerHTML = html;
   }
 
-  function renderStrip() {
-    if (!photos.length) { $('.m24r-strip-w').hidden = true; return; }
-    $('.m24r-strip-h span').textContent = photos.length + ' фото';
-    $('.m24r-strip').innerHTML = photos.map(function (p, i) {
-      return '<button type="button" class="m24r-th" data-ph="' + i + '" aria-label="Фото покупця ' + (i + 1) + '">' + img(small(p.u), p.u) + '</button>';
-    }).join('');
-    $('.m24r-strip-w').hidden = false;
-  }
-
-  function renderChips() {
-    if (all.length < 3) { $('.m24r-chips').hidden = true; return; }
-    var c = [['all', 'Всі', all.length]];
-    [5, 4, 3, 2, 1].forEach(function (s) { var k = all.filter(function (r) { return +r.rating === s; }).length; if (k) c.push([String(s), s + ' ★', k]); });
-    ['true', 'small', 'large'].forEach(function (f) { var k = all.filter(function (r) { return r.size_fit === f; }).length; if (k) c.push(['fit:' + f, FIT[f], k]); });
-    $('.m24r-chips').innerHTML = c.map(function (x) { return '<button type="button" class="m24r-chip' + (x[0] === filter ? ' on' : '') + '" data-c="' + x[0] + '">' + x[1] + '<small>' + x[2] + '</small></button>'; }).join('');
-    $('.m24r-chips').hidden = false;
-  }
-
-  function filtered() {
-    return all.filter(function (r) {
-      if (filter === 'all') return true;
-      if (filter.indexOf('fit:') === 0) return r.size_fit === filter.slice(4);
-      return String(r.rating) === filter;
-    });
-  }
-
-  function renderList() {
-    var list = filtered(), el = $('.m24r-list'), more = $('.m24r-more');
-    if (!all.length) { el.innerHTML = '<p class="m24r-empty">Поки немає відгуків. Будьте першою!</p>'; more.hidden = true; return; }
-    if (!list.length) { el.innerHTML = '<p class="m24r-empty">Таких відгуків поки немає.</p>'; more.hidden = true; return; }
-    el.innerHTML = list.slice(0, shown).map(function (r) {
-      var pills = (r.size_fit && FIT[r.size_fit] ? '<span class="m24r-pill">' + FIT[r.size_fit] + '</span>' : '') + (r.verified ? '<span class="m24r-pill">✓ Покупка</span>' : '');
-      var first = 0; for (var i = 0; i < photos.length; i++) if (photos[i].r === r) { first = i; break; }
-      var ph = r._p.map(function (u, k) { return '<button type="button" class="m24r-th" data-ph="' + (first + k) + '" aria-label="Фото ' + (k + 1) + '">' + img(small(u), u) + '</button>'; }).join('');
-      var name = (r.author_name || '').trim() || 'Покупець';
-      return '<article class="m24r-item"><div class="m24r-ih"><div class="m24r-who"><span class="m24r-ava">' + esc(name.charAt(0)) + '</span><div><b>' + esc(name) + '</b><small>' + fmtD(r.created_at) + '</small></div></div>' +
-        (pills ? '<div class="m24r-pills">' + pills + '</div>' : '') + '</div>' +
-        stars(+r.rating || 0, true) + (r.title ? '<p class="m24r-rt">' + esc(r.title) + '</p>' : '') + '<p class="m24r-tx">' + esc(r.body) + '</p>' +
-        (ph ? '<div class="m24r-ph">' + ph + '</div>' : '') +
-        (r.reply_text ? '<div class="m24r-reply"><b>Відповідь Moda24</b>' + esc(r.reply_text) + '</div>' : '') + '</article>';
-    }).join('');
-    var rest = list.length - shown;
-    more.hidden = rest <= 0;
-    if (rest > 0) more.textContent = 'Показати ще ' + Math.min(rest, PAGE);
-  }
-
-  /* ---------- лайтбокс ---------- */
-  var lb = document.createElement('div');
-  lb.className = 'm24r-ov m24r-lb'; lb.setAttribute('role', 'dialog'); lb.setAttribute('aria-modal', 'true'); lb.setAttribute('aria-label', 'Фото покупців');
-  lb.innerHTML = '<div class="m24r-lb-top"><span class="m24r-lb-n"></span><button type="button" class="m24r-x" aria-label="Закрити">✕</button></div>' +
-    '<div class="m24r-lb-im"><button type="button" class="m24r-nav p" aria-label="Попереднє фото">' + ARR_L + '</button><img alt=""><span class="m24r-lb-sp"></span><button type="button" class="m24r-nav n" aria-label="Наступне фото">' + ARR_R + '</button></div><div class="m24r-lb-cap"></div>';
-  document.body.appendChild(lb);
-  var cur = 0, tx = null, seq = 0;
-  function showImg(im, u) {
-    var my = ++seq; im.classList.remove('ok'); im.removeAttribute('src');
-    im.onload = function () { if (my === seq) im.classList.add('ok'); };
+  /* ---------- перегляд відгуку ---------- */
+  var vw = document.createElement('div');
+  vw.className = 'm24r-ov m24r-vw'; vw.setAttribute('role', 'dialog'); vw.setAttribute('aria-modal', 'true'); vw.setAttribute('aria-label', 'Відгук');
+  vw.innerHTML = '<div class="m24r-box"><button type="button" class="m24r-x" aria-label="Закрити">✕</button><div class="m24r-view"><div class="m24r-gal"><img alt=""><button type="button" class="m24r-nav p" aria-label="Попереднє фото">' + ARR_L + '</button><button type="button" class="m24r-nav n" aria-label="Наступне фото">' + ARR_R + '</button><div class="m24r-dots"></div></div><div class="m24r-vtx"></div></div></div>';
+  document.body.appendChild(vw);
+  var cr = null, ci = 0, tx = null, seq = 0;
+  function photo(i) {
+    var p = cr._p; if (!p.length) return;
+    ci = (i + p.length) % p.length;
+    var im = vw.querySelector('.m24r-gal img'), u = p[ci], my = ++seq;
+    im.classList.remove('ok'); im.onload = function () { if (my === seq) im.classList.add('ok'); };
     im.onerror = function () { if (my === seq && im.src !== u) im.src = u; };
     im.src = med(u);
+    vw.querySelector('.m24r-dots').innerHTML = p.length > 1 ? p.map(function (_, k) { return '<b' + (k === ci ? ' class="on"' : '') + '></b>'; }).join('') : '';
+    vw.querySelectorAll('.m24r-nav').forEach(function (b) { b.hidden = p.length < 2; });
   }
-  function lbShow(i) {
-    if (!photos.length) return;
-    cur = (i + photos.length) % photos.length; var p = photos[cur], r = p.r;
-    showImg(lb.querySelector('img'), p.u);
-    [cur + 1, cur - 1].forEach(function (j) { var q = photos[(j + photos.length) % photos.length]; if (q) (new Image()).src = med(q.u); });
-    lb.querySelector('.m24r-lb-n').textContent = (cur + 1) + ' / ' + photos.length;
-    lb.querySelector('.m24r-lb-cap').innerHTML = stars(+r.rating || 0, true) + '<p><b>' + esc(r.author_name || 'Покупець') + '</b>' + (r.size_fit && FIT[r.size_fit] ? ' · ' + FIT[r.size_fit].toLowerCase() : '') + '</p><p>' + esc(r.body) + '</p>';
-    lb.querySelectorAll('.m24r-nav').forEach(function (b) { b.hidden = photos.length < 2; });
+  function openView(r) {
+    cr = r; var name = (r.author_name || '').trim() || 'Покупець';
+    vw.querySelector('.m24r-vtx').innerHTML = stars(+r.rating || 0) + '<div><div class="m24r-name">' + esc(name) + '</div><small style="font-size:12px;color:var(--soft)">' + fmtD(r.created_at) + '</small></div>' +
+      ((r.size_fit && FIT[r.size_fit]) || r.verified ? '<div class="m24r-tags">' + (r.size_fit && FIT[r.size_fit] ? '<span>' + FIT[r.size_fit] + '</span>' : '') + (r.verified ? '<span>✓ Покупка підтверджена</span>' : '') + '</div>' : '') +
+      (r.title ? '<p style="font-weight:600">' + esc(r.title) + '</p>' : '') + '<p>' + esc(r.body) + '</p>' +
+      (r.reply_text ? '<div class="m24r-reply"><b>Відповідь Moda24</b>' + esc(r.reply_text) + '</div>' : '');
+    photo(0);
+    vw.classList.add('on'); document.documentElement.style.overflow = 'hidden'; vw.querySelector('.m24r-x').focus();
   }
-  function lbOpen(i) { lbShow(i); lb.classList.add('on'); document.documentElement.style.overflow = 'hidden'; lb.querySelector('.m24r-x').focus(); }
-  function lbClose() { lb.classList.remove('on'); document.documentElement.style.overflow = ''; }
-  lb.addEventListener('click', function (e) {
-    if (e.target.closest('.m24r-x') || e.target === lb || e.target.classList.contains('m24r-lb-im')) lbClose();
-    else if (e.target.closest('.m24r-nav.p')) lbShow(cur - 1);
-    else if (e.target.closest('.m24r-nav.n')) lbShow(cur + 1);
+  function closeAll() { vw.classList.remove('on'); sh.classList.remove('on'); document.documentElement.style.overflow = ''; }
+  vw.addEventListener('click', function (e) {
+    if (e.target === vw || e.target.closest('.m24r-x')) return closeAll();
+    if (e.target.closest('.m24r-nav.p')) photo(ci - 1);
+    else if (e.target.closest('.m24r-nav.n')) photo(ci + 1);
   });
-  lb.addEventListener('touchstart', function (e) { tx = e.touches[0].clientX; }, { passive: true });
-  lb.addEventListener('touchend', function (e) { if (tx === null) return; var dx = e.changedTouches[0].clientX - tx; tx = null; if (Math.abs(dx) > 40) lbShow(cur + (dx < 0 ? 1 : -1)); }, { passive: true });
+  var gal = vw.querySelector('.m24r-gal');
+  gal.addEventListener('touchstart', function (e) { tx = e.touches[0].clientX; }, { passive: true });
+  gal.addEventListener('touchend', function (e) { if (tx === null) return; var dx = e.changedTouches[0].clientX - tx; tx = null; if (Math.abs(dx) > 40) photo(ci + (dx < 0 ? 1 : -1)); }, { passive: true });
 
   /* ---------- стискання фото в браузері ---------- */
   function shrink(bmp, w, h, q) {
@@ -388,56 +335,65 @@
     });
   }
 
-  /* ---------- форма ---------- */
+  /* ---------- форма: фото першим кроком, бо без фото відгук не приймається ---------- */
+  var nameEl = document.querySelector('h1.js-catalog-prod-name, .js-product-name, .js-store-prod-name');
+  var PNAME = nameEl ? nameEl.textContent.trim() : '';
   var sh = document.createElement('div');
-  sh.className = 'm24r-ov m24r-sh'; sh.setAttribute('role', 'dialog'); sh.setAttribute('aria-modal', 'true'); sh.setAttribute('aria-label', 'Залишити відгук');
-  sh.innerHTML = '<form class="m24r-sh-in" novalidate><div class="m24r-sh-h"><h3>Ваш відгук</h3><button type="button" class="m24r-x" aria-label="Закрити">✕</button></div>' +
-    '<div class="m24r-f" data-k="rate">Оцінка *<span class="m24r-rate">' + [1, 2, 3, 4, 5].map(function (n) { return '<button type="button" data-r="' + n + '" aria-label="' + n + ' з 5">' + STAR + '</button>'; }).join('') + '</span></div>' +
-    '<label class="m24r-f" data-k="n">Ваше ім\'я *<input type="text" name="n" maxlength="60" autocomplete="given-name"></label>' +
-    '<div class="m24r-f">Розмір підійшов?<span class="m24r-seg"><button type="button" data-v="small">Маломірить</button><button type="button" data-v="true">По розміру</button><button type="button" data-v="large">Великомірить</button></span></div>' +
-    '<label class="m24r-f" data-k="b">Відгук *<textarea name="b" maxlength="1400"></textarea></label>' +
-    '<div class="m24r-f" data-k="ph">Фото *<label class="m24r-drop"><span>＋ Додати фото<small>від 1 до ' + MAX_PHOTOS + '</small></span><input type="file" accept="image/jpeg,image/png,image/webp,image/heic,image/heif" multiple></label><div class="m24r-prev"></div></div>' +
+  sh.className = 'm24r-ov m24r-sh'; sh.setAttribute('role', 'dialog'); sh.setAttribute('aria-modal', 'true'); sh.setAttribute('aria-label', 'Написати відгук');
+  sh.innerHTML = '<div class="m24r-box"><button type="button" class="m24r-x" aria-label="Закрити">✕</button><form class="m24r-form" novalidate>' +
+    '<div class="m24r-fh"><h3>Ваш відгук</h3>' + (PNAME ? '<p>' + esc(PNAME) + '</p>' : '') + '</div>' +
+    '<div class="m24r-f" data-k="ph">Фото у виробі * <small>від 1 до ' + MAX_PHOTOS + '</small><div class="m24r-tiles"></div></div>' +
+    '<div class="m24r-f" data-k="rate">Оцінка *<span class="m24r-rate">' + [1, 2, 3, 4, 5].map(function (n) { return '<button type="button" data-r="' + n + '" aria-label="' + n + ' з 5">' + STAR + '</button>'; }).join('') + '<em></em></span></div>' +
+    '<div class="m24r-f">Як сів розмір?<span class="m24r-seg"><button type="button" data-v="small">Маломірить</button><button type="button" data-v="true">Відповідає</button><button type="button" data-v="large">Великомірить</button></span></div>' +
+    '<label class="m24r-f" data-k="b">Враження *<textarea name="b" maxlength="1400" placeholder="Тканина, посадка, як виглядає на вас"></textarea></label>' +
+    '<label class="m24r-f" data-k="n">Ім\'я *<input type="text" name="n" maxlength="60" autocomplete="given-name"></label>' +
     '<input type="text" name="hp" class="m24r-hp" tabindex="-1" autocomplete="off" aria-hidden="true">' +
-    '<button type="submit" class="m24r-send">Надіслати відгук</button><div class="m24r-note" aria-live="polite"></div></form>';
+    '<button type="submit" class="m24r-send">Надіслати відгук</button><div class="m24r-note" aria-live="polite"></div></form></div>';
   document.body.appendChild(sh);
-  var form = sh.querySelector('form'), rating = 0, fit = '', files = [], opened = 0;
-  function shOpen() { sh.classList.add('on'); document.documentElement.style.overflow = 'hidden'; if (!opened) opened = Date.now(); }
-  function shClose() { sh.classList.remove('on'); document.documentElement.style.overflow = ''; }
+  var form = sh.querySelector('form'), formHtml = form.innerHTML, rating = 0, fit = '', files = [], opened = 0;
+  function bindForm() {
+    form = sh.querySelector('form');
+    form.n.addEventListener('input', function () { mark('n', false); });
+    form.b.addEventListener('input', function () { mark('b', false); });
+    tiles();
+  }
+  function shOpen() {
+    if (!sh.querySelector('form.m24r-form textarea')) { sh.querySelector('.m24r-box').innerHTML = '<button type="button" class="m24r-x" aria-label="Закрити">✕</button><form class="m24r-form" novalidate>' + formHtml + '</form>'; rating = 0; fit = ''; files = []; bindForm(); }
+    sh.classList.add('on'); document.documentElement.style.overflow = 'hidden'; if (!opened) opened = Date.now();
+  }
   function note(t, c) { var n = sh.querySelector('.m24r-note'); n.textContent = t; n.className = 'm24r-note ' + (c || ''); }
   function mark(k, on) { var f = sh.querySelector('[data-k="' + k + '"]'); if (f) f.classList.toggle('err', on); }
-  function previews() {
-    sh.querySelector('.m24r-prev').innerHTML = files.map(function (f, i) { return '<div><img src="' + URL.createObjectURL(f) + '" alt=""><button type="button" data-rm="' + i + '" aria-label="Прибрати фото">✕</button></div>'; }).join('');
-    sh.querySelector('.m24r-drop').style.display = files.length >= MAX_PHOTOS ? 'none' : '';
+  function tiles() {
+    var h = files.map(function (f, i) { return '<div class="m24r-tile"><img src="' + URL.createObjectURL(f) + '" alt=""><button type="button" data-rm="' + i + '" aria-label="Прибрати фото">✕</button></div>'; }).join('');
+    if (files.length < MAX_PHOTOS) h += '<label class="m24r-tile add">' + CAM + 'Додати<input type="file" accept="image/jpeg,image/png,image/webp,image/heic,image/heif" multiple></label>';
+    sh.querySelector('.m24r-tiles').innerHTML = h;
+    var inp = sh.querySelector('.m24r-tile.add input');
+    if (inp) inp.addEventListener('change', function (e) { files = files.concat(Array.prototype.slice.call(e.target.files, 0, MAX_PHOTOS - files.length)); tiles(); });
     if (files.length) mark('ph', false);
   }
+  bindForm();
   sh.addEventListener('click', function (e) {
     var t = e.target;
-    if (t === sh || t.closest('.m24r-x')) return shClose();
-    var rb = t.closest('.m24r-rate button'); if (rb) { rating = +rb.getAttribute('data-r'); mark('rate', false); sh.querySelectorAll('.m24r-rate button').forEach(function (b) { b.classList.toggle('on', +b.getAttribute('data-r') <= rating); }); return; }
+    if (t === sh || t.closest('.m24r-x')) return closeAll();
+    var rb = t.closest('.m24r-rate button'); if (rb) { rating = +rb.getAttribute('data-r'); mark('rate', false); sh.querySelectorAll('.m24r-rate button').forEach(function (b) { b.classList.toggle('on', +b.getAttribute('data-r') <= rating); }); sh.querySelector('.m24r-rate em').textContent = RATE_TXT[rating]; return; }
     var sb = t.closest('.m24r-seg button'); if (sb) { fit = fit === sb.getAttribute('data-v') ? '' : sb.getAttribute('data-v'); sh.querySelectorAll('.m24r-seg button').forEach(function (b) { b.classList.toggle('on', b.getAttribute('data-v') === fit); }); return; }
-    var rm = t.closest('[data-rm]'); if (rm) { files.splice(+rm.getAttribute('data-rm'), 1); previews(); }
+    var rm = t.closest('[data-rm]'); if (rm) { e.preventDefault(); files.splice(+rm.getAttribute('data-rm'), 1); tiles(); }
   });
-  form.n.addEventListener('input', function () { mark('n', false); });
-  form.b.addEventListener('input', function () { mark('b', false); });
-  sh.querySelector('input[type=file]').addEventListener('change', function (e) {
-    files = files.concat(Array.prototype.slice.call(e.target.files, 0, MAX_PHOTOS - files.length)); e.target.value = ''; previews();
-  });
-  form.addEventListener('submit', function (e) {
+  sh.addEventListener('submit', function (e) {
     e.preventDefault();
     var name = form.n.value.trim(), body = form.b.value.trim();
-    mark('rate', !rating); mark('n', !name); mark('b', !body); mark('ph', !files.length);
-    if (!rating) return note('Оберіть оцінку', 'err');
-    if (!name) return note('Вкажіть ім\'я', 'err');
-    if (!body) return note('Напишіть кілька слів про товар', 'err');
+    mark('ph', !files.length); mark('rate', !rating); mark('b', !body); mark('n', !name);
     if (!files.length) return note('Додайте хоча б одне фото', 'err');
+    if (!rating) return note('Оберіть оцінку', 'err');
+    if (!body) return note('Напишіть кілька слів про товар', 'err');
+    if (!name) return note('Вкажіть ім\'я', 'err');
     var btn = sh.querySelector('.m24r-send'); btn.disabled = true; btn.textContent = 'Надсилаємо…'; note('');
-    var nameEl = document.querySelector('h1.js-catalog-prod-name, .js-product-name, .js-store-prod-name');
     var sent = 0, failed = 0;
-    // спершу перевіряємо, що фото відкриваються (HEIC на старих телефонах — ні), і тільки тоді надсилаємо відгук
+    // спершу перевіряємо, що фото відкриваються (HEIC на старих телефонах — ні), і лише тоді надсилаємо відгук
     Promise.all(files.map(function (f) { return prepare(f).then(function () { return true; }, function () { return false; }); })).then(function (ok) {
-      if (ok.indexOf(false) !== -1) { var e = new Error('decode'); throw e; }
+      if (ok.indexOf(false) !== -1) throw new Error('decode');
       return fetchT(API + '?a=submit', { method: 'POST', headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify({
-        product_id: PID, product_url: PID, product_name: nameEl ? nameEl.textContent.trim() : null,
+        product_id: PID, product_url: PID, product_name: PNAME || null,
         author_name: name, rating: rating, body: body, size_fit: fit || null,
         hp: form.hp.value, t: opened ? Date.now() - opened : null
       }) }, 20000);
@@ -448,30 +404,28 @@
         return p.then(function () { return sendPhoto(rev.id, rev.k, f).then(function () { sent++; }, function () { failed++; }); });
       }, Promise.resolve());
     }).then(function () {
-      if (failed && !sent) return note('Фото не завантажились. Спробуйте ще раз або оберіть інші фото.', 'err');
-      note('Дякуємо! Відгук з\'явиться після перевірки.', 'ok');
-      form.reset(); rating = 0; fit = ''; files = []; previews();
-      sh.querySelectorAll('.m24r-rate button,.m24r-seg button').forEach(function (b) { b.classList.remove('on'); });
+      if (failed && !sent) { note('Фото не завантажились. Спробуйте ще раз або оберіть інші фото.', 'err'); return; }
+      form.innerHTML = '<div class="m24r-done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9.5"/><path d="m8 12.5 2.8 2.8L16.5 9.5"/></svg><b>Дякуємо!</b><p>Відгук з\'явиться на сайті після перевірки.</p></div>';
     }).catch(function (e) {
       if (e && e.message === 'decode') { mark('ph', true); return note('Одне з фото не вдалося відкрити. Оберіть фото у форматі JPG або PNG.', 'err'); }
       note(e && e.status === 429 ? 'Забагато відгуків за короткий час. Спробуйте пізніше.' : 'Не вдалося надіслати. Спробуйте ще раз за хвилину.', 'err');
-    }).then(function () { btn.disabled = false; btn.textContent = 'Надіслати відгук'; });
+    }).then(function () { var b = sh.querySelector('.m24r-send'); if (b) { b.disabled = false; b.textContent = 'Надіслати відгук'; } });
   });
 
-  /* ---------- події віджета ---------- */
+  /* ---------- події ---------- */
   root.addEventListener('click', function (e) {
     var t = e.target;
-    var ph = t.closest('[data-ph]'); if (ph) return lbOpen(+ph.getAttribute('data-ph'));
-    var c = t.closest('.m24r-chip'); if (c) { filter = c.getAttribute('data-c'); shown = PAGE; root.querySelectorAll('.m24r-chip').forEach(function (x) { x.classList.toggle('on', x === c); }); return renderList(); }
-    var b = t.closest('.m24r-bar'); if (b) { var cc = root.querySelector('.m24r-chip[data-c="' + b.getAttribute('data-f') + '"]'); if (cc) { cc.click(); cc.scrollIntoView({ block: 'nearest', inline: 'center' }); } return; }
-    if (t.closest('.m24r-more')) { shown += PAGE; return renderList(); }
-    if (t.closest('.m24r-write')) return shOpen();
-    if (t.closest('.m24r-retry')) { $('.m24r-list').innerHTML = '<div class="m24r-skw"><span class="m24r-sk a"></span><span class="m24r-sk w4"></span><span class="m24r-sk w9"></span></div>'; return load(); }
+    var c = t.closest('.m24r-card'); if (c) return openView(all[+c.getAttribute('data-i')]);
+    if (t.closest('.m24r-more')) { shown += perPage(); return render(); }
+    if (t.closest('[data-add]')) return shOpen();
+    if (t.closest('.m24r-retry')) { $('.m24r-body').innerHTML = ''; return load(); }
   });
   document.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape') { lbClose(); shClose(); }
-    if (lb.classList.contains('on')) { if (e.key === 'ArrowRight') lbShow(cur + 1); if (e.key === 'ArrowLeft') lbShow(cur - 1); }
+    if (e.key === 'Escape') closeAll();
+    if (vw.classList.contains('on')) { if (e.key === 'ArrowRight') photo(ci + 1); if (e.key === 'ArrowLeft') photo(ci - 1); }
   });
+  // рядок з оцінкою під назвою товару (reviews-catalog.js) веде сюди
+  window.m24ReviewsOpen = function () { root.scrollIntoView({ behavior: 'smooth', block: 'start' }); };
 
   /* дані вантажимо, коли блок наближається до екрана */
   if ('IntersectionObserver' in window) {
