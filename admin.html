@@ -458,7 +458,8 @@ async function token() {
   }
   return session.access;
 }
-async function H(extra = {}) { return { 'apikey': SB_PUB, 'Authorization': 'Bearer ' + await token(), ...extra }; }
+// у токені можуть опинитися невидимі символи (наприклад, коли посилання скопійоване з чату) — прибираємо їх
+async function H(extra = {}) { return { 'apikey': SB_PUB, 'Authorization': 'Bearer ' + String(await token()).replace(/[^\x21-\x7E]/g, ''), ...extra }; }
 
 async function tryLogin() {
   const email = document.getElementById('email-input').value.trim();
@@ -510,9 +511,13 @@ async function forgotPassword() {
 let recovery = false;
 (function () {
   const h = new URLSearchParams(location.hash.slice(1));
+  const clean = v => String(v || '').replace(/[^\x21-\x7E]/g, '');
   if (h.get('access_token') && h.get('type') === 'recovery') {
-    saveSession({ access_token: h.get('access_token'), refresh_token: h.get('refresh_token'), expires_in: +h.get('expires_in') || 3600 });
+    saveSession({ access_token: clean(h.get('access_token')), refresh_token: clean(h.get('refresh_token')), expires_in: +clean(h.get('expires_in')) || 3600 });
     history.replaceState(null, '', location.pathname);
+    sessionStorage.setItem('adm_recovery', '1');
+  }
+  if (session && sessionStorage.getItem('adm_recovery') === '1') {
     recovery = true;
     document.querySelector('#login-screen .login-box').style.display = 'none';
     document.getElementById('newpwd-box').style.display = '';
@@ -531,7 +536,7 @@ async function saveNewPassword() {
     if (!r.ok) throw new Error((await r.json()).msg || 'Не вдалося зберегти пароль');
     const ok = await sbRpc('is_admin');
     if (ok !== true) throw new Error('Немає прав адміністратора');
-    recovery = false; showApp(); init();
+    recovery = false; sessionStorage.removeItem('adm_recovery'); showApp(); init();
   } catch (e) { err.textContent = e.message; }
 }
 document.getElementById('pwd-input').addEventListener('keydown', e => { if (e.key === 'Enter') tryLogin(); });
