@@ -1,6 +1,6 @@
 // moda24.online — API відгуків. Сайт звертається тільки сюди; ключі Supabase живуть лише на сервері.
 //  GET  ?a=ratings | ?a=product&uid=…&offset=&rating=&fit= | ?a=latest&offset=
-//  POST ?a=submit (JSON) | ?a=photo&id=…&k=… (FormData)
+//  POST ?a=submit (JSON) | ?a=photo&id=…&k=… (FormData) | ?a=vote (JSON {id, v})
 // Відгук без фото не потрапляє на сайт: схвалити його не дасть база (тригер reviews_require_photo).
 import { createClient } from "npm:@supabase/supabase-js@2.45.4";
 
@@ -209,6 +209,21 @@ Deno.serve(async (req) => {
         }).select("id").single();
         if (error) throw error;
         return reply({ ok: true, id: data.id, k: await uploadToken(data.id) }, 200, origin);
+      }
+
+      if (a === "vote") {
+        // «Відгук корисний?»: один голос з пристрою (IP + браузер); v = 1, -1 або 0 (зняти)
+        const b = await req.json().catch(() => ({}));
+        const id = typeof b.id === "string" ? b.id : "";
+        const v = Number(b.v);
+        if (!/^[0-9a-f-]{36}$/.test(id) || ![1, -1, 0].includes(v)) return reply({ error: "validation" }, 400, origin);
+        const ok = await db.rpc("api_hit", { p_key: `vote:${ipHash}`, p_limit: 60, p_window_seconds: 3600 });
+        if (ok.data === false) return reply({ error: "rate_limited" }, 429, origin);
+        const voter = await sha256(`${SECRET_KEY}:voter:${ip}:${req.headers.get("user-agent") ?? ""}`);
+        const { data, error } = await db.rpc("review_vote", { p_review: id, p_voter: voter, p_vote: v });
+        if (error) throw error;
+        if (!data) return reply({ error: "not_found" }, 404, origin);
+        return reply({ ok: true, ...data }, 200, origin);
       }
 
       if (a === "photo") {

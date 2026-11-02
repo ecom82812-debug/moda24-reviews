@@ -22,7 +22,7 @@ const SNAP_KEY = Deno.env.get("SNAP_KEY") ?? "";
 const BUCKET = "review-cache";
 const HOME_N = 120; // скільки останніх відгуків іде на головну
 const COLS =
-  "id,product_uid,product_name,product_url,author_name,rating,title,body,size_fit,verified,created_at,reply_text,reply_date";
+  "id,product_uid,product_name,product_url,author_name,rating,title,body,size_fit,verified,created_at,reply_text,reply_date,helpful_up,helpful_down";
 
 const db = createClient(SUPABASE_URL, SECRET_KEY, { auth: { persistSession: false, autoRefreshToken: false } });
 
@@ -65,6 +65,8 @@ function slim(r: Rev, withProduct: boolean) {
   if (r.verified) o.verified = true;
   if (r.reply_text) { o.reply_text = r.reply_text; o.reply_date = r.reply_date; }
   if (r.photos.length) o.photos = r.photos;
+  if (r.helpful_up) o.up = r.helpful_up;
+  if (r.helpful_down) o.down = r.helpful_down;
   if (withProduct) { if (r.product_name) o.product_name = r.product_name; if (r.product_url) o.product_url = r.product_url; }
   return o;
 }

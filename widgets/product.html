@@ -33,41 +33,52 @@
 .m24r-add:hover{background:var(--ink);color:#fff}
 .m24r-add svg{width:16px;height:16px}
 
-/* «мозаїка» */
-.m24r-mas{display:flex;gap:12px;margin-top:24px;align-items:flex-start}
-.m24r-col{flex:1 1 0;min-width:0;display:grid;gap:12px}
-.m24r-mc{all:unset;box-sizing:border-box;cursor:pointer;display:block;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff;animation:m24rIn .4s ease both;transition:border-color .2s,box-shadow .25s}
-.m24r-mc:hover{border-color:#DCD2D6;box-shadow:0 8px 24px rgba(30,26,27,.06)}
-.m24r-mc.np{background:var(--tint);border-color:transparent}
+/* стрічка відгуків: три варіанти для тесту (v1 «картка», v2 «компакт», v3 «фото зверху») */
 @keyframes m24rIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-.m24r-pic{position:relative;display:block;aspect-ratio:3/4;overflow:hidden;background:linear-gradient(100deg,#F3EEF0 35%,#FAF7F8 50%,#F3EEF0 65%) 0 0/250% 100%;animation:m24rSh 1.3s linear infinite}
-.m24r-pic.ok{animation:none;background:var(--tint)}
-@keyframes m24rSh{to{background-position:-150% 0}}
-.m24r-pic img{width:100%;height:100%;object-fit:cover;display:block;opacity:0;transition:opacity .35s ease,transform .5s ease}
-.m24r-pic img.ok{opacity:1}
-.m24r-mc:hover .m24r-pic img{transform:scale(1.03)}
-.m24r-cnt{position:absolute;right:8px;top:8px;display:inline-flex;align-items:center;gap:4px;padding:4px 8px;border-radius:999px;background:rgba(255,255,255,.92);font-size:11px;font-weight:600;color:var(--ink)}
-.m24r-cnt svg{width:12px;height:12px}
-.m24r-mb{display:grid;gap:8px;padding:12px 12px 14px}
-.m24r-meta{display:flex;align-items:center;justify-content:space-between;gap:8px}
-.m24r-meta small{font-size:11px;color:var(--soft);white-space:nowrap}
-.m24r-txt{font-size:14px;line-height:1.55;color:#3A3235;display:-webkit-box;-webkit-line-clamp:6;-webkit-box-orient:vertical;overflow:hidden;overflow-wrap:anywhere}
-.m24r-mc.np .m24r-txt{font-family:var(--hd);font-size:18px;font-weight:500;line-height:1.35;color:var(--ink);-webkit-line-clamp:9}
-.m24r-who{display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 8px;font-size:12px;color:var(--soft)}
-.m24r-who b{font-size:13px;font-weight:600;color:var(--ink)}
-.m24r-name{font-size:16px;font-weight:600;line-height:1.3}
-
-/* «стрічка» */
 .m24r-feed{display:grid;gap:12px;margin-top:24px}
-.m24r-fc{display:grid;gap:10px;padding:18px 16px;border:1px solid var(--line);border-radius:12px;background:#fff;animation:m24rIn .4s ease both;align-content:start}
-.m24r-ftx{all:unset;cursor:pointer;font-size:15px;line-height:1.6;color:#3A3235;white-space:pre-line;overflow-wrap:anywhere;display:-webkit-box;-webkit-line-clamp:7;-webkit-box-orient:vertical;overflow:hidden}
-.m24r-thumbs{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
+.m24r-fc{display:grid;gap:12px;padding:16px;border:1px solid #F0EAED;border-radius:16px;background:#fff;box-shadow:0 2px 14px rgba(30,26,27,.05);animation:m24rIn .4s ease both;align-content:start;min-width:0;
+  grid-template-columns:minmax(0,1fr);grid-template-areas:"h" "t" "p" "r" "ft"}
+.m24r-h{grid-area:h;display:flex;align-items:center;gap:10px;min-width:0}
+.m24r-ava{width:36px;height:36px;border-radius:50%;background:var(--tint);display:grid;place-items:center;font-family:var(--hd);font-size:18px;color:var(--ink);flex:none;text-transform:uppercase}
+.m24r-hn{min-width:0;flex:1}
+.m24r-hn b{display:block;font-size:14px;font-weight:600;line-height:1.25;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.m24r-hn small{display:block;font-size:12px;color:var(--soft)}
+.m24r-h .m24r-st svg{width:15px;height:15px}
+.m24r-t{grid-area:t;display:grid;gap:8px;min-width:0}
+.m24r-fit{justify-self:start;font-size:12px;font-weight:500;padding:4px 10px;border-radius:999px;background:var(--tint);color:var(--ink)}
+.m24r-ftx{all:unset;cursor:pointer;font-size:15px;line-height:1.6;color:#3A3235;white-space:pre-line;overflow-wrap:anywhere;display:-webkit-box;-webkit-line-clamp:6;-webkit-box-orient:vertical;overflow:hidden}
+.m24r-thumbs{grid-area:p;display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
 .m24r-thumbs::-webkit-scrollbar{display:none}
-.m24r-th{all:unset;cursor:pointer;flex:none;width:76px;aspect-ratio:3/4;border-radius:8px;overflow:hidden;background:var(--tint)}
+.m24r-th{all:unset;cursor:pointer;flex:none;width:72px;aspect-ratio:3/4;border-radius:10px;overflow:hidden;background:var(--tint)}
 .m24r-th img{width:100%;height:100%;object-fit:cover;display:block;opacity:0;transition:opacity .3s}
 .m24r-th img.ok{opacity:1}
-@media (min-width:700px){.m24r-feed{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media (min-width:981px){.m24r-fc{padding:22px 22px}.m24r-th{width:84px}}
+.m24r-rp{grid-area:r;padding:12px 14px;border-radius:12px;background:#F6F3F4;font-size:14px;line-height:1.5;color:#3A3235}
+.m24r-rp b{display:block;font-size:12px;font-weight:600;color:var(--soft);margin-bottom:4px}
+.m24r-ft{grid-area:ft;display:flex;align-items:center;gap:6px;font-size:13px;color:var(--soft)}
+.m24r-ft span{margin-right:auto}
+.m24r-vote{all:unset;box-sizing:border-box;cursor:pointer;display:inline-flex;align-items:center;gap:5px;height:34px;padding:0 11px;border-radius:10px;background:#F6F3F4;color:var(--ink);font-size:13px;font-weight:600;transition:background .2s,color .2s}
+.m24r-vote svg{width:17px;height:17px}
+.m24r-vote em{font-style:normal}
+.m24r-vote:hover{background:#EFE8EB}
+.m24r-vote.on{background:var(--acc);color:#fff}
+/* v2 «компакт»: текст ліворуч, фото праворуч */
+.m24r-feed.v2 .m24r-fc{grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"h h" "t p" "r r" "ft ft";column-gap:14px}
+.m24r-feed.v2 .m24r-thumbs{align-self:start;gap:0;overflow:visible}
+.m24r-feed.v2 .m24r-th{width:54px;border-radius:8px;box-shadow:0 0 0 2px #fff}
+.m24r-feed.v2 .m24r-th+.m24r-th{margin-left:-18px}
+.m24r-feed.v2 .m24r-th:nth-child(n+4){display:none}
+.m24r-feed.v2 .m24r-fc{border-radius:12px;box-shadow:none;border-color:var(--line)}
+/* v3 «фото зверху»: фото перед текстом, крупніше */
+.m24r-feed.v3 .m24r-fc{grid-template-areas:"h" "p" "t" "r" "ft"}
+.m24r-feed.v3 .m24r-th{width:96px;border-radius:12px}
+@media (min-width:700px){.m24r-feed{grid-template-columns:repeat(2,minmax(0,1fr))}.m24r-feed.v2{grid-template-columns:minmax(0,1fr)}}
+@media (min-width:981px){
+  .m24r-fc{padding:22px 22px 18px}
+  .m24r-th{width:84px}
+  .m24r-feed.v2 .m24r-th{width:68px}
+  .m24r-feed.v3 .m24r-th{width:110px}
+  .m24r-feed.v2{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
 .m24r-more{all:unset;box-sizing:border-box;cursor:pointer;display:flex;justify-content:center;align-items:center;width:100%;margin-top:28px;height:48px;border-radius:8px;background:var(--tint);font-size:14px;font-weight:600;color:var(--ink)}
 .m24r-more:hover{background:#EFE8EB}
 .m24r-sk{display:block;border-radius:10px;background:linear-gradient(100deg,#F3EEF0 35%,#FAF7F8 50%,#F3EEF0 65%) 0 0/250% 100%;animation:m24rSh 1.3s linear infinite}
@@ -85,7 +96,7 @@
 @media (min-width:981px){
   .m24r{padding:80px 0 88px}
   .m24r-title{font-size:46px}
-  .m24r-mas{gap:18px;margin-top:32px}.m24r-col{gap:18px}.m24r-feed{margin-top:32px;gap:16px}
+  .m24r-feed{margin-top:32px;gap:16px}
   .m24r-more{width:auto;padding:0 40px;margin:36px auto 0}
 }
 
@@ -232,14 +243,16 @@
   function med(u) { return u + '.m.webp'; }
   function img(src, orig) { return '<img src="' + esc(src) + '" loading="lazy" decoding="async" alt="" onload="this.classList.add(\'ok\');this.parentNode.classList.add(\'ok\')" onerror="if(this.src!==\'' + esc(orig) + '\')this.src=\'' + esc(orig) + '\'">'; }
 
-  /* вигляд списку (тест): ?rlayout=masonry | feed — запам'ятовується в браузері */
+  /* вигляд стрічки (тест): ?rlayout=v1 | v2 | v3 — запам'ятовується в браузері */
   var LAYOUT = (function () {
     var q = new URLSearchParams(location.search).get('rlayout');
     try { if (q) localStorage.setItem('m24rLayout', q); q = localStorage.getItem('m24rLayout'); } catch (e) {}
-    return q === 'feed' ? 'feed' : 'masonry';
+    return /^v[123]$/.test(q || '') ? q : 'v1';
   })();
-  var all = [], shown = 0, ver = null, lastCols = 0;
-  window.addEventListener('resize', function () { var c = innerWidth >= 981 ? 4 : innerWidth >= 700 ? 3 : 2; if (all.length && c !== lastCols) { lastCols = c; render(); } });
+  var THUMB = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M7 10v10H4V10z"/><path d="M7 10l4-7c1.4 0 2.4 1.2 2.1 2.6L12.5 9H18a2 2 0 0 1 2 2.3l-1.2 7A2 2 0 0 1 16.8 20H7"/></svg>';
+  var THUMB_D = THUMB.replace('<svg', '<svg style="transform:scaleY(-1)"');
+  var votes = (function () { try { return JSON.parse(localStorage.getItem('m24r:votes') || '{}'); } catch (e) { return {}; } })();
+  var all = [], shown = 0, ver = null;
   function perPage() { return innerWidth >= 981 ? 8 : innerWidth >= 700 ? 6 : 4; }
 
   function apply(items) {
@@ -283,34 +296,20 @@
       s += '<span class="m24r-fitsum">' + FIT[top] + ' — ' + Math.round(fit[top] / fn * 100) + '% покупців</span>';
     }
     $('.m24r-sum').innerHTML = s; $('.m24r-sum').hidden = false;
-    var list = all.slice(0, shown), html;
-    lastCols = innerWidth >= 981 ? 4 : innerWidth >= 700 ? 3 : 2;
-    if (LAYOUT === 'feed') {
-      /* «стрічка»: картки під текст, фото — рядком мініатюр */
-      html = '<div class="m24r-feed">' + list.map(function (r, i) {
-        var name = (r.author_name || '').trim() || 'Покупець';
-        return '<article class="m24r-fc" style="animation-delay:' + Math.min(i, 8) * 40 + 'ms">' +
-          '<div class="m24r-meta">' + stars(+r.rating || 0) + '<small>' + fmtD(r.created_at) + '</small></div>' +
-          '<button type="button" class="m24r-ftx" data-i="' + i + '">' + esc(r.body) + '</button>' +
-          (r._p.length ? '<div class="m24r-thumbs">' + r._p.map(function (u, k) { return '<button type="button" class="m24r-th" data-i="' + i + '" data-k="' + k + '" aria-label="Фото ' + (k + 1) + '">' + img(small(u), u) + '</button>'; }).join('') + '</div>' : '') +
-          '<div class="m24r-who"><b>' + esc(name) + '</b>' + (r.size_fit && FIT[r.size_fit] ? '<span>' + FIT[r.size_fit] + '</span>' : '') + '</div>' +
-          (r.reply_text ? '<div class="m24r-reply"><b>Відповідь Moda24</b>' + esc(r.reply_text) + '</div>' : '') +
-          '</article>';
-      }).join('') + '</div>';
-    } else {
-      /* «мозаїка»: висота картки — під фото й під довжину тексту; розкладаємо по колонках зліва направо */
-      var cols = innerWidth >= 981 ? 4 : innerWidth >= 700 ? 3 : 2, col = [];
-      for (var c = 0; c < cols; c++) col.push('');
-      list.forEach(function (r, i) {
-        var name = (r.author_name || '').trim() || 'Покупець', ph = r._p;
-        col[i % cols] += '<button type="button" class="m24r-mc' + (ph.length ? '' : ' np') + '" data-i="' + i + '" style="animation-delay:' + Math.min(i, 8) * 40 + 'ms" aria-label="Відгук: ' + esc(name) + '">' +
-          (ph.length ? '<span class="m24r-pic">' + img(small(ph[0]), ph[0]) + (ph.length > 1 ? '<span class="m24r-cnt">' + CAM + ph.length + '</span>' : '') + '</span>' : '') +
-          '<span class="m24r-mb"><span class="m24r-meta">' + stars(+r.rating || 0) + '<small>' + fmtD(r.created_at, true) + '</small></span>' +
-          '<span class="m24r-txt">' + esc(r.body) + '</span>' +
-          '<span class="m24r-who"><b>' + esc(name) + '</b>' + (r.size_fit && FIT[r.size_fit] ? '<span>' + FIT[r.size_fit] + '</span>' : '') + '</span></span></button>';
-      });
-      html = '<div class="m24r-mas">' + col.map(function (h) { return '<div class="m24r-col">' + h + '</div>'; }).join('') + '</div>';
-    }
+    var list = all.slice(0, shown);
+    var html = '<div class="m24r-feed ' + LAYOUT + '">' + list.map(function (r, i) {
+      var name = (r.author_name || '').trim() || 'Покупець', my = votes[r.id] || 0;
+      var up = (r.up || 0), dn = (r.down || 0);
+      return '<article class="m24r-fc" style="animation-delay:' + Math.min(i, 8) * 40 + 'ms">' +
+        '<div class="m24r-h"><span class="m24r-ava">' + esc(name.charAt(0)) + '</span><span class="m24r-hn"><b>' + esc(name) + '</b><small>' + fmtD(r.created_at) + '</small></span>' + stars(+r.rating || 0) + '</div>' +
+        '<div class="m24r-t">' + (r.size_fit && FIT[r.size_fit] ? '<span class="m24r-fit">' + FIT[r.size_fit] + '</span>' : '') + '<button type="button" class="m24r-ftx" data-i="' + i + '">' + esc(r.body) + '</button></div>' +
+        (r._p.length ? '<div class="m24r-thumbs">' + r._p.map(function (u, k) { return '<button type="button" class="m24r-th" data-i="' + i + '" data-k="' + k + '" aria-label="Фото ' + (k + 1) + '">' + img(small(u), u) + '</button>'; }).join('') + '</div>' : '') +
+        (r.reply_text ? '<div class="m24r-rp"><b>Відповідь Moda24</b>' + esc(r.reply_text) + '</div>' : '') +
+        '<div class="m24r-ft"><span>Відгук корисний?</span>' +
+          '<button type="button" class="m24r-vote' + (my === 1 ? ' on' : '') + '" data-vote="1" data-id="' + r.id + '" aria-label="Так, корисний">' + THUMB + (up ? '<em>' + up + '</em>' : '') + '</button>' +
+          '<button type="button" class="m24r-vote' + (my === -1 ? ' on' : '') + '" data-vote="-1" data-id="' + r.id + '" aria-label="Ні">' + THUMB_D + (dn ? '<em>' + dn + '</em>' : '') + '</button></div>' +
+        '</article>';
+    }).join('') + '</div>';
     var rest = n - shown;
     if (rest > 0) html += '<button type="button" class="m24r-more">' + (rest <= perPage() ? 'Показати ще ' + rest + ' ' + plural(rest, 'відгук', 'відгуки', 'відгуків') : 'Показати ще · залишилось ' + rest) + '</button>';
     $('.m24r-body').innerHTML = html;
@@ -456,11 +455,29 @@
     }).then(function () { var b = sh.querySelector('.m24r-send'); if (b) { b.disabled = false; b.textContent = 'Надіслати відгук'; } });
   });
 
+  /* ---------- «Відгук корисний?» ---------- */
+  function vote(btn) {
+    var id = btn.getAttribute('data-id'), v = +btn.getAttribute('data-vote'), r = null;
+    all.forEach(function (x) { if (x.id === id) r = x; });
+    if (!r || btn.disabled) return;
+    var prev = votes[id] || 0, next = prev === v ? 0 : v;
+    // одразу показуємо результат, сервер підтверджує
+    if (prev === 1) r.up = Math.max(0, (r.up || 0) - 1); if (prev === -1) r.down = Math.max(0, (r.down || 0) - 1);
+    if (next === 1) r.up = (r.up || 0) + 1; if (next === -1) r.down = (r.down || 0) + 1;
+    if (next) votes[id] = next; else delete votes[id];
+    try { localStorage.setItem('m24r:votes', JSON.stringify(votes)); } catch (e) {}
+    render();
+    fetchT(API + '?a=vote', { method: 'POST', headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify({ id: id, v: next }) }, 10000)
+      .then(function (d) { if (d && d.ok) { r.up = d.up; r.down = d.down; render(); } })
+      .catch(function () {});
+  }
+
   /* ---------- події ---------- */
   root.addEventListener('click', function (e) {
     var t = e.target;
+    var vb = t.closest('.m24r-vote'); if (vb) return vote(vb);
     var th = t.closest('.m24r-th'); if (th) return openView(all[+th.getAttribute('data-i')], +th.getAttribute('data-k'));
-    var c = t.closest('.m24r-mc, .m24r-ftx'); if (c) return openView(all[+c.getAttribute('data-i')], 0);
+    var c = t.closest('.m24r-ftx'); if (c) return openView(all[+c.getAttribute('data-i')], 0);
     if (t.closest('.m24r-more')) { shown += perPage(); return render(); }
     if (t.closest('[data-add]')) return shOpen();
     if (t.closest('.m24r-retry')) { $('.m24r-body').innerHTML = ''; return load(); }
