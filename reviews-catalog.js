@@ -7,6 +7,18 @@
  */
 (function () {
   if (window.__m24rc) return; window.__m24rc = 1;
+
+  // тест нових плашок: ?badges=test вмикає до закриття вкладки, ?badges=off вимикає
+  try {
+    var bq = (location.search.match(/[?&]badges=(\w+)/) || [])[1];
+    if (bq === 'test') sessionStorage.setItem('m24bt', '1');
+    if (bq === 'off') sessionStorage.removeItem('m24bt');
+    if (sessionStorage.getItem('m24bt')) {
+      var bs = document.createElement('script');
+      bs.src = 'https://ecom82812-debug.github.io/moda24-reviews/badges-test.js?t=' + Math.floor(Date.now() / 60000);
+      document.head.appendChild(bs);
+    }
+  } catch (e) {}
   var URL_R = 'https://lvyssuomgbccjmksetof.supabase.co/storage/v1/object/public/review-cache/v1/ratings.json';
   var KEY = 'm24r:ratings', TTL = 3 * 60 * 1000;
   var map = null, pending = null;
