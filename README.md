@@ -15,7 +15,7 @@
 
 | Файл | Що це |
 |---|---|
-| `admin.html` | Адмінка: вхід, схвалення, редагування, відповіді, видалення. https://ecom82812-debug.github.io/moda24-reviews/admin.html |
+| `admin.html` | Адмінка: вкладки «На перевірці / Опубліковані / Усі», пошук; на картці — товар із посиланням, телефон, оцінка, дата, розмір, текст, фото, відповідь, публікація й видалення (зміни зберігаються одразу). https://ecom82812-debug.github.io/moda24-reviews/admin.html |
 | `widgets/loader.js` | Підключається в Тільді, підтягує віджет з GitHub |
 | `widgets/product.html` | Блок «Відгуки» на сторінці товару (перед «З цим також купують»): сітка карток «фото + враження», перегляд, форма |
 | `reviews-catalog.js` | Оцінка на фото карток каталогу і рядок «★ 4,8 · N відгуків» під назвою товару |
@@ -36,6 +36,8 @@
 | Що | Де |
 |---|---|
 | Таблиці, захист (RLS), функції бази, сховище, розклад | `supabase/migrations/001_reviews.sql` |
+| «Відгук корисний?» — голоси й лічильники | `supabase/migrations/002_helpful_votes.sql` |
+| Телефон покупця (лише для адміна) | `supabase/migrations/003_review_contacts.sql` |
 | API для сайту | `supabase/functions/reviews-api` (`verify_jwt: false`, власна перевірка) |
 | Збирання JSON-файлів | `supabase/functions/reviews-snapshot` (`verify_jwt: false`, ключ `snap_key` у Vault) |
 

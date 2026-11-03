@@ -208,6 +208,12 @@ Deno.serve(async (req) => {
           author_name, rating, title, body, size_fit, approved: false, verified: false, ip_hash: ipHash,
         }).select("id").single();
         if (error) throw error;
+        // телефон — окремо, лише для адміністратора (на сайт не потрапляє)
+        const digits = clean(b.phone, 20).replace(/\D/g, "");
+        if (digits.length >= 10 && digits.length <= 13) {
+          const phone = "+" + (digits.length === 10 && digits.startsWith("0") ? "38" + digits : digits);
+          await db.from("review_contacts").insert({ review_id: data.id, phone });
+        }
         return reply({ ok: true, id: data.id, k: await uploadToken(data.id) }, 200, origin);
       }
 

@@ -2,450 +2,177 @@
 <html lang="uk">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Moda24 · Відгуки</title>
 <meta name="robots" content="noindex, nofollow">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-:root {
-  --bg:     #fff;
-  --surf:   #FAFAFA;
-  --card:   #fff;
-  --border: #E8E8E8;
-  --ink:    #111;
-  --muted:  #AAA;
-  --muted2: #DDD;
-  --ok:     #4A7A5A;
-  --ok-bg:  #F0F7F2;
-  --warn:   #9A6A20;
-  --warn-bg:#FBF5EC;
-  --err:    #A04040;
-  --err-bg: #FDF0F0;
-  --ff:     'Manrope', sans-serif;
-  --ffs:    'Cormorant Garamond', serif;
+/* Адмінка відгуків moda24.online: усе керування — прямо на картці відгуку */
+:root{--ink:#1E1A1B;--soft:#86868A;--line:#E8E8E6;--tint:#F5F5F4;--bg:#F7F7F6;--ok:#2F6B45;--okbg:#E9F3EC;--wait:#8A5A00;--waitbg:#FBF1DD;--err:#C0392B;--hd:'Cormorant Garamond',Georgia,serif}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{font:400 14px/1.5 'Manrope',Arial,sans-serif;color:var(--ink);background:var(--bg);-webkit-font-smoothing:antialiased}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+[hidden]{display:none!important}
+a{color:inherit}
+
+/* вхід */
+.login{min-height:100vh;display:grid;place-items:center;padding:20px}
+.lbox{width:100%;max-width:380px;background:#fff;border:1px solid var(--line);border-radius:16px;padding:28px 24px;display:grid;gap:14px}
+.lbox h1{font:500 32px/1.05 var(--hd);margin:0 0 6px}
+.lbox label{display:grid;gap:6px;font-size:13px;font-weight:600}
+.in{width:100%;height:44px;padding:0 12px;border:1px solid #D9D9D7;border-radius:10px;background:#fff;outline:none}
+.in:focus{border-color:var(--ink)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;height:40px;padding:0 16px;border-radius:10px;border:1px solid var(--line);background:#fff;font-weight:600;font-size:13px;white-space:nowrap}
+.btn:hover{border-color:#CFCFCC}
+.btn.dark{background:var(--ink);border-color:var(--ink);color:#fff}
+.btn.dark:hover{background:#3A3235}
+.btn.ghost{border-color:transparent;background:transparent}
+.btn.danger{color:var(--err)}
+.btn.big{height:46px}
+.link{background:none;border:0;padding:0;text-decoration:underline;text-underline-offset:3px;font-size:13px;justify-self:center}
+.msg{min-height:18px;font-size:13px;text-align:center;color:var(--err)}
+
+/* шапка */
+.top{position:sticky;top:0;z-index:5;background:rgba(247,247,246,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.top-in{max-width:1100px;margin:0 auto;padding:12px 16px;display:flex;align-items:center;gap:10px}
+.logo{font:500 24px/1 var(--hd);margin-right:auto}
+.bar{max-width:1100px;margin:0 auto;padding:10px 16px 12px;display:grid;gap:10px}
+.tabs{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
+.tab{flex:none;height:36px;padding:0 14px;border-radius:999px;border:1px solid var(--line);background:#fff;font-size:13px;font-weight:600}
+.tab b{font-weight:700;margin-left:4px;opacity:.55}
+.tab.on{background:var(--ink);border-color:var(--ink);color:#fff}
+.tab.on b{opacity:.8}
+
+/* список */
+.list{max-width:1100px;margin:0 auto;padding:16px;display:grid;gap:14px}
+.card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px;display:grid;gap:14px}
+.card.wait{border-color:#EED9AE}
+.c-head{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px}
+.pill{font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:4px 9px;border-radius:999px}
+.pill.ok{background:var(--okbg);color:var(--ok)}
+.pill.wait{background:var(--waitbg);color:var(--wait)}
+.prod{display:inline-flex;align-items:center;gap:6px;font-weight:600;text-decoration:none;min-width:0}
+.prod span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:46vw}
+.prod:hover span{text-decoration:underline}
+.prod svg{width:14px;height:14px;flex:none;color:var(--soft)}
+.uid{font-size:12px;color:var(--soft)}
+.c-grid{display:grid;gap:12px}
+.who{display:grid;gap:10px}
+.f{display:grid;gap:5px;font-size:12px;font-weight:600;color:var(--soft)}
+.f .in{height:40px;font-size:14px;font-weight:500;color:var(--ink)}
+.f select.in{padding-right:8px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.phone{display:flex;align-items:center;gap:8px;height:40px;padding:0 12px;border-radius:10px;background:var(--tint);font-size:14px;font-weight:600;color:var(--ink)}
+.phone a{text-decoration:none}
+.phone.none{font-weight:500;color:var(--soft)}
+.phone button{margin-left:auto;border:0;background:none;font-size:12px;color:var(--soft);text-decoration:underline}
+.stars{display:flex;gap:2px}
+.stars button{border:0;background:none;padding:2px;color:#D6D6D3}
+.stars button.on{color:var(--ink)}
+.stars svg{width:24px;height:24px;display:block}
+.chk{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--ink)}
+.chk input{width:18px;height:18px;accent-color:var(--ink)}
+.ta{width:100%;min-height:90px;padding:10px 12px;border:1px solid #D9D9D7;border-radius:10px;background:#fff;outline:none;resize:vertical;font-size:14px;line-height:1.55}
+.ta:focus{border-color:var(--ink)}
+.ta.reply{min-height:64px;background:var(--tint);border-color:transparent}
+.ta.reply:focus{background:#fff;border-color:var(--ink)}
+.photos{display:flex;flex-wrap:wrap;gap:8px}
+.ph{position:relative;width:76px;aspect-ratio:3/4;border-radius:10px;overflow:hidden;background:var(--tint)}
+.ph img{width:100%;height:100%;object-fit:cover;display:block;cursor:zoom-in}
+.ph button{position:absolute;top:4px;right:4px;width:22px;height:22px;border-radius:50%;border:0;background:rgba(0,0,0,.6);color:#fff;font-size:11px;display:grid;place-items:center}
+.nophoto{font-size:13px;color:var(--wait);background:var(--waitbg);padding:8px 12px;border-radius:10px}
+.c-foot{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding-top:12px;border-top:1px solid var(--line)}
+.c-foot .meta{margin-right:auto;font-size:12px;color:var(--soft)}
+.saved{font-size:12px;color:var(--ok);opacity:0;transition:opacity .3s}
+.saved.on{opacity:1}
+.empty{padding:60px 16px;text-align:center;color:var(--soft)}
+.more{justify-self:center}
+@media (min-width:860px){
+  .c-grid{grid-template-columns:280px minmax(0,1fr);gap:20px}
+  .card{padding:20px 22px}
+  .prod span{max-width:520px}
 }
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
-body { background: #F4F2EF; color: var(--ink); font-family: var(--ff); font-weight: 300; font-size: 14px; line-height: 1.6; -webkit-font-smoothing: antialiased; min-height: 100vh; }
-::-webkit-scrollbar { width: 4px; height: 4px; }
-::-webkit-scrollbar-track { background: var(--bg); }
-::-webkit-scrollbar-thumb { background: var(--border); }
 
-/* ── LOGIN ─────────────────────────────── */
-#login-screen { min-height:100vh; display:flex; align-items:center; justify-content:center; background:#F4F2EF; }
-.login-box {
-  width:360px; background:#fff;
-  border: 1px solid var(--border);
-  padding:48px 40px 40px; position:relative;
-  box-shadow: 0 4px 32px rgba(0,0,0,.06);
-}
-.login-box::before { content:''; position:absolute; top:0; left:0; width:48px; height:2px; background:var(--ink); }
-.login-eyebrow { font-size:9px; letter-spacing:.22em; text-transform:uppercase; color:var(--muted); margin-bottom:10px; }
-.login-title { font-family:var(--ffs); font-size:24px; font-style:italic; font-weight:400; margin-bottom:32px; line-height:1.2; color:var(--ink); }
-.login-field { margin-bottom:16px; }
-.login-field label { display:block; font-size:9px; letter-spacing:.16em; text-transform:uppercase; color:var(--muted); margin-bottom:7px; }
-.login-field input { width:100%; padding:10px 14px; background:var(--surf); border:1px solid var(--border); color:var(--ink); font-family:var(--ff); font-size:14px; outline:none; transition:border-color .2s; }
-.login-field input:focus { border-color:var(--ink); background:#fff; }
-.btn-login { width:100%; padding:13px; background:var(--ink); color:#fff; font-family:var(--ff); font-size:10px; font-weight:500; letter-spacing:.18em; text-transform:uppercase; border:none; cursor:pointer; margin-top:8px; transition:background .2s; }
-.btn-login:hover { background:#333; }
-.login-forgot { display:block; margin:14px auto 0; background:none; border:0; font-family:var(--ff); font-size:12px; color:var(--ink); text-decoration:underline; text-underline-offset:3px; cursor:pointer; }
-.login-err { font-size:12px; color:var(--err); text-align:center; margin-top:12px; min-height:18px; }
-
-/* ── APP ───────────────────────────────── */
-#app { display:none; }
-
-/* HEADER */
-.adm-header { background:#fff; border-bottom:1px solid var(--border); padding:0 32px; display:flex; align-items:center; justify-content:space-between; height:56px; position:sticky; top:0; z-index:100; box-shadow:0 1px 0 var(--border); }
-.adm-logo { font-family:var(--ffs); font-size:17px; font-style:italic; font-weight:400; color:var(--ink); }
-.adm-logo span { font-style:normal; }
-.adm-meta { display:flex; align-items:center; gap:20px; font-size:12px; color:var(--muted); }
-.btn-logout { font-size:9px; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); background:none; border:1px solid var(--border); padding:6px 14px; cursor:pointer; transition:all .2s; font-family:var(--ff); }
-.btn-logout:hover { color:var(--ink); border-color:var(--ink); }
-
-/* LAYOUT */
-.adm-body { display:flex; min-height:calc(100vh - 56px); }
-
-/* SIDEBAR */
-.adm-sidebar { width:216px; background:#fff; border-right:1px solid var(--border); padding:24px 0; flex-shrink:0; position:sticky; top:56px; height:calc(100vh - 56px); overflow-y:auto; }
-.sidebar-section { font-size:9px; letter-spacing:.2em; text-transform:uppercase; color:var(--muted2); padding:0 20px; margin-bottom:6px; margin-top:22px; }
-.sidebar-section:first-child { margin-top:0; }
-.sidebar-btn { display:flex; align-items:center; gap:10px; width:100%; padding:8px 20px; font-family:var(--ff); font-size:13px; font-weight:300; color:var(--muted); background:none; border:none; cursor:pointer; text-align:left; transition:color .15s, background .15s; position:relative; }
-.sidebar-btn:hover { color:var(--ink); background:rgba(0,0,0,.025); }
-.sidebar-btn.active { color:var(--ink); font-weight:400; }
-.sidebar-btn.active::before { content:''; position:absolute; left:0; top:0; bottom:0; width:2px; background:var(--ink); }
-.sidebar-count { margin-left:auto; font-size:10px; font-weight:500; background:var(--ink); color:#fff; padding:1px 7px; min-width:20px; text-align:center; }
-.sidebar-count.grey { background:var(--muted2); color:var(--muted); }
-
-/* CONTENT */
-.adm-content { flex:1; padding:32px 36px; overflow-x:hidden; }
-
-/* STATS */
-.stats-row { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:32px; }
-.stat-card { background:#fff; border:1px solid var(--border); padding:20px 22px; position:relative; }
-.stat-card::before { content:''; position:absolute; top:0; left:0; width:28px; height:1px; background:var(--ink); }
-.stat-card.ok::before   { background:var(--ok); }
-.stat-card.warn::before { background:var(--warn); }
-.stat-card.err::before  { background:var(--err); }
-.stat-label { font-size:9px; letter-spacing:.18em; text-transform:uppercase; color:var(--muted); margin-bottom:8px; }
-.stat-num { font-family:var(--ffs); font-size:36px; font-weight:400; line-height:1; color:var(--ink); }
-.stat-sub { font-size:11px; color:var(--muted); margin-top:4px; }
-
-/* TOOLBAR */
-.toolbar { display:flex; align-items:center; gap:10px; margin-bottom:20px; flex-wrap:wrap; }
-.toolbar-search { flex:1; min-width:200px; padding:9px 14px; background:#fff; border:1px solid var(--border); color:var(--ink); font-family:var(--ff); font-size:13px; outline:none; transition:border-color .2s; }
-.toolbar-search:focus { border-color:var(--ink); }
-.toolbar-search::placeholder { color:var(--muted2); }
-.toolbar-select { padding:9px 14px; background:#fff; border:1px solid var(--border); color:var(--muted); font-family:var(--ff); font-size:12px; outline:none; cursor:pointer; -webkit-appearance:none; }
-.toolbar-select:focus { border-color:var(--ink); }
-.toolbar-select option { background:#fff; }
-.btn-sm { padding:8px 14px; font-family:var(--ff); font-size:9px; font-weight:400; letter-spacing:.12em; text-transform:uppercase; border:1px solid; cursor:pointer; transition:all .15s; white-space:nowrap; background:transparent; }
-.btn-approve { color:var(--ok); border-color:#C8DFD0; }
-.btn-approve:hover { background:var(--ok-bg); border-color:var(--ok); }
-.btn-reject  { color:var(--warn); border-color:#E8D8B8; background:var(--warn-bg); }
-.btn-reject:hover  { border-color:var(--warn); }
-.btn-delete  { color:var(--err); border-color:#F0CCCC; background:var(--err-bg); }
-.btn-delete:hover  { border-color:var(--err); }
-.btn-edit    { color:var(--ink); border-color:var(--border); }
-.btn-edit:hover { background:var(--surf); border-color:var(--ink); }
-
-/* TABLE */
-.rev-table { width:100%; border-collapse:collapse; }
-.rev-table th { font-size:9px; letter-spacing:.16em; text-transform:uppercase; color:var(--muted); font-weight:400; text-align:left; padding:0 12px 12px; border-bottom:1px solid var(--ink); white-space:nowrap; }
-.rev-table th:first-child { padding-left:0; }
-.rev-table td { padding:16px 12px; border-bottom:1px solid var(--border); vertical-align:top; font-size:13px; }
-.rev-table td:first-child { padding-left:0; }
-.rev-table tr:hover td { background:var(--surf); }
-.rev-table input[type=checkbox] { width:15px; height:15px; accent-color:var(--ink); cursor:pointer; }
-
-.rev-author { font-family:var(--ffs); font-size:15px; color:var(--ink); line-height:1.2; font-weight:400; }
-.rev-product { font-size:11px; color:var(--muted); letter-spacing:.04em; margin-top:2px; }
-.rev-date { font-size:10px; color:var(--muted); margin-top:4px; letter-spacing:.06em; }
-.rev-title { font-weight:400; color:var(--ink); margin-bottom:4px; font-family:var(--ffs); font-style:italic; }
-.rev-body { color:#666; font-size:12px; line-height:1.6; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; max-width:320px; }
-
-.stars-mini { display:flex; gap:2px; }
-.star-mini { width:11px; height:11px; fill:var(--ink); }
-.star-mini.e { fill:var(--muted2); }
-
-.status { display:inline-flex; align-items:center; gap:5px; font-size:9px; letter-spacing:.12em; text-transform:uppercase; font-weight:500; padding:3px 9px; border:1px solid; }
-.status-ok   { color:var(--ok);   border-color:#C8DFD0; background:var(--ok-bg); }
-.status-pend { color:var(--warn); border-color:#E8D8B8; background:var(--warn-bg); }
-
-.table-photos { display:flex; gap:4px; margin-top:8px; flex-wrap:wrap; }
-.table-photo { width:40px; height:48px; object-fit:cover; cursor:pointer; transition:opacity .2s, transform .2s; }
-.table-photo:hover { opacity:.8; transform:scale(1.04); }
-
-.rev-actions { display:flex; flex-direction:column; gap:5px; min-width:110px; }
-.rev-actions .btn-sm { font-size:9px; padding:6px 10px; }
-
-/* BULK BAR */
-.bulk-bar { position:fixed; bottom:24px; left:50%; transform:translateX(-50%); background:#fff; border:1px solid var(--border); padding:14px 24px; display:flex; align-items:center; gap:16px; box-shadow:0 8px 32px rgba(0,0,0,.1); z-index:200; opacity:0; pointer-events:none; transition:opacity .2s; white-space:nowrap; }
-.bulk-bar.show { opacity:1; pointer-events:all; }
-.bulk-count { font-size:12px; color:var(--muted); }
-.bulk-count strong { color:var(--ink); }
-
-/* STATES */
-.tbl-empty { text-align:center; padding:60px 0; font-family:var(--ffs); font-style:italic; font-size:20px; color:var(--muted); }
-.tbl-loading { text-align:center; padding:60px 0; }
-.spinner { display:inline-block; width:22px; height:22px; border:1px solid var(--border); border-top-color:var(--ink); border-radius:50%; animation:spin .8s linear infinite; }
-@keyframes spin { to { transform:rotate(360deg); } }
-
-/* PAGINATION */
-.pagination { display:flex; justify-content:center; gap:6px; margin-top:28px; }
-.page-btn { width:34px; height:34px; background:none; border:1px solid var(--border); color:var(--muted); font-family:var(--ff); font-size:12px; cursor:pointer; transition:all .15s; display:flex; align-items:center; justify-content:center; }
-.page-btn:hover { border-color:var(--ink); color:var(--ink); }
-.page-btn.active { border-color:var(--ink); color:var(--ink); background:var(--surf); font-weight:500; }
-.page-btn:disabled { opacity:.3; cursor:not-allowed; }
-
-/* ── EDIT MODAL ─────────────────────────── */
-.modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,.4); display:flex; align-items:center; justify-content:center; z-index:500; opacity:0; pointer-events:none; transition:opacity .25s; padding:20px; backdrop-filter:blur(2px); }
-.modal-overlay.open { opacity:1; pointer-events:all; }
-.modal { background:#fff; border:1px solid var(--border); width:100%; max-width:620px; max-height:90vh; overflow-y:auto; position:relative; transform:translateY(16px); transition:transform .25s; box-shadow:0 16px 48px rgba(0,0,0,.12); }
-.modal-overlay.open .modal { transform:translateY(0); }
-.modal::before { content:''; position:absolute; top:0; left:0; width:48px; height:2px; background:var(--ink); }
-.modal-head { padding:28px 32px 22px; border-bottom:1px solid var(--border); display:flex; align-items:flex-start; justify-content:space-between; gap:16px; }
-.modal-eyebrow { font-size:9px; letter-spacing:.2em; text-transform:uppercase; color:var(--muted); margin-bottom:8px; }
-.modal-title { font-family:var(--ffs); font-size:20px; font-style:italic; font-weight:400; line-height:1.2; color:var(--ink); }
-.modal-close { background:none; border:none; color:var(--muted); font-size:20px; cursor:pointer; line-height:1; padding:4px; transition:color .2s; flex-shrink:0; }
-.modal-close:hover { color:var(--ink); }
-.modal-body { padding:24px 32px; display:flex; flex-direction:column; gap:18px; }
-.mf { display:flex; flex-direction:column; gap:6px; }
-.mf label { font-size:9px; letter-spacing:.16em; text-transform:uppercase; color:var(--muted); }
-.mf input[type=text], .mf input[type=datetime-local], .mf textarea { background:var(--surf); border:1px solid var(--border); color:var(--ink); font-family:var(--ff); font-size:14px; font-weight:300; padding:9px 13px; outline:none; transition:border-color .2s; width:100%; }
-.mf input:focus, .mf textarea:focus { border-color:var(--ink); background:#fff; }
-.mf textarea { resize:vertical; min-height:110px; }
-.mf input[type=datetime-local]::-webkit-calendar-picker-indicator { cursor:pointer; opacity:.5; }
-.mf-row { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
-@media(max-width:540px){ .mf-row { grid-template-columns:1fr; } }
-.modal-stars { display:flex; gap:6px; flex-direction:row-reverse; width:fit-content; }
-.modal-stars input { display:none; }
-.modal-stars label { font-size:26px; cursor:pointer; color:var(--muted2); transition:color .1s; line-height:1; }
-.modal-stars label:hover, .modal-stars label:hover ~ label, .modal-stars input:checked ~ label { color:var(--ink); }
-.modal-foot { padding:18px 32px 28px; display:flex; align-items:center; justify-content:flex-end; gap:10px; border-top:1px solid var(--border); }
-.btn-save { padding:11px 36px; background:var(--ink); color:#fff; font-family:var(--ff); font-size:10px; font-weight:500; letter-spacing:.16em; text-transform:uppercase; border:none; cursor:pointer; transition:background .2s; }
-.btn-save:hover { background:#333; }
-.btn-save:disabled { opacity:.4; cursor:not-allowed; }
-.btn-cancel { padding:11px 22px; background:none; border:1px solid var(--border); color:var(--muted); font-family:var(--ff); font-size:10px; letter-spacing:.12em; text-transform:uppercase; cursor:pointer; transition:all .2s; }
-.btn-cancel:hover { border-color:var(--ink); color:var(--ink); }
-.modal-photos { display:flex; gap:8px; flex-wrap:wrap; }
-.modal-photo-wrap { position:relative; }
-.modal-photo-wrap img { width:72px; height:88px; object-fit:cover; display:block; cursor:pointer; transition:opacity .2s; }
-.modal-photo-wrap img:hover { opacity:.8; }
-.modal-photo-del { position:absolute; top:2px; right:2px; width:18px; height:18px; background:rgba(160,64,64,.85); border:none; color:#fff; font-size:10px; cursor:pointer; display:flex; align-items:center; justify-content:center; }
-
-/* TOAST */
-.toast-wrap { position:fixed; top:72px; right:24px; display:flex; flex-direction:column; gap:8px; z-index:9999; pointer-events:none; }
-.toast { padding:11px 18px; font-size:12px; letter-spacing:.04em; background:#fff; border:1px solid; animation:toastIn .25s ease; pointer-events:all; max-width:300px; box-shadow:0 4px 16px rgba(0,0,0,.08); }
-.toast.ok  { border-color:#C8DFD0; color:var(--ok); }
-.toast.err { border-color:#F0CCCC; color:var(--err); }
-@keyframes toastIn { from{opacity:0;transform:translateX(12px)}to{opacity:1;transform:translateX(0)} }
-
-/* LIGHTBOX */
-.lb { position:fixed; inset:0; background:rgba(0,0,0,.9); display:flex; align-items:center; justify-content:center; z-index:9000; opacity:0; pointer-events:none; transition:opacity .25s; }
-.lb.open { opacity:1; pointer-events:all; }
-.lb img { max-width:90vw; max-height:85vh; object-fit:contain; }
-.lb-x { position:absolute; top:20px; right:24px; font-size:22px; background:none; border:none; color:#888; cursor:pointer; transition:color .2s; }
-.lb-x:hover { color:#fff; }
-
-/* RESPONSIVE */
-@media(max-width:900px){
-  .adm-sidebar { display:none; }
-  .stats-row { grid-template-columns:1fr 1fr; }
-  .adm-content { padding:20px; }
-}
+/* перегляд фото */
+.lb{position:fixed;inset:0;z-index:20;background:rgba(18,15,16,.92);display:grid;place-items:center;padding:20px}
+.lb img{max-width:100%;max-height:90vh;border-radius:6px}
+.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);z-index:30;background:var(--ink);color:#fff;padding:10px 16px;border-radius:10px;font-size:13px;font-weight:600;max-width:90vw}
+.toast.err{background:var(--err)}
 </style>
 </head>
 <body>
 
-<!-- LOGIN -->
-<div id="login-screen">
-  <div class="login-box">
-    <div class="login-eyebrow">Адміністратор</div>
-    <div class="login-title">Moda24 · Відгуки</div>
-    <div class="login-field">
-      <label>Email</label>
-      <input type="email" id="email-input" placeholder="you@example.com" autocomplete="username">
-    </div>
-    <div class="login-field">
-      <label>Пароль</label>
-      <input type="password" id="pwd-input" placeholder="••••••••" autocomplete="current-password">
-    </div>
-    <button class="btn-login" onclick="tryLogin()">Увійти</button>
-    <button class="login-forgot" type="button" onclick="forgotPassword()">Забули пароль?</button>
-    <div class="login-err" id="login-err"></div>
+<!-- вхід -->
+<div class="login" id="login" hidden>
+  <div class="lbox" id="lbox">
+    <h1>Moda24 · Відгуки</h1>
+    <label>Email<input class="in" type="email" id="email" autocomplete="username"></label>
+    <label>Пароль<input class="in" type="password" id="pwd" autocomplete="current-password"></label>
+    <button class="btn dark big" id="btn-login">Увійти</button>
+    <button class="link" id="btn-forgot">Забули пароль?</button>
+    <div class="msg" id="lmsg"></div>
   </div>
-  <div class="login-box" id="newpwd-box" style="display:none">
-    <div class="login-eyebrow">Новий пароль</div>
-    <div class="login-title">Задайте пароль для входу</div>
-    <div class="login-field"><label>Пароль (мінімум 10 символів)</label><input type="password" id="np1" autocomplete="new-password"></div>
-    <div class="login-field"><label>Повторіть пароль</label><input type="password" id="np2" autocomplete="new-password"></div>
-    <button class="btn-login" onclick="saveNewPassword()">Зберегти й увійти</button>
-    <div class="login-err" id="np-err"></div>
+  <div class="lbox" id="pbox" hidden>
+    <h1>Новий пароль</h1>
+    <label>Пароль (мінімум 10 символів)<input class="in" type="password" id="np1" autocomplete="new-password"></label>
+    <label>Повторіть пароль<input class="in" type="password" id="np2" autocomplete="new-password"></label>
+    <button class="btn dark big" id="btn-np">Зберегти й увійти</button>
+    <div class="msg" id="pmsg"></div>
   </div>
 </div>
 
-<!-- APP -->
-<div id="app">
-
-  <header class="adm-header">
-    <div class="adm-logo">Moda24 · Відгуки</div>
-    <div class="adm-meta">
-      <span id="hdr-pending" style="color:var(--warn-bg);display:none;background:var(--warn-bg);color:var(--warn);padding:4px 10px;font-size:11px;">⚡ <span id="pending-cnt">0</span> на модерації</span>
-      <button class="btn-logout" id="btn-optimize" onclick="optimizePhotos()" title="Стиснути старі фото і створити мініатюри">⚡ Оптимізувати фото</button>
-      <button class="btn-logout" onclick="changePassword()">Змінити пароль</button>
-      <button class="btn-logout" onclick="logout()">Вийти</button>
+<!-- адмінка -->
+<div id="app" hidden>
+  <div class="top">
+    <div class="top-in">
+      <div class="logo">Moda24 · Відгуки</div>
+      <button class="btn ghost" id="btn-pass">Пароль</button>
+      <button class="btn" id="btn-out">Вийти</button>
     </div>
-  </header>
-
-  <div class="adm-body">
-
-    <!-- SIDEBAR -->
-    <nav class="adm-sidebar">
-      <div class="sidebar-section">Статус</div>
-      <button class="sidebar-btn active" data-view="pending"  onclick="setView('pending',this)">⏳ На модерації <span class="sidebar-count" id="sb-pending">0</span></button>
-      <button class="sidebar-btn"        data-view="approved" onclick="setView('approved',this)">✓ Опубліковані <span class="sidebar-count grey" id="sb-approved">0</span></button>
-      <button class="sidebar-btn"        data-view="all"      onclick="setView('all',this)">◻ Всі <span class="sidebar-count grey" id="sb-all">0</span></button>
-
-      <div class="sidebar-section">Рейтинг</div>
-      <button class="sidebar-btn active-rating" data-rating="0" onclick="setRating(0,this)">Всі оцінки</button>
-      <button class="sidebar-btn" data-rating="5" onclick="setRating(5,this)">★★★★★ — 5</button>
-      <button class="sidebar-btn" data-rating="4" onclick="setRating(4,this)">★★★★ — 4</button>
-      <button class="sidebar-btn" data-rating="3" onclick="setRating(3,this)">★★★ — 3</button>
-      <button class="sidebar-btn" data-rating="2" onclick="setRating(2,this)">★★ — 2</button>
-      <button class="sidebar-btn" data-rating="1" onclick="setRating(1,this)">★ — 1</button>
-    </nav>
-
-    <!-- CONTENT -->
-    <main class="adm-content">
-
-      <!-- STATS -->
-      <div class="stats-row">
-        <div class="stat-card gold"><div class="stat-label">Середній рейтинг</div><div class="stat-num" id="st-avg">—</div><div class="stat-sub">з 5 зірок</div></div>
-        <div class="stat-card ok"><div class="stat-label">Опубліковано</div><div class="stat-num" id="st-approved">0</div><div class="stat-sub">відгуків</div></div>
-        <div class="stat-card warn"><div class="stat-label">На модерації</div><div class="stat-num" id="st-pending">0</div><div class="stat-sub">очікують</div></div>
-        <div class="stat-card err"><div class="stat-label">Всього</div><div class="stat-num" id="st-total">0</div><div class="stat-sub">відгуків</div></div>
+    <div class="bar">
+      <div class="tabs">
+        <button class="tab on" data-tab="wait">На перевірці<b id="n-wait"></b></button>
+        <button class="tab" data-tab="ok">Опубліковані<b id="n-ok"></b></button>
+        <button class="tab" data-tab="all">Усі<b id="n-all"></b></button>
       </div>
-
-      <!-- TOOLBAR -->
-      <div class="toolbar">
-        <input class="toolbar-search" type="text" id="search-input" placeholder="Пошук по імені, тексту, товару…" oninput="onSearch()">
-        <select class="toolbar-select" id="sort-select" onchange="reload()">
-          <option value="created_at.desc">Нові спочатку</option>
-          <option value="created_at.asc">Старі спочатку</option>
-          <option value="rating.desc">Оцінка ↓</option>
-          <option value="rating.asc">Оцінка ↑</option>
-        </select>
-        <button class="btn-sm btn-approve" onclick="bulkAction('approve')">✓ Схвалити вибране</button>
-        <button class="btn-sm btn-delete"  onclick="bulkAction('delete')">✕ Видалити вибране</button>
-      </div>
-
-      <!-- TABLE -->
-      <div id="tbl-wrap"><div class="tbl-loading"><div class="spinner"></div></div></div>
-      <div class="pagination" id="pagination"></div>
-
-    </main>
-  </div>
-</div>
-
-<!-- BULK BAR -->
-<div class="bulk-bar" id="bulk-bar">
-  <span class="bulk-count">Обрано: <strong id="sel-count">0</strong></span>
-  <button class="btn-sm btn-approve" onclick="bulkAction('approve')">✓ Схвалити</button>
-  <button class="btn-sm btn-delete"  onclick="bulkAction('delete')">✕ Видалити</button>
-  <button class="btn-sm btn-reject"  onclick="clearSel()">Скасувати</button>
-</div>
-
-<!-- ── EDIT MODAL ───────────────────────── -->
-<div class="modal-overlay" id="edit-overlay" onclick="closeModal(event)">
-  <div class="modal" id="edit-modal">
-    <div class="modal-head">
-      <div>
-        <div class="modal-eyebrow">Редагування відгуку</div>
-        <div class="modal-title" id="modal-author-label">Ім'я автора</div>
-      </div>
-      <button class="modal-close" onclick="closeModalDirect()">✕</button>
-    </div>
-
-    <div class="modal-body">
-
-      <!-- ЗІРКИ -->
-      <div class="mf">
-        <label>Оцінка</label>
-        <div class="modal-stars" id="modal-stars">
-          <input type="radio" name="m-rating" id="mr5" value="5"><label for="mr5">★</label>
-          <input type="radio" name="m-rating" id="mr4" value="4"><label for="mr4">★</label>
-          <input type="radio" name="m-rating" id="mr3" value="3"><label for="mr3">★</label>
-          <input type="radio" name="m-rating" id="mr2" value="2"><label for="mr2">★</label>
-          <input type="radio" name="m-rating" id="mr1" value="1"><label for="mr1">★</label>
-        </div>
-      </div>
-
-      <div class="mf-row">
-        <!-- ІМ'Я -->
-        <div class="mf">
-          <label>Ім'я автора</label>
-          <input type="text" id="m-name" maxlength="60" placeholder="Ольга М.">
-        </div>
-        <!-- ДАТА -->
-        <div class="mf">
-          <label>Дата публікації</label>
-          <input type="datetime-local" id="m-date">
-          <small style="color:var(--muted);font-size:10px;margin-top:4px;font-family:var(--ff)">Можна встановити будь-яку дату</small>
-        </div>
-      </div>
-
-      <div class="mf-row">
-        <!-- ID ТОВАРУ -->
-        <div class="mf">
-          <label>ID товару</label>
-          <input type="text" id="m-product" maxlength="120" placeholder="product-slug">
-        </div>
-        <!-- РОЗМІР -->
-        <div class="mf">
-          <label>Розмір підійшов?</label>
-          <select id="m-fit" style="background:var(--surf);border:1px solid var(--border);color:var(--ink);font-family:var(--ff);font-size:14px;padding:9px 13px;outline:none;width:100%;-webkit-appearance:none;">
-            <option value="">— не вказано —</option>
-            <option value="small">Маломірить</option>
-            <option value="true">По розміру</option>
-            <option value="large">Великомірить</option>
-          </select>
-        </div>
-      </div>
-
-      <!-- ЗАГОЛОВОК -->
-      <div class="mf">
-        <label>Заголовок відгуку</label>
-        <input type="text" id="m-title" maxlength="100" placeholder="Коротке враження…">
-      </div>
-
-      <!-- ТЕКСТ -->
-      <div class="mf">
-        <label>Текст відгуку *</label>
-        <textarea id="m-body" maxlength="1400" placeholder="Детальний відгук…" style="min-height:140px"></textarea>
-        <small style="color:var(--muted);font-size:10px;text-align:right;font-family:var(--ff)" id="m-char">0 / 1400</small>
-      </div>
-
-      <!-- ВІДПОВІДЬ МАГАЗИНУ -->
-      <div class="mf">
-        <label>Відповідь магазину</label>
-        <textarea id="m-reply" maxlength="1000" placeholder="Дякуємо за відгук…" style="min-height:70px"></textarea>
-      </div>
-
-      <!-- ПІДТВЕРДЖЕНА ПОКУПКА -->
-      <div class="mf" style="flex-direction:row;align-items:center;gap:12px">
-        <input type="checkbox" id="m-verified" style="width:15px;height:15px;accent-color:var(--ink);cursor:pointer;flex-shrink:0">
-        <label for="m-verified" style="font-size:12px;color:var(--muted);text-transform:none;letter-spacing:0;cursor:pointer">Підтверджена покупка</label>
-      </div>
-
-      <!-- ФОТО -->
-      <div class="mf" id="modal-photos-section" style="display:none">
-        <label>Фото покупця</label>
-        <div class="modal-photos" id="modal-photos"></div>
-      </div>
-
-    </div>
-
-    <div class="modal-foot">
-      <button class="btn-cancel" onclick="closeModalDirect()">Скасувати</button>
-      <button class="btn-save" id="btn-save" onclick="saveEdit()">Зберегти зміни</button>
+      <input class="in" type="search" id="q" placeholder="Пошук: ім'я, текст, товар">
     </div>
   </div>
-</div>
-
-<!-- TOASTS -->
-<div class="toast-wrap" id="toasts"></div>
-
-<!-- LIGHTBOX -->
-<div class="lb" id="lb" onclick="closeLb()">
-  <button class="lb-x" onclick="closeLb()">✕</button>
-  <img id="lb-img" src="" alt="">
+  <div class="list" id="list"></div>
 </div>
 
 <script>
-/* ══════════════════════════════════════════
-   ⚙️  КОНФІГУРАЦІЯ
-   Публічний ключ тут безпечний: без входу адміністратора
-   база не віддає і не змінює нічого (захист RLS).
-══════════════════════════════════════════ */
-const SB_URL     = 'https://lvyssuomgbccjmksetof.supabase.co';
-const SB_PUB     = 'sb_publishable_dtLu2_5BPLRRjRnPKqOd7g_uM_DoE2S';
-const BUCKET     = 'review-photos';
-const PAGE_SIZE  = 15;
+/* ===== НАЛАШТУВАННЯ =====
+   Публічний ключ тут безпечний: без входу адміністратора база нічого не віддає і не змінює (RLS). */
+const SB_URL = 'https://lvyssuomgbccjmksetof.supabase.co';
+const SB_PUB = 'sb_publishable_dtLu2_5BPLRRjRnPKqOd7g_uM_DoE2S';
+const BUCKET = 'review-photos';
+const PAGE = 20;
+/* ======================== */
 
-/* ══════════════════════════════════════════
-   AUTH — Supabase Auth (email + пароль)
-══════════════════════════════════════════ */
+const $ = s => document.querySelector(s);
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const FIT = { small: 'Сидить тісніше', 'true': 'Саме в розмір', large: 'Сидить вільніше' };
+const STAR = '<svg viewBox="0 0 24 24"><path fill="currentColor" d="M12 2.8c.4 0 .7.2.9.6l2.3 4.7 5.2.8c.8.1 1.1 1.1.5 1.7l-3.8 3.7.9 5.2c.1.8-.7 1.4-1.4 1L12 18l-4.6 2.5c-.7.4-1.6-.2-1.4-1l.9-5.2-3.8-3.7c-.6-.6-.3-1.6.5-1.7l5.2-.8 2.3-4.7c.2-.4.5-.6.9-.6z"/></svg>';
+const EXT = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4h6v6"/><path d="M20 4 10 14"/><path d="M19 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h5"/></svg>';
+
+function toast(t, err) {
+  const el = document.createElement('div'); el.className = 'toast' + (err ? ' err' : ''); el.textContent = t;
+  document.body.appendChild(el); setTimeout(() => el.remove(), err ? 4500 : 2200);
+}
+
+/* ===== вхід (Supabase Auth: email + пароль) ===== */
 let session = null;
 try { session = JSON.parse(sessionStorage.getItem('adm_session') || 'null'); } catch {}
-
+const clean = v => String(v || '').replace(/[^\x21-\x7E]/g, '');   // невидимі символи з токена (посилання, скопійоване з чату)
 function saveSession(d) {
-  session = { access: d.access_token, refresh: d.refresh_token, exp: Date.now() + (d.expires_in - 60) * 1000 };
+  session = { access: clean(d.access_token), refresh: clean(d.refresh_token), exp: Date.now() + ((+d.expires_in || 3600) - 60) * 1000 };
   sessionStorage.setItem('adm_session', JSON.stringify(session));
 }
-async function authRequest(grant, body) {
-  const r = await fetch(`${SB_URL}/auth/v1/token?grant_type=${grant}`, {
-    method: 'POST', headers: { 'apikey': SB_PUB, 'Content-Type': 'application/json' }, body: JSON.stringify(body)
-  });
+async function auth(grant, body) {
+  const r = await fetch(`${SB_URL}/auth/v1/token?grant_type=${grant}`, { method: 'POST', headers: { apikey: SB_PUB, 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
   const d = await r.json();
   if (!r.ok) throw new Error(d.error_description || d.msg || 'Помилка входу');
   saveSession(d);
@@ -453,582 +180,228 @@ async function authRequest(grant, body) {
 async function token() {
   if (!session) throw new Error('Не виконано вхід');
   if (Date.now() > session.exp) {
-    try { await authRequest('refresh_token', { refresh_token: session.refresh }); }
+    try { await auth('refresh_token', { refresh_token: session.refresh }); }
     catch { logout(); throw new Error('Сесія завершилась'); }
   }
   return session.access;
 }
-// у токені можуть опинитися невидимі символи (наприклад, коли посилання скопійоване з чату) — прибираємо їх
-async function H(extra = {}) { return { 'apikey': SB_PUB, 'Authorization': 'Bearer ' + String(await token()).replace(/[^\x21-\x7E]/g, ''), ...extra }; }
-
-async function tryLogin() {
-  const email = document.getElementById('email-input').value.trim();
-  const password = document.getElementById('pwd-input').value;
-  const err = document.getElementById('login-err');
-  err.textContent = '';
-  try {
-    await authRequest('password', { email, password });
-    const ok = await sbRpc('is_admin');
-    if (ok !== true) { sessionStorage.removeItem('adm_session'); session = null; throw new Error('Немає прав адміністратора'); }
-    showApp(); init();
-  } catch (e) {
-    err.textContent = e.message === 'Invalid login credentials' ? 'Невірний email або пароль' : e.message;
-    document.getElementById('pwd-input').value = '';
-  }
+async function H(extra = {}) { return { apikey: SB_PUB, Authorization: 'Bearer ' + await token(), ...extra }; }
+async function api(path, opt = {}) {
+  const r = await fetch(`${SB_URL}/rest/v1/${path}`, { ...opt, headers: await H(opt.headers || {}) });
+  if (!r.ok) { const t = await r.text(); let m = t; try { m = JSON.parse(t).message || t; } catch {} throw new Error(m); }
+  return r;
 }
-function showApp() {
-  document.getElementById('login-screen').style.display = 'none';
-  document.getElementById('app').style.display = 'block';
-}
+const patch = (path, body) => api(path, { method: 'PATCH', headers: { 'Content-Type': 'application/json', Prefer: 'return=minimal' }, body: JSON.stringify(body) });
+const del = path => api(path, { method: 'DELETE', headers: { Prefer: 'return=minimal' } });
+async function isAdmin() { const r = await api('rpc/is_admin', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' }); return (await r.json()) === true; }
 function logout() {
-  if (session) fetch(`${SB_URL}/auth/v1/logout`, { method: 'POST', headers: { 'apikey': SB_PUB, 'Authorization': 'Bearer ' + session.access } }).catch(() => {});
-  sessionStorage.removeItem('adm_session'); location.reload();
+  if (session) fetch(`${SB_URL}/auth/v1/logout`, { method: 'POST', headers: { apikey: SB_PUB, Authorization: 'Bearer ' + session.access } }).catch(() => {});
+  sessionStorage.removeItem('adm_session'); sessionStorage.removeItem('adm_recovery'); location.reload();
 }
-async function changePassword() {
-  const p1 = prompt('Новий пароль (мінімум 10 символів):');
-  if (!p1) return;
-  if (p1.length < 10) return toast('Пароль має бути не коротший за 10 символів', 'err');
-  if (prompt('Повторіть новий пароль:') !== p1) return toast('Паролі не збігаються', 'err');
+
+$('#btn-login').onclick = async () => {
+  const m = $('#lmsg'); m.style.color = ''; m.textContent = '';
   try {
-    const r = await fetch(`${SB_URL}/auth/v1/user`, { method: 'PUT', headers: await H({ 'Content-Type': 'application/json' }), body: JSON.stringify({ password: p1 }) });
-    if (!r.ok) throw new Error((await r.json()).msg || 'Не вдалося змінити');
-    toast('Пароль змінено ✓', 'ok');
-  } catch (e) { toast('Помилка: ' + e.message, 'err'); }
-}
-/* «Забули пароль?»: Supabase надсилає лист із посиланням назад на цю сторінку */
-async function forgotPassword() {
-  const email = document.getElementById('email-input').value.trim();
-  const err = document.getElementById('login-err');
-  if (!email) { err.textContent = 'Впишіть email і натисніть ще раз'; return; }
-  const back = location.origin + location.pathname;
-  const r = await fetch(`${SB_URL}/auth/v1/recover?redirect_to=${encodeURIComponent(back)}`, {
-    method: 'POST', headers: { 'apikey': SB_PUB, 'Content-Type': 'application/json' }, body: JSON.stringify({ email })
+    await auth('password', { email: $('#email').value.trim(), password: $('#pwd').value });
+    if (!await isAdmin()) { sessionStorage.removeItem('adm_session'); session = null; throw new Error('Немає прав адміністратора'); }
+    start();
+  } catch (e) { m.textContent = e.message === 'Invalid login credentials' ? 'Невірний email або пароль' : e.message; $('#pwd').value = ''; }
+};
+$('#pwd').onkeydown = e => { if (e.key === 'Enter') $('#btn-login').click(); };
+/* «Забули пароль?»: лист Supabase з посиланням назад на цю сторінку */
+$('#btn-forgot').onclick = async () => {
+  const email = $('#email').value.trim(), m = $('#lmsg');
+  if (!email) { m.style.color = ''; m.textContent = 'Впишіть email і натисніть ще раз'; return; }
+  const r = await fetch(`${SB_URL}/auth/v1/recover?redirect_to=${encodeURIComponent(location.origin + location.pathname)}`, {
+    method: 'POST', headers: { apikey: SB_PUB, 'Content-Type': 'application/json' }, body: JSON.stringify({ email })
   }).catch(() => null);
-  err.style.color = r && r.ok ? 'var(--ink)' : '';
-  err.textContent = r && r.ok ? 'Лист надіслано. Відкрийте посилання з листа на цьому ж пристрої.' : 'Не вдалося надіслати лист. Спробуйте за хвилину.';
-}
-/* перехід із листа: у адресі є токен відновлення — просимо задати новий пароль */
-let recovery = false;
+  m.style.color = r && r.ok ? 'var(--ink)' : '';
+  m.textContent = r && r.ok ? 'Лист надіслано. Відкрийте посилання з листа на цьому ж пристрої.'
+    : r && r.status === 429 ? 'Забагато листів за годину. Спробуйте трохи пізніше.' : 'Не вдалося надіслати лист. Спробуйте ще раз.';
+};
+/* перехід з листа відновлення: просимо задати новий пароль */
 (function () {
   const h = new URLSearchParams(location.hash.slice(1));
-  const clean = v => String(v || '').replace(/[^\x21-\x7E]/g, '');
   if (h.get('access_token') && h.get('type') === 'recovery') {
-    saveSession({ access_token: clean(h.get('access_token')), refresh_token: clean(h.get('refresh_token')), expires_in: +clean(h.get('expires_in')) || 3600 });
-    history.replaceState(null, '', location.pathname);
+    saveSession({ access_token: h.get('access_token'), refresh_token: h.get('refresh_token'), expires_in: h.get('expires_in') });
     sessionStorage.setItem('adm_recovery', '1');
-  }
-  if (session && sessionStorage.getItem('adm_recovery') === '1') {
-    recovery = true;
-    document.querySelector('#login-screen .login-box').style.display = 'none';
-    document.getElementById('newpwd-box').style.display = '';
+    history.replaceState(null, '', location.pathname);
   } else if (h.get('error_description')) {
     history.replaceState(null, '', location.pathname);
-    document.getElementById('login-err').textContent = 'Посилання з листа застаріло. Натисніть «Забули пароль?» ще раз.';
+    $('#lmsg').textContent = 'Посилання з листа застаріло. Натисніть «Забули пароль?» ще раз.';
   }
 })();
-async function saveNewPassword() {
-  const p1 = document.getElementById('np1').value, p2 = document.getElementById('np2').value;
-  const err = document.getElementById('np-err'); err.textContent = '';
-  if (p1.length < 10) { err.textContent = 'Пароль має бути не коротший за 10 символів'; return; }
-  if (p1 !== p2) { err.textContent = 'Паролі не збігаються'; return; }
+async function setPassword(p1, p2, msgEl) {
+  if (p1.length < 10) throw new Error('Пароль має бути не коротший за 10 символів');
+  if (p1 !== p2) throw new Error('Паролі не збігаються');
+  const r = await fetch(`${SB_URL}/auth/v1/user`, { method: 'PUT', headers: await H({ 'Content-Type': 'application/json' }), body: JSON.stringify({ password: p1 }) });
+  if (!r.ok) throw new Error((await r.json()).msg || 'Не вдалося зберегти пароль');
+}
+$('#btn-np').onclick = async () => {
   try {
-    const r = await fetch(`${SB_URL}/auth/v1/user`, { method: 'PUT', headers: await H({ 'Content-Type': 'application/json' }), body: JSON.stringify({ password: p1 }) });
-    if (!r.ok) throw new Error((await r.json()).msg || 'Не вдалося зберегти пароль');
-    const ok = await sbRpc('is_admin');
-    if (ok !== true) throw new Error('Немає прав адміністратора');
-    recovery = false; sessionStorage.removeItem('adm_recovery'); showApp(); init();
-  } catch (e) { err.textContent = e.message; }
-}
-document.getElementById('pwd-input').addEventListener('keydown', e => { if (e.key === 'Enter') tryLogin(); });
-if (session && !recovery) showApp();
+    await setPassword($('#np1').value, $('#np2').value);
+    if (!await isAdmin()) throw new Error('Немає прав адміністратора');
+    sessionStorage.removeItem('adm_recovery'); start();
+  } catch (e) { $('#pmsg').textContent = e.message; }
+};
+$('#btn-pass').onclick = async () => {
+  const p1 = prompt('Новий пароль (мінімум 10 символів):'); if (!p1) return;
+  const p2 = prompt('Повторіть новий пароль:');
+  try { await setPassword(p1, p2 || ''); toast('Пароль змінено'); } catch (e) { toast(e.message, true); }
+};
+$('#btn-out').onclick = logout;
 
-/* ══════════════════════════════════════════
-   API
-══════════════════════════════════════════ */
-async function sbGet(path) {
-  const r = await fetch(`${SB_URL}/rest/v1/${path}`, { headers: await H({ 'Prefer': 'count=exact' }) });
-  if (!r.ok) throw new Error(await r.text());
-  const data = await r.json();
-  const total = r.headers.get('content-range')?.split('/')[1];
-  return { data, total: total && total !== '*' ? +total : data.length };
+/* ===== дані ===== */
+const st = { tab: 'wait', q: '', offset: 0, items: [], more: false };
+const SEL = 'select=*,review_photos(id,url,thumb_url,orig_url,created_at),review_contacts(phone)';
+function filterQs() {
+  let f = st.tab === 'wait' ? '&approved=eq.false' : st.tab === 'ok' ? '&approved=eq.true' : '';
+  if (st.q) { const q = encodeURIComponent('*' + st.q.replace(/[(),*]/g, ' ') + '*'); f += `&or=(author_name.ilike.${q},body.ilike.${q},product_name.ilike.${q})`; }
+  return f;
 }
-async function sbPatch(path, body) {
-  const r = await fetch(`${SB_URL}/rest/v1/${path}`, {
-    method: 'PATCH', headers: await H({ 'Content-Type': 'application/json', 'Prefer': 'return=minimal' }), body: JSON.stringify(body)
-  });
-  if (!r.ok) { const t = await r.text(); let m = t; try { m = JSON.parse(t).message || t; } catch {} throw new Error(m); }
+async function count(f) {
+  const r = await api(`reviews?select=id${f}`, { method: 'HEAD', headers: { Prefer: 'count=exact', Range: '0-0' } });
+  return +((r.headers.get('content-range') || '/0').split('/')[1]) || 0;
 }
-async function sbDelete(path) {
-  const r = await fetch(`${SB_URL}/rest/v1/${path}`, { method: 'DELETE', headers: await H({ 'Prefer': 'return=minimal' }) });
-  if (!r.ok) throw new Error(await r.text());
+async function counts() {
+  const [w, o, a] = await Promise.all([count('&approved=eq.false'), count('&approved=eq.true'), count('')]);
+  $('#n-wait').textContent = w; $('#n-ok').textContent = o; $('#n-all').textContent = a;
 }
-async function sbRpc(fn, args = {}) {
-  const r = await fetch(`${SB_URL}/rest/v1/rpc/${fn}`, {
-    method: 'POST', headers: await H({ 'Content-Type': 'application/json' }), body: JSON.stringify(args)
-  });
-  if (!r.ok) throw new Error(await r.text());
-  return r.json();
-}
-const storagePath = url => { const m = String(url || '').split(`/object/public/${BUCKET}/`)[1]; return m ? decodeURIComponent(m.split('?')[0]) : null; };
-async function storageUpload(path, blob) {
-  const r = await fetch(`${SB_URL}/storage/v1/object/${BUCKET}/${path.split('/').map(encodeURIComponent).join('/')}`, {
-    method: 'POST', headers: await H({ 'Content-Type': blob.type, 'cache-control': 'max-age=31536000', 'x-upsert': 'true' }), body: blob
-  });
-  if (!r.ok) throw new Error(await r.text());
-  return `${SB_URL}/storage/v1/object/public/${BUCKET}/${path.split('/').map(encodeURIComponent).join('/')}`;
-}
-async function storageRemove(urls) {
-  const prefixes = urls.map(storagePath).filter(Boolean);
-  if (!prefixes.length) return;
-  await fetch(`${SB_URL}/storage/v1/object/${BUCKET}`, {
-    method: 'DELETE', headers: await H({ 'Content-Type': 'application/json' }), body: JSON.stringify({ prefixes })
-  }).catch(() => {});
-}
-async function photosOf(ids) {
-  if (!ids.length) return [];
-  const { data } = await sbGet(`review_photos?review_id=in.(${ids.join(',')})&select=id,review_id,url,thumb_url,orig_url&order=created_at.asc`);
-  return data;
-}
-
-/* ══════════════════════════════════════════
-   ОПТИМІЗАЦІЯ ФОТО (у браузері, безкоштовно)
-   Для кожного фото без мініатюри: стиснута версія ≤1600px + мініатюра 400px.
-   Оригінал не видаляється — посилання на нього зберігається в orig_url.
-══════════════════════════════════════════ */
-function loadImg(blob) {
-  return new Promise((res, rej) => { const i = new Image(); i.onload = () => res(i); i.onerror = rej; i.src = URL.createObjectURL(blob); });
-}
-async function resizeTo(img, max, q) {
-  const k = Math.min(1, max / Math.max(img.naturalWidth, img.naturalHeight));
-  const c = document.createElement('canvas');
-  c.width = Math.round(img.naturalWidth * k); c.height = Math.round(img.naturalHeight * k);
-  c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
-  let b = await new Promise(r => c.toBlob(r, 'image/webp', q));
-  if (!b || b.type !== 'image/webp') b = await new Promise(r => c.toBlob(r, 'image/jpeg', q));
-  return b;
-}
-async function optimizePhotos() {
-  const btn = document.getElementById('btn-optimize');
-  if (btn.disabled) return;
-  if (!confirm('Стиснути всі старі фото і створити мініатюри? Це займе кілька хвилин, не закривайте вкладку.')) return;
-  btn.disabled = true;
-  let done = 0, failed = 0, saved = 0;
+async function load(reset) {
+  if (reset) { st.offset = 0; st.items = []; $('#list').innerHTML = '<div class="empty">Завантаження…</div>'; }
   try {
-    const { data: list } = await sbGet('review_photos?thumb_url=is.null&select=id,url&limit=5000');
-    const total = list.length;
-    if (!total) { toast('Усі фото вже оптимізовані ✓', 'ok'); return; }
-    const queue = [...list];
-    async function worker() {
-      while (queue.length) {
-        const p = queue.shift();
-        try {
-          const path = storagePath(p.url);
-          if (!path) throw 0;
-          const resp = await fetch(p.url, { cache: 'no-store' });
-          if (!resp.ok) throw 0;
-          const blob = await resp.blob();
-          const img = await loadImg(blob);
-          const [mid, th] = await Promise.all([resizeTo(img, 1600, 0.82), resizeTo(img, 400, 0.75)]);
-          URL.revokeObjectURL(img.src);
-          const ext = mid.type === 'image/webp' ? 'webp' : 'jpg';
-          const base = path.replace(/\.[^./]+$/, '');
-          const useMid = mid.size < blob.size;
-          const midUrl = useMid ? await storageUpload(`${base}_m.${ext}`, mid) : p.url;
-          const thUrl = await storageUpload(`${base}_t.${ext}`, th);
-          await sbPatch(`review_photos?id=eq.${p.id}`, { url: midUrl, thumb_url: thUrl, orig_url: p.url });
-          saved += blob.size - (useMid ? mid.size : blob.size);
-        } catch { failed++; }
-        done++;
-        btn.textContent = `⚡ ${done} / ${total}`;
-      }
-    }
-    await Promise.all([worker(), worker(), worker()]);
-    toast(`Готово: ${done - failed} фото, зекономлено ${(saved / 1048576).toFixed(0)} МБ${failed ? `, помилок: ${failed}` : ''}`, failed ? 'err' : 'ok');
-    reload();
-  } catch (e) { toast('Помилка: ' + e.message, 'err'); }
-  finally { btn.disabled = false; btn.textContent = '⚡ Оптимізувати фото'; }
+    const r = await api(`reviews?${SEL}${filterQs()}&order=created_at.desc&limit=${PAGE + 1}&offset=${st.offset}`);
+    const rows = await r.json();
+    st.more = rows.length > PAGE;
+    st.items = st.items.concat(rows.slice(0, PAGE));
+    st.offset += PAGE;
+    render();
+  } catch (e) { $('#list').innerHTML = `<div class="empty">Не вдалося завантажити: ${esc(e.message)}</div>`; }
 }
 
-/* ══════════════════════════════════════════
-   STATE
-══════════════════════════════════════════ */
-window.st = { view:'pending', rating:0, page:0, total:0, search:'', sort:'created_at.desc', selected:new Set(), reviews:[], loading:false };
-let st = window.st;
-let editingId = null;
-let editPhotos = []; // { url, id_to_delete? }
-
-/* ══════════════════════════════════════════
-   INIT
-══════════════════════════════════════════ */
-async function init() { await loadStats(); await reload(); }
-
-/* ══════════════════════════════════════════
-   STATS
-══════════════════════════════════════════ */
-async function loadStats() {
-  try {
-    const { data } = await sbGet('reviews?select=rating,approved&limit=20000');
-    const approved = data.filter(r=>r.approved);
-    const pending  = data.filter(r=>!r.approved);
-    const avg = approved.length
-      ? (approved.reduce((s,r)=>s+r.rating,0)/approved.length).toFixed(1) : '—';
-    document.getElementById('st-avg').textContent     = avg;
-    document.getElementById('st-approved').textContent = approved.length;
-    document.getElementById('st-pending').textContent  = pending.length;
-    document.getElementById('st-total').textContent    = data.length;
-    document.getElementById('sb-pending').textContent  = pending.length;
-    document.getElementById('sb-approved').textContent = approved.length;
-    document.getElementById('sb-all').textContent      = data.length;
-    const pEl = document.getElementById('hdr-pending');
-    document.getElementById('pending-cnt').textContent = pending.length;
-    pEl.style.display = pending.length ? '' : 'none';
-  } catch(e) { console.warn('Stats', e); }
+/* ===== картка відгуку ===== */
+function localDT(iso) { const d = new Date(iso); d.setMinutes(d.getMinutes() - d.getTimezoneOffset()); return d.toISOString().slice(0, 16); }
+function phoneOf(r) { const c = r.review_contacts; return Array.isArray(c) ? (c[0] && c[0].phone) : (c && c.phone); }
+function card(r) {
+  const photos = (r.review_photos || []).sort((a, b) => a.created_at < b.created_at ? -1 : 1);
+  const ph = phoneOf(r);
+  const pname = r.product_name || 'Товар';
+  return `<article class="card${r.approved ? '' : ' wait'}" data-id="${r.id}">
+    <div class="c-head">
+      <span class="pill ${r.approved ? 'ok' : 'wait'}">${r.approved ? 'Опубліковано' : 'На перевірці'}</span>
+      ${r.product_url ? `<a class="prod" href="${esc(r.product_url)}" target="_blank" rel="noopener" title="Відкрити товар на сайті"><span>${esc(pname)}</span>${EXT}</a>` : `<span class="prod"><span>${esc(pname)}</span></span>`}
+      ${r.product_uid ? `<span class="uid">ID ${esc(r.product_uid)}</span>` : ''}
+    </div>
+    <div class="c-grid">
+      <div class="who">
+        <label class="f">Ім'я<input class="in" data-f="author_name" value="${esc(r.author_name)}" maxlength="60"></label>
+        <div class="f">Телефон ${ph ? `<div class="phone"><a href="tel:${esc(ph)}">${esc(ph)}</a><button data-copy="${esc(ph)}">копіювати</button></div>` : '<div class="phone none">Не вказано</div>'}</div>
+        <div class="f">Оцінка<div class="stars" data-rating="${r.rating}">${[1, 2, 3, 4, 5].map(n => `<button data-r="${n}" class="${n <= r.rating ? 'on' : ''}" aria-label="${n} з 5">${STAR}</button>`).join('')}</div></div>
+        <div class="row2">
+          <label class="f">Дата<input class="in" type="datetime-local" data-f="created_at" value="${localDT(r.created_at)}"></label>
+          <label class="f">Розмір<select class="in" data-f="size_fit"><option value="">—</option>${Object.keys(FIT).map(k => `<option value="${k}"${r.size_fit === k ? ' selected' : ''}>${FIT[k]}</option>`).join('')}</select></label>
+        </div>
+        <label class="chk"><input type="checkbox" data-f="verified"${r.verified ? ' checked' : ''}>Покупка підтверджена</label>
+      </div>
+      <div class="f" style="gap:10px">
+        <label class="f">Текст відгуку<textarea class="ta" data-f="body" maxlength="1400">${esc(r.body)}</textarea></label>
+        <div class="f">Фото${photos.length ? `<div class="photos">${photos.map(p => `<div class="ph"><img src="${esc(p.thumb_url || p.url)}" data-full="${esc(p.orig_url || p.url)}" loading="lazy" alt=""><button data-delphoto="${p.id}" title="Видалити фото">✕</button></div>`).join('')}</div>` : '<div class="nophoto">Без фото — опублікувати не можна</div>'}</div>
+        <label class="f">Відповідь Moda24 <textarea class="ta reply" data-f="reply_text" maxlength="1000" placeholder="Напишіть відповідь — вона з'явиться під відгуком на сайті">${esc(r.reply_text || '')}</textarea></label>
+      </div>
+    </div>
+    <div class="c-foot">
+      <span class="meta">👍 ${r.helpful_up || 0} · 👎 ${r.helpful_down || 0}<span class="saved"> · Збережено</span></span>
+      ${r.approved ? '<button class="btn" data-act="hide">Сховати з сайту</button>' : '<button class="btn dark" data-act="publish">Опублікувати</button>'}
+      <button class="btn danger" data-act="delete">Видалити</button>
+    </div>
+  </article>`;
 }
+function render() {
+  const el = $('#list');
+  if (!st.items.length) { el.innerHTML = `<div class="empty">${st.q ? 'Нічого не знайдено' : st.tab === 'wait' ? 'Нових відгуків немає' : 'Відгуків немає'}</div>`; return; }
+  el.innerHTML = st.items.map(card).join('') + (st.more ? '<button class="btn more" id="more">Показати ще</button>' : '');
+}
+const byId = id => st.items.find(x => x.id === id);
+function savedMark(cardEl) { const s = cardEl.querySelector('.saved'); s.classList.add('on'); setTimeout(() => s.classList.remove('on'), 1500); }
 
-/* ══════════════════════════════════════════
-   RELOAD
-══════════════════════════════════════════ */
-async function reload() {
-  st.search = document.getElementById('search-input').value.trim();
-  st.sort   = document.getElementById('sort-select').value;
-  document.getElementById('tbl-wrap').innerHTML = '<div class="tbl-loading"><div class="spinner"></div></div>';
-  try {
-    let q = `reviews?select=*&order=${st.sort}&limit=${PAGE_SIZE}&offset=${st.page*PAGE_SIZE}`;
-    if (st.view==='pending')  q += '&approved=eq.false';
-    if (st.view==='approved') q += '&approved=eq.true';
-    if (st.rating) q += `&rating=eq.${st.rating}`;
-    if (st.search) {
-      const s = encodeURIComponent(st.search);
-      q += `&or=(author_name.ilike.*${s}*,body.ilike.*${s}*,product_id.ilike.*${s}*,title.ilike.*${s}*)`;
-    }
-    const { data, total } = await sbGet(q);
-    st.total = total;
-
-    // Фото — один запит для всієї сторінки
-    try {
-      const photos = await photosOf(data.map(r => r.id));
-      data.forEach(r => r._photos = photos.filter(p => p.review_id === r.id));
-    } catch { data.forEach(r => r._photos = []); }
-
-    // Рендеримо один раз — вже з фото
-    st.reviews = data;
-    renderTable(); renderPagination(); updateBulkBar();
-
-  } catch(e) {
-    document.getElementById('tbl-wrap').innerHTML =
-      `<p style="text-align:center;color:var(--err);padding:40px">Помилка: ${e.message}</p>`;
+/* збереження поля одразу після зміни */
+async function saveField(cardEl, field, value) {
+  const id = cardEl.dataset.id, r = byId(id), body = { [field]: value };
+  if (field === 'reply_text') { body.reply_text = value.trim() || null; body.reply_date = body.reply_text ? (r.reply_date || new Date().toISOString()) : null; }
+  if (field === 'body' && !value.trim()) { toast('Текст відгуку не може бути порожнім', true); return; }
+  try { await patch(`reviews?id=eq.${id}`, body); Object.assign(r, body); savedMark(cardEl); }
+  catch (e) { toast('Не збереглося: ' + e.message, true); }
+}
+document.addEventListener('change', e => {
+  const t = e.target, c = t.closest('.card'); if (!c || !t.dataset.f) return;
+  const f = t.dataset.f;
+  if (f === 'verified') return saveField(c, f, t.checked);
+  if (f === 'created_at') { if (!t.value) return; return saveField(c, f, new Date(t.value).toISOString()); }
+  if (f === 'size_fit') return saveField(c, f, t.value || null);
+  if (f === 'author_name') { const v = t.value.trim(); if (!v) { toast("Ім'я не може бути порожнім", true); return; } return saveField(c, f, v); }
+  saveField(c, f, t.value);
+});
+document.addEventListener('click', async e => {
+  const t = e.target;
+  if (t.id === 'more') return load(false);
+  const tab = t.closest('.tab');
+  if (tab) { document.querySelectorAll('.tab').forEach(x => x.classList.toggle('on', x === tab)); st.tab = tab.dataset.tab; return load(true); }
+  const img = t.closest('.ph img');
+  if (img) { const lb = document.createElement('div'); lb.className = 'lb'; lb.innerHTML = `<img src="${esc(img.dataset.full)}" alt="">`; lb.onclick = () => lb.remove(); document.body.appendChild(lb); return; }
+  const cp = t.closest('[data-copy]');
+  if (cp) { navigator.clipboard && navigator.clipboard.writeText(cp.dataset.copy).then(() => toast('Номер скопійовано')); return; }
+  const c = t.closest('.card'); if (!c) return;
+  const id = c.dataset.id, r = byId(id);
+  const star = t.closest('.stars button');
+  if (star) {
+    const n = +star.dataset.r;
+    c.querySelectorAll('.stars button').forEach(b => b.classList.toggle('on', +b.dataset.r <= n));
+    return saveField(c, 'rating', n);
   }
-}
-
-/* ══════════════════════════════════════════
-   HELPERS
-══════════════════════════════════════════ */
-const esc = s => String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const fmtD = iso => new Date(iso).toLocaleDateString('uk-UA',{day:'2-digit',month:'2-digit',year:'numeric'});
-function starsHtml(n) {
-  return Array.from({length:5},(_,i)=>
-    `<svg class="star-mini${i<n?'':' e'}" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>`
-  ).join('');
-}
-
-/* ══════════════════════════════════════════
-   TABLE RENDER
-══════════════════════════════════════════ */
-function renderTable() {
-  if (!st.reviews.length) {
-    document.getElementById('tbl-wrap').innerHTML='<div class="tbl-empty">Відгуків не знайдено</div>';
+  const dp = t.closest('[data-delphoto]');
+  if (dp) {
+    if (!confirm('Видалити це фото?')) return;
+    const p = r.review_photos.find(x => x.id === dp.dataset.delphoto);
+    try {
+      if (r.approved && r.review_photos.length === 1) throw new Error('Це останнє фото опублікованого відгуку. Спершу сховайте відгук з сайту.');
+      await del(`review_photos?id=eq.${p.id}`);
+      await removeFiles([p.url, p.thumb_url, p.orig_url]);
+      r.review_photos = r.review_photos.filter(x => x.id !== p.id);
+      c.outerHTML = card(r); toast('Фото видалено');
+    } catch (err) { toast(err.message, true); }
     return;
   }
-  const allChecked = st.reviews.every(r=>st.selected.has(r.id));
-  const rows = st.reviews.map(r => {
-    const chk = st.selected.has(r.id) ? 'checked' : '';
-    const status = r.approved
-      ? '<span class="status status-ok">✓ Опубліковано</span>'
-      : '<span class="status status-pend">⏳ Модерація</span>';
-    const photos = (r._photos||[]).map(p=>
-      `<img class="table-photo" src="${esc(p.thumb_url || p.url)}" loading="lazy" onclick="openLb('${esc(p.url)}')" title="Переглянути фото">`
-    ).join('');
-    const approveBtn = !r.approved
-      ? `<button class="btn-sm btn-approve" onclick="action('approve','${r.id}')">✓ Схвалити</button>`
-      : `<button class="btn-sm btn-reject"  onclick="action('reject','${r.id}')">↩ Сховати</button>`;
-    return `<tr>
-      <td><input type="checkbox" ${chk} onchange="toggleSel('${r.id}',this.checked)"></td>
-      <td>
-        <div class="rev-author">${esc(r.author_name)}</div>
-        <div class="rev-product">${esc(r.product_id)}</div>
-        <div class="rev-date">${fmtD(r.created_at)}</div>
-      </td>
-      <td><div class="stars-mini">${starsHtml(r.rating)}</div></td>
-      <td>
-        ${r.title?`<div class="rev-title">${esc(r.title)}</div>`:''}
-        <div class="rev-body">${esc(r.body)}</div>
-        ${photos?`<div class="table-photos">${photos}</div>`:''}
-      </td>
-      <td>${status}</td>
-      <td>
-        <div class="rev-actions">
-          ${approveBtn}
-          <button class="btn-sm btn-edit"   onclick="openEdit('${r.id}')">✎ Редагувати</button>
-          <button class="btn-sm btn-delete" onclick="action('delete','${r.id}')">✕ Видалити</button>
-        </div>
-      </td>
-    </tr>`;
-  }).join('');
-
-  document.getElementById('tbl-wrap').innerHTML = `
-    <table class="rev-table">
-      <thead><tr>
-        <th><input type="checkbox" ${allChecked?'checked':''} onchange="toggleAll(this.checked)" style="accent-color:var(--gold)"></th>
-        <th>Автор / Товар</th><th>Оцінка</th><th>Відгук</th><th>Статус</th><th>Дії</th>
-      </tr></thead>
-      <tbody>${rows}</tbody>
-    </table>`;
-}
-
-/* ══════════════════════════════════════════
-   PAGINATION
-══════════════════════════════════════════ */
-function renderPagination() {
-  const pages = Math.ceil(st.total/PAGE_SIZE);
-  if (pages<=1) { document.getElementById('pagination').innerHTML=''; return; }
-  let h = `<button class="page-btn" onclick="goPage(${st.page-1})" ${st.page===0?'disabled':''}>‹</button>`;
-  for(let i=0;i<pages;i++){
-    if(pages>7 && Math.abs(i-st.page)>2 && i!==0 && i!==pages-1){ if(i===st.page-3||i===st.page+3) h+=`<span style="color:var(--muted);padding:0 4px">…</span>`; continue; }
-    h+=`<button class="page-btn${i===st.page?' active':''}" onclick="goPage(${i})">${i+1}</button>`;
-  }
-  h+=`<button class="page-btn" onclick="goPage(${st.page+1})" ${st.page>=pages-1?'disabled':''}>›</button>`;
-  document.getElementById('pagination').innerHTML=h;
-}
-function goPage(p){ st.page=p; reload(); window.scrollTo({top:0,behavior:'smooth'}); }
-
-/* ══════════════════════════════════════════
-   SELECTION
-══════════════════════════════════════════ */
-function toggleSel(id,on){ on?st.selected.add(id):st.selected.delete(id); updateBulkBar(); renderTable(); }
-function toggleAll(on){ st.reviews.forEach(r=>on?st.selected.add(r.id):st.selected.delete(r.id)); updateBulkBar(); renderTable(); }
-function clearSel(){ st.selected.clear(); updateBulkBar(); renderTable(); }
-function updateBulkBar(){
-  const n=st.selected.size;
-  document.getElementById('sel-count').textContent=n;
-  document.getElementById('bulk-bar').classList.toggle('show',n>0);
-}
-
-/* ══════════════════════════════════════════
-   ACTIONS (approve / reject / delete)
-══════════════════════════════════════════ */
-async function action(type, id) {
+  const act = t.closest('[data-act]'); if (!act) return;
   try {
-    if(type==='approve') { await sbPatch(`reviews?id=eq.${id}`,{approved:true}); toast('Відгук опубліковано ✓','ok'); }
-    else if(type==='reject') { await sbPatch(`reviews?id=eq.${id}`,{approved:false}); toast('Відгук приховано','ok'); }
-    else if(type==='delete') {
-      if(!confirm('Видалити відгук? Незворотньо.')) return;
-      const ph = await photosOf([id]);
-      await sbDelete(`review_photos?review_id=eq.${id}`);
-      await storageRemove(ph.flatMap(p => [p.url, p.thumb_url, p.orig_url]));
-      await sbDelete(`reviews?id=eq.${id}`);
-      toast('Відгук видалено','ok');
+    if (act.dataset.act === 'publish') { await patch(`reviews?id=eq.${id}`, { approved: true }); r.approved = true; toast('Опубліковано — на сайті з\'явиться за хвилину'); }
+    if (act.dataset.act === 'hide') { await patch(`reviews?id=eq.${id}`, { approved: false }); r.approved = false; toast('Відгук приховано з сайту'); }
+    if (act.dataset.act === 'delete') {
+      if (!confirm('Видалити відгук разом із фото? Відновити не можна.')) return;
+      const files = (r.review_photos || []).flatMap(p => [p.url, p.thumb_url, p.orig_url]);
+      await del(`reviews?id=eq.${id}`);   // фото, телефон і голоси видаляються разом із відгуком
+      await removeFiles(files);
+      st.items = st.items.filter(x => x.id !== id);
+      toast('Відгук видалено');
     }
-    st.selected.delete(id);
-    await loadStats(); await reload();
-  } catch(e) { toast('Помилка: '+e.message,'err'); }
+    // відгук переходить в іншу вкладку — прибираємо його з поточної
+    if ((st.tab === 'wait' && r.approved) || (st.tab === 'ok' && !r.approved)) st.items = st.items.filter(x => x.id !== id);
+    render(); counts();
+  } catch (err) { toast(err.message, true); }
+});
+const storagePath = u => { const m = String(u || '').split(`/object/public/${BUCKET}/`)[1]; return m ? decodeURIComponent(m.split('?')[0]) : null; };
+async function removeFiles(urls) {
+  const prefixes = urls.map(storagePath).filter(Boolean);
+  if (!prefixes.length) return;
+  await fetch(`${SB_URL}/storage/v1/object/${BUCKET}`, { method: 'DELETE', headers: await H({ 'Content-Type': 'application/json' }), body: JSON.stringify({ prefixes }) }).catch(() => {});
 }
+let qt = null;
+$('#q').oninput = () => { clearTimeout(qt); qt = setTimeout(() => { st.q = $('#q').value.trim(); load(true); }, 350); };
 
-async function bulkAction(type) {
-  if(!st.selected.size) return;
-  const ids=[...st.selected];
-  if(type==='delete'&&!confirm(`Видалити ${ids.length} відгуків?`)) return;
-  try {
-    const f=ids.map(id=>`id=eq.${id}`).join(',');
-    if(type==='approve'){ await sbPatch(`reviews?or=(${f})`,{approved:true}); toast(`Опубліковано ${ids.length} ✓`,'ok'); }
-    else {
-      const ph = await photosOf(ids);
-      await sbDelete(`review_photos?or=(${ids.map(id=>`review_id=eq.${id}`).join(',')})`);
-      await storageRemove(ph.flatMap(p => [p.url, p.thumb_url, p.orig_url]));
-      await sbDelete(`reviews?or=(${f})`);
-      toast(`Видалено ${ids.length}`,'ok');
-    }
-    st.selected.clear(); await loadStats(); await reload();
-  } catch(e) { toast('Помилка: '+e.message,'err'); }
-}
-
-/* ══════════════════════════════════════════
-   EDIT MODAL — відкрити
-══════════════════════════════════════════ */
-function openEdit(id) {
-  const r = st.reviews.find(x=>x.id===id);
-  if (!r) return;
-  editingId = id;
-  editPhotos = (r._photos||[]).map(p=>({...p})); // копія
-
-  // Заповнити поля
-  document.getElementById('modal-author-label').textContent = r.author_name;
-  document.getElementById('m-name').value    = r.author_name || '';
-  document.getElementById('m-title').value   = r.title || '';
-  document.getElementById('m-body').value    = r.body || '';
-  document.getElementById('m-product').value = r.product_id || '';
-  document.getElementById('m-fit').value     = r.size_fit || '';
-  document.getElementById('m-verified').checked = !!r.verified;
-  document.getElementById('m-reply').value = r.reply_text || '';
-  updateCharCount();
-
-  // Дата: перетворити UTC → local datetime-local format
-  const d = new Date(r.created_at);
-  const pad = n => String(n).padStart(2,'0');
-  const local = `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
-  document.getElementById('m-date').value = local;
-
-  // Рейтинг
-  document.querySelectorAll('input[name="m-rating"]').forEach(inp => {
-    inp.checked = +inp.value === r.rating;
-  });
-
-  // Фото
-  renderModalPhotos();
-
-  document.getElementById('edit-overlay').classList.add('open');
-  document.body.style.overflow = 'hidden';
-}
-
-function renderModalPhotos() {
-  const section = document.getElementById('modal-photos-section');
-  const wrap    = document.getElementById('modal-photos');
-  if (!editPhotos.length) { section.style.display='none'; return; }
-  section.style.display='';
-  wrap.innerHTML = editPhotos.map((p,i)=>`
-    <div class="modal-photo-wrap">
-      <img src="${esc(p.thumb_url || p.url)}" onclick="openLb('${esc(p.url)}')" title="Натисніть для збільшення">
-      <button class="modal-photo-del" onclick="removeModalPhoto(${i})" title="Видалити фото">✕</button>
-    </div>`).join('');
-}
-
-function removeModalPhoto(i) {
-  // Позначаємо для видалення при збереженні
-  editPhotos[i]._toDelete = true;
-  editPhotos.splice(i, 1);
-  renderModalPhotos();
-}
-
-function updateCharCount() {
-  const v = document.getElementById('m-body').value.length;
-  document.getElementById('m-char').textContent = `${v} / 1400`;
-}
-document.getElementById('m-body').addEventListener('input', updateCharCount);
-
-/* ══════════════════════════════════════════
-   EDIT MODAL — зберегти
-══════════════════════════════════════════ */
-async function saveEdit() {
-  const name  = document.getElementById('m-name').value.trim();
-  const body  = document.getElementById('m-body').value.trim();
-  const rEl   = document.querySelector('input[name="m-rating"]:checked');
-
-  if (!name) return toast('Введіть ім\'я автора','err');
-  if (!body) return toast('Текст відгуку не може бути порожнім','err');
-
-  const btn = document.getElementById('btn-save');
-  btn.disabled = true; btn.textContent = 'Зберігаємо…';
-
-  try {
-    // Підготувати дату (datetime-local → ISO)
-    const dateVal = document.getElementById('m-date').value;
-    const isoDate = dateVal ? new Date(dateVal).toISOString() : undefined;
-
-    const payload = {
-      author_name: name,
-      body,
-      title:    document.getElementById('m-title').value.trim() || null,
-      product_id: document.getElementById('m-product').value.trim(),
-      size_fit: document.getElementById('m-fit').value || null,
-      verified: document.getElementById('m-verified').checked,
-      reply_text: document.getElementById('m-reply').value.trim() || null,
-      ...((document.getElementById('m-reply').value.trim() && !st.reviews.find(x=>x.id===editingId)?.reply_text) ? { reply_date: new Date().toISOString() } : {}),
-      ...(rEl ? { rating: +rEl.value } : {}),
-      ...(isoDate ? { created_at: isoDate } : {}),
-    };
-
-    await sbPatch(`reviews?id=eq.${editingId}`, payload);
-
-    // Видалити відмічені фото
-    const toDelete = (editPhotos._deleted || []);
-    // Оскільки ми видаляємо зі splice, відстежуємо через окремий масив
-    for (const pid of (window._photosToDelete||[])) {
-      try {
-        const r0 = st.reviews.find(x=>x.id===editingId);
-        const p0 = (r0?._photos||[]).find(p=>p.id===pid);
-        await sbDelete(`review_photos?id=eq.${pid}`);
-        if (p0) await storageRemove([p0.url, p0.thumb_url, p0.orig_url]);
-      } catch {}
-    }
-    window._photosToDelete = [];
-
-    toast('Зміни збережено ✓','ok');
-    closeModalDirect();
-    await loadStats(); await reload();
-  } catch(e) {
-    toast('Помилка: '+e.message,'err');
-  }
-  btn.disabled=false; btn.textContent='Зберегти зміни';
-}
-
-// Перевизначаємо removeModalPhoto щоб зберігати id для видалення
-window._photosToDelete = [];
-function removeModalPhoto(i) {
-  const p = editPhotos[i];
-  if (p.id) window._photosToDelete.push(p.id);
-  editPhotos.splice(i,1);
-  renderModalPhotos();
-}
-
-/* ══════════════════════════════════════════
-   MODAL — закрити
-══════════════════════════════════════════ */
-function closeModal(e) {
-  if (e.target === document.getElementById('edit-overlay')) closeModalDirect();
-}
-function closeModalDirect() {
-  document.getElementById('edit-overlay').classList.remove('open');
-  document.body.style.overflow='';
-  editingId=null; editPhotos=[];
-  window._photosToDelete=[];
-}
-document.addEventListener('keydown', e => { if(e.key==='Escape') { closeLb(); closeModalDirect(); } });
-
-/* ══════════════════════════════════════════
-   FILTER
-══════════════════════════════════════════ */
-function setView(v,btn) {
-  st.view=v; st.page=0;
-  document.querySelectorAll('.sidebar-btn[data-view]').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active'); reload();
-}
-function setRating(r,btn) {
-  st.rating=r; st.page=0;
-  document.querySelectorAll('.sidebar-btn[data-rating]').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active'); reload();
-}
-let searchTimer;
-function onSearch(){ clearTimeout(searchTimer); searchTimer=setTimeout(()=>{ st.page=0; reload(); },350); }
-
-/* ══════════════════════════════════════════
-   LIGHTBOX
-══════════════════════════════════════════ */
-function openLb(url){ document.getElementById('lb-img').src=url; document.getElementById('lb').classList.add('open'); }
-function closeLb(){ document.getElementById('lb').classList.remove('open'); }
-
-/* ══════════════════════════════════════════
-   TOAST
-══════════════════════════════════════════ */
-function toast(msg,type='ok'){
-  const wrap=document.getElementById('toasts');
-  const el=document.createElement('div');
-  el.className=`toast ${type}`; el.textContent=msg;
-  wrap.appendChild(el); setTimeout(()=>el.remove(),3500);
-}
-
-/* ══════════════════════════════════════════
-   AUTO-INIT
-══════════════════════════════════════════ */
-if (session && !recovery) init();
+/* ===== старт ===== */
+function start() { $('#login').hidden = true; $('#app').hidden = false; counts(); load(true); }
+if (session && sessionStorage.getItem('adm_recovery') === '1') { $('#login').hidden = false; $('#lbox').hidden = true; $('#pbox').hidden = false; }
+else if (session) isAdmin().then(ok => ok ? start() : logout()).catch(() => { $('#login').hidden = false; });
+else $('#login').hidden = false;
 </script>
 </body>
 </html>
