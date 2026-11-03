@@ -28,7 +28,6 @@
 .m24r-sum .m24r-st svg{width:14px;height:14px}
 .m24r-sum span{display:inline-flex;align-items:center;gap:6px}
 .m24r-sum em{font-style:normal;margin-left:6px}
-.m24r-fitsum{padding:5px 11px;border-radius:999px;background:var(--tint);color:var(--ink);font-size:12px;font-weight:500}
 .m24r-add{all:unset;box-sizing:border-box;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:8px;height:44px;padding:0 20px;border:1px solid var(--ink);border-radius:8px;font-size:14px;font-weight:600;color:var(--ink);transition:background .2s,color .2s}
 .m24r-add:hover{background:var(--ink);color:#fff}
 .m24r-add svg{width:16px;height:16px}
@@ -45,7 +44,6 @@
 .m24r-hn small{display:block;font-size:12px;color:var(--soft)}
 .m24r-h .m24r-st svg{width:15px;height:15px}
 .m24r-t{grid-area:t;display:grid;gap:8px;min-width:0}
-.m24r-fit{justify-self:start;font-size:12px;font-weight:500;padding:4px 10px;border-radius:999px;background:var(--tint);color:var(--ink)}
 .m24r-ftx{all:unset;cursor:pointer;font-size:15px;line-height:1.6;color:#3A3235;white-space:pre-line;overflow-wrap:anywhere;display:-webkit-box;-webkit-line-clamp:6;-webkit-box-orient:vertical;overflow:hidden}
 .m24r-thumbs{grid-area:p;display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
 .m24r-thumbs::-webkit-scrollbar{display:none}
@@ -143,9 +141,6 @@
 .m24r-rate button.on{color:var(--acc)}
 .m24r-rate svg{width:34px;height:34px;display:block}
 .m24r-rate em{font-style:normal;font-size:13px;font-weight:500;color:var(--soft);margin-left:8px}
-.m24r-seg{display:flex;flex-wrap:wrap;gap:6px}
-.m24r-seg button{all:unset;cursor:pointer;padding:9px 14px;border:1px solid #D9D9D7;border-radius:999px;font-size:13px;font-weight:500}
-.m24r-seg button.on{border-color:var(--ink);background:var(--ink);color:#fff}
 .m24r-send{all:unset;cursor:pointer;text-align:center;height:52px;line-height:52px;border-radius:8px;background:var(--ink);color:#fff;font-size:15px;font-weight:600}
 .m24r-send[disabled]{opacity:.5;cursor:default}
 .m24r-note{font-size:13px;text-align:center;min-height:18px;margin-top:-8px}
@@ -209,7 +204,6 @@
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
   function fmtD(iso, short) { try { return new Date(iso).toLocaleDateString('uk-UA', short ? { day: 'numeric', month: 'short' } : { day: 'numeric', month: 'long', year: 'numeric' }); } catch (e) { return ''; } }
   function plural(n, a, b, c) { var m10 = n % 10, m100 = n % 100; return m10 === 1 && m100 !== 11 ? a : (m10 >= 2 && m10 <= 4 && (m100 < 12 || m100 > 14) ? b : c); }
-  var FIT = { small: 'Сидить тісніше', 'true': 'Саме в розмір', large: 'Сидить вільніше' };
   var RATE_TXT = ['', 'Погано', 'Так собі', 'Нормально', 'Добре', 'Чудово'];
 
   function fetchT(url, opts, ms) {
@@ -270,13 +264,9 @@
       $('.m24r-body').innerHTML = '<div class="m24r-empty">' + CAM + '<b>Відгуків поки немає</b><p>Поділіться враженням і фото — це допоможе іншим обрати розмір.</p><button type="button" class="m24r-add" data-add>Написати відгук</button></div>';
       return;
     }
-    var sum = 0, fit = { small: 0, 'true': 0, large: 0 }, fn = 0;
-    all.forEach(function (r) { sum += +r.rating || 0; if (fit.hasOwnProperty(r.size_fit)) { fit[r.size_fit]++; fn++; } });
+    var sum = 0;
+    all.forEach(function (r) { sum += +r.rating || 0; });
     var avg = sum / n, s = '<span><b>' + avg.toFixed(1).replace('.', ',') + '</b>' + stars(Math.round(avg)) + '<em>' + n + ' ' + plural(n, 'відгук', 'відгуки', 'відгуків') + '</em></span>';
-    if (fn) {
-      var top = ['true', 'small', 'large'].sort(function (a, b) { return fit[b] - fit[a]; })[0];
-      s += '<span class="m24r-fitsum">' + FIT[top] + ' — ' + Math.round(fit[top] / fn * 100) + '% покупців</span>';
-    }
     $('.m24r-sum').innerHTML = s; $('.m24r-sum').hidden = false;
     var list = all.slice(0, shown);
     // плавна поява — лише вперше; оновлення (голос, свіжі дані) без мерехтіння
@@ -285,7 +275,7 @@
       var up = (r.up || 0), dn = (r.down || 0);
       return '<article class="m24r-fc" style="animation-delay:' + Math.min(i, 8) * 40 + 'ms">' +
         '<div class="m24r-h"><span class="m24r-ava">' + esc(name.charAt(0)) + '</span><span class="m24r-hn"><b>' + esc(name) + '</b><small>' + fmtD(r.created_at) + '</small></span>' + stars(+r.rating || 0) + '</div>' +
-        '<div class="m24r-t">' + (r.size_fit && FIT[r.size_fit] ? '<span class="m24r-fit">' + FIT[r.size_fit] + '</span>' : '') + '<button type="button" class="m24r-ftx" data-i="' + i + '">' + esc(r.body) + '</button></div>' +
+        '<div class="m24r-t"><button type="button" class="m24r-ftx" data-i="' + i + '">' + esc(r.body) + '</button></div>' +
         (r._p.length ? '<div class="m24r-thumbs">' + r._p.map(function (u, k) { return '<button type="button" class="m24r-th" data-i="' + i + '" data-k="' + k + '" aria-label="Фото ' + (k + 1) + '">' + img(small(u), u) + '</button>'; }).join('') + '</div>' : '') +
         (r.reply_text ? '<div class="m24r-rp"><b>Відповідь Moda24</b>' + esc(r.reply_text) + '</div>' : '') +
         '<div class="m24r-ft"><span>Відгук корисний?</span>' +
@@ -318,7 +308,7 @@
   function openView(r, k) {
     cr = r; var name = (r.author_name || '').trim() || 'Покупець';
     vw.querySelector('.m24r-vtx').innerHTML = stars(+r.rating || 0) + '<div><div class="m24r-name">' + esc(name) + '</div><small style="font-size:12px;color:var(--soft)">' + fmtD(r.created_at) + '</small></div>' +
-      ((r.size_fit && FIT[r.size_fit]) || r.verified ? '<div class="m24r-tags">' + (r.size_fit && FIT[r.size_fit] ? '<span>' + FIT[r.size_fit] + '</span>' : '') + (r.verified ? '<span>✓ Покупка підтверджена</span>' : '') + '</div>' : '') +
+      (r.verified ? '<div class="m24r-tags"><span>✓ Покупка підтверджена</span></div>' : '') +
       (r.title ? '<p style="font-weight:600">' + esc(r.title) + '</p>' : '') + '<p>' + esc(r.body) + '</p>' +
       (r.reply_text ? '<div class="m24r-reply"><b>Відповідь Moda24</b>' + esc(r.reply_text) + '</div>' : '');
     vw.querySelector('.m24r-view').classList.toggle('nop', !r._p.length);
@@ -371,14 +361,13 @@
     '<div class="m24r-fh"><h3>Ваш відгук</h3>' + (PNAME ? '<p>' + esc(PNAME) + '</p>' : '') + '</div>' +
     '<div class="m24r-f" data-k="ph">Фото у виробі * <small>від 1 до ' + MAX_PHOTOS + '</small><div class="m24r-tiles"></div></div>' +
     '<div class="m24r-f" data-k="rate">Оцінка *<span class="m24r-rate">' + [1, 2, 3, 4, 5].map(function (n) { return '<button type="button" data-r="' + n + '" aria-label="' + n + ' з 5">' + STAR + '</button>'; }).join('') + '<em></em></span></div>' +
-    '<div class="m24r-f">Як сидить розмір?<span class="m24r-seg"><button type="button" data-v="small">Тісніше</button><button type="button" data-v="true">Саме в розмір</button><button type="button" data-v="large">Вільніше</button></span></div>' +
     '<label class="m24r-f" data-k="b">Враження *<textarea name="b" maxlength="1400" placeholder="Тканина, посадка, як виглядає на вас"></textarea></label>' +
     '<label class="m24r-f" data-k="n">Ім\'я *<input type="text" name="n" maxlength="60" autocomplete="given-name"></label>' +
     '<label class="m24r-f" data-k="ph2">Телефон <small>за бажанням</small><input type="tel" name="p" maxlength="20" inputmode="tel" autocomplete="tel" placeholder="+380"><small class="m24r-hint">Номер бачить лише магазин — на сайті він не публікується. Він допоможе підтвердити покупку й зв\'язатися з вами, якщо знадобиться.</small></label>' +
     '<input type="text" name="hp" class="m24r-hp" tabindex="-1" autocomplete="off" aria-hidden="true">' +
     '<button type="submit" class="m24r-send">Надіслати відгук</button><div class="m24r-note" aria-live="polite"></div></form></div>';
   document.body.appendChild(sh);
-  var form = sh.querySelector('form'), formHtml = form.innerHTML, rating = 0, fit = '', files = [], opened = 0;
+  var form = sh.querySelector('form'), formHtml = form.innerHTML, rating = 0, files = [], opened = 0;
   function bindForm() {
     form = sh.querySelector('form');
     form.n.addEventListener('input', function () { mark('n', false); });
@@ -387,7 +376,7 @@
     tiles();
   }
   function shOpen() {
-    if (!sh.querySelector('form.m24r-form textarea')) { sh.querySelector('.m24r-box').innerHTML = '<button type="button" class="m24r-x" aria-label="Закрити">✕</button><form class="m24r-form" novalidate>' + formHtml + '</form>'; rating = 0; fit = ''; files = []; bindForm(); }
+    if (!sh.querySelector('form.m24r-form textarea')) { sh.querySelector('.m24r-box').innerHTML = '<button type="button" class="m24r-x" aria-label="Закрити">✕</button><form class="m24r-form" novalidate>' + formHtml + '</form>'; rating = 0; files = []; bindForm(); }
     sh.classList.add('on'); document.documentElement.style.overflow = 'hidden'; if (!opened) opened = Date.now();
   }
   function note(t, c) { var n = sh.querySelector('.m24r-note'); n.textContent = t; n.className = 'm24r-note ' + (c || ''); }
@@ -405,7 +394,6 @@
     var t = e.target;
     if (t === sh || t.closest('.m24r-x')) return closeAll();
     var rb = t.closest('.m24r-rate button'); if (rb) { rating = +rb.getAttribute('data-r'); mark('rate', false); sh.querySelectorAll('.m24r-rate button').forEach(function (b) { b.classList.toggle('on', +b.getAttribute('data-r') <= rating); }); sh.querySelector('.m24r-rate em').textContent = RATE_TXT[rating]; return; }
-    var sb = t.closest('.m24r-seg button'); if (sb) { fit = fit === sb.getAttribute('data-v') ? '' : sb.getAttribute('data-v'); sh.querySelectorAll('.m24r-seg button').forEach(function (b) { b.classList.toggle('on', b.getAttribute('data-v') === fit); }); return; }
     var rm = t.closest('[data-rm]'); if (rm) { e.preventDefault(); files.splice(+rm.getAttribute('data-rm'), 1); tiles(); }
   });
   sh.addEventListener('submit', function (e) {
@@ -426,7 +414,7 @@
       if (ok.indexOf(false) !== -1) throw new Error('decode');
       return fetchT(API + '?a=submit', { method: 'POST', headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify({
         product_id: PID, product_url: PID, product_name: PNAME || null,
-        author_name: name, phone: phone || null, rating: rating, body: body, size_fit: fit || null,
+        author_name: name, phone: phone || null, rating: rating, body: body,
         hp: form.hp.value, t: opened ? Date.now() - opened : null
       }) }, 20000);
     }).then(function (rev) {

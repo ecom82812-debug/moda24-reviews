@@ -154,7 +154,6 @@ const PAGE = 20;
 
 const $ = s => document.querySelector(s);
 const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-const FIT = { small: 'Сидить тісніше', 'true': 'Саме в розмір', large: 'Сидить вільніше' };
 const STAR = '<svg viewBox="0 0 24 24"><path fill="currentColor" d="M12 2.8c.4 0 .7.2.9.6l2.3 4.7 5.2.8c.8.1 1.1 1.1.5 1.7l-3.8 3.7.9 5.2c.1.8-.7 1.4-1.4 1L12 18l-4.6 2.5c-.7.4-1.6-.2-1.4-1l.9-5.2-3.8-3.7c-.6-.6-.3-1.6.5-1.7l5.2-.8 2.3-4.7c.2-.4.5-.6.9-.6z"/></svg>';
 const EXT = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4h6v6"/><path d="M20 4 10 14"/><path d="M19 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h5"/></svg>';
 
@@ -299,7 +298,6 @@ function card(r) {
         <div class="f">Оцінка<div class="stars" data-rating="${r.rating}">${[1, 2, 3, 4, 5].map(n => `<button data-r="${n}" class="${n <= r.rating ? 'on' : ''}" aria-label="${n} з 5">${STAR}</button>`).join('')}</div></div>
         <div class="row2">
           <label class="f">Дата<input class="in" type="datetime-local" data-f="created_at" value="${localDT(r.created_at)}"></label>
-          <label class="f">Розмір<select class="in" data-f="size_fit"><option value="">—</option>${Object.keys(FIT).map(k => `<option value="${k}"${r.size_fit === k ? ' selected' : ''}>${FIT[k]}</option>`).join('')}</select></label>
         </div>
         <label class="chk"><input type="checkbox" data-f="verified"${r.verified ? ' checked' : ''}>Покупка підтверджена</label>
       </div>
@@ -337,7 +335,6 @@ document.addEventListener('change', e => {
   const f = t.dataset.f;
   if (f === 'verified') return saveField(c, f, t.checked);
   if (f === 'created_at') { if (!t.value) return; return saveField(c, f, new Date(t.value).toISOString()); }
-  if (f === 'size_fit') return saveField(c, f, t.value || null);
   if (f === 'author_name') { const v = t.value.trim(); if (!v) { toast("Ім'я не може бути порожнім", true); return; } return saveField(c, f, v); }
   saveField(c, f, t.value);
 });
