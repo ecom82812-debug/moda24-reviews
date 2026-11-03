@@ -5,7 +5,7 @@
 <title>Відгуки — сторінка товару</title>
 <!-- moda24.online: відгуки на сторінці товару — сітка карток «фото + враження».
      Читає готові файли зі сховища review-cache (база на перегляд не навантажується).
-     Відгук і фото надсилаються через функцію reviews-api. Фото обов'язкові. -->
+     Відгук і фото (за бажанням) надсилаються через функцію reviews-api. -->
 <link rel="preconnect" href="https://lvyssuomgbccjmksetof.supabase.co" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -367,9 +367,9 @@
   sh.className = 'm24r-ov m24r-sh'; sh.setAttribute('role', 'dialog'); sh.setAttribute('aria-modal', 'true'); sh.setAttribute('aria-label', 'Написати відгук');
   sh.innerHTML = '<div class="m24r-box"><button type="button" class="m24r-x" aria-label="Закрити">✕</button><form class="m24r-form" novalidate>' +
     '<div class="m24r-fh"><h3>Ваш відгук</h3>' + (PNAME ? '<p>' + esc(PNAME) + '</p>' : '') + '</div>' +
-    '<div class="m24r-f" data-k="ph">Фото у виробі * <small>від 1 до ' + MAX_PHOTOS + '</small><div class="m24r-tiles"></div></div>' +
     '<div class="m24r-f" data-k="rate">Оцінка *<span class="m24r-rate">' + [1, 2, 3, 4, 5].map(function (n) { return '<button type="button" data-r="' + n + '" aria-label="' + n + ' з 5">' + STAR + '</button>'; }).join('') + '<em></em></span></div>' +
     '<label class="m24r-f" data-k="b">Враження *<textarea name="b" maxlength="1400" placeholder="Якість, тканина, посадка — що варто знати іншим покупцям"></textarea></label>' +
+    '<div class="m24r-f" data-k="ph">Фото <small>за бажанням, до ' + MAX_PHOTOS + '</small><div class="m24r-tiles"></div></div>' +
     '<label class="m24r-f" data-k="n">Ім\'я *<input type="text" name="n" maxlength="60" autocomplete="given-name"></label>' +
     '<label class="m24r-f" data-k="ph2">Телефон <small>за бажанням</small><input type="tel" name="p" maxlength="20" inputmode="tel" autocomplete="tel" placeholder="+380"><small class="m24r-hint">Номер бачить лише магазин — на сайті він не публікується. Він допоможе підтвердити покупку й зв\'язатися з вами, якщо знадобиться.</small></label>' +
     '<input type="text" name="hp" class="m24r-hp" tabindex="-1" autocomplete="off" aria-hidden="true">' +
@@ -407,8 +407,7 @@
   sh.addEventListener('submit', function (e) {
     e.preventDefault();
     var name = form.n.value.trim(), body = form.b.value.trim();
-    mark('ph', !files.length); mark('rate', !rating); mark('b', !body); mark('n', !name);
-    if (!files.length) return note('Додайте хоча б одне фото', 'err');
+    mark('rate', !rating); mark('b', !body); mark('n', !name);
     if (!rating) return note('Оберіть оцінку', 'err');
     if (!body) return note('Напишіть кілька слів про товар', 'err');
     if (!name) return note('Вкажіть ім\'я', 'err');
@@ -426,7 +425,7 @@
         hp: form.hp.value, t: opened ? Date.now() - opened : null
       }) }, 20000);
     }).then(function (rev) {
-      if (!rev || !rev.id) return;
+      if (!rev || !rev.id || !files.length) return;
       btn.textContent = 'Завантажуємо фото…';
       return files.reduce(function (p, f) {
         return p.then(function () { return sendPhoto(rev.id, rev.k, f).then(function () { sent++; }, function () { failed++; }); });

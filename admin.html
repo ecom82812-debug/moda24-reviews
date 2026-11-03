@@ -82,7 +82,7 @@ a{color:inherit}
 .ph{position:relative;width:76px;aspect-ratio:3/4;border-radius:10px;overflow:hidden;background:var(--tint)}
 .ph img{width:100%;height:100%;object-fit:cover;display:block;cursor:zoom-in}
 .ph button{position:absolute;top:4px;right:4px;width:22px;height:22px;border-radius:50%;border:0;background:rgba(0,0,0,.6);color:#fff;font-size:11px;display:grid;place-items:center}
-.nophoto{font-size:13px;color:var(--wait);background:var(--waitbg);padding:8px 12px;border-radius:10px}
+.nophoto{font-size:13px;color:var(--soft)}
 .c-foot{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding-top:12px;border-top:1px solid var(--line)}
 .c-foot .meta{margin-right:auto;font-size:12px;color:var(--soft)}
 .saved{font-size:12px;color:var(--ok);opacity:0;transition:opacity .3s}
@@ -303,7 +303,7 @@ function card(r) {
       </div>
       <div class="f" style="gap:10px">
         <label class="f">Текст відгуку<textarea class="ta" data-f="body" maxlength="1400">${esc(r.body)}</textarea></label>
-        <div class="f">Фото${photos.length ? `<div class="photos">${photos.map(p => `<div class="ph"><img src="${esc(p.thumb_url || p.url)}" data-full="${esc(p.orig_url || p.url)}" loading="lazy" alt=""><button data-delphoto="${p.id}" title="Видалити фото">✕</button></div>`).join('')}</div>` : '<div class="nophoto">Без фото — опублікувати не можна</div>'}</div>
+        <div class="f">Фото${photos.length ? `<div class="photos">${photos.map(p => `<div class="ph"><img src="${esc(p.thumb_url || p.url)}" data-full="${esc(p.orig_url || p.url)}" loading="lazy" alt=""><button data-delphoto="${p.id}" title="Видалити фото">✕</button></div>`).join('')}</div>` : '<div class="nophoto">Без фото</div>'}</div>
         <label class="f">Відповідь Moda24 <textarea class="ta reply" data-f="reply_text" maxlength="1000" placeholder="Напишіть відповідь — вона з'явиться під відгуком на сайті">${esc(r.reply_text || '')}</textarea></label>
       </div>
     </div>
@@ -360,7 +360,6 @@ document.addEventListener('click', async e => {
     if (!confirm('Видалити це фото?')) return;
     const p = r.review_photos.find(x => x.id === dp.dataset.delphoto);
     try {
-      if (r.approved && r.review_photos.length === 1) throw new Error('Це останнє фото опублікованого відгуку. Спершу сховайте відгук з сайту.');
       await del(`review_photos?id=eq.${p.id}`);
       await removeFiles([p.url, p.thumb_url, p.orig_url]);
       r.review_photos = r.review_photos.filter(x => x.id !== p.id);

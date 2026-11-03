@@ -1,7 +1,6 @@
 // moda24.online — API відгуків. Сайт звертається тільки сюди; ключі Supabase живуть лише на сервері.
 //  GET  ?a=ratings | ?a=product&uid=…&offset=&rating=&fit= | ?a=latest&offset=
 //  POST ?a=submit (JSON) | ?a=photo&id=…&k=… (FormData) | ?a=vote (JSON {id, v})
-// Відгук без фото не потрапляє на сайт: схвалити його не дасть база (тригер reviews_require_photo).
 import { createClient } from "npm:@supabase/supabase-js@2.45.4";
 
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
