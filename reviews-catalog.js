@@ -8,10 +8,10 @@
 (function () {
   if (window.__m24rc) return; window.__m24rc = 1;
 
-  // тест нових плашок: ?badges=test вмикає до закриття вкладки, ?badges=off вимикає
+  // тест нових плашок: ?badges=test (палітра 3) або ?badges=test2 (палітра 2) вмикає до закриття вкладки, ?badges=off вимикає
   try {
     var bq = (location.search.match(/[?&]badges=(\w+)/) || [])[1];
-    if (bq === 'test') sessionStorage.setItem('m24bt', '1');
+    if (bq === 'test' || bq === 'test2') sessionStorage.setItem('m24bt', bq === 'test2' ? '2' : '3');
     if (bq === 'off') sessionStorage.removeItem('m24bt');
     if (sessionStorage.getItem('m24bt')) {
       var bs = document.createElement('script');
