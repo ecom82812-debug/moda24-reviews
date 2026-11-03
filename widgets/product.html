@@ -47,6 +47,7 @@
 .m24r-hn small{display:block;font-size:12px;color:var(--soft)}
 .m24r-h .m24r-st svg{width:15px;height:15px}
 .m24r-t{grid-area:t;display:grid;gap:8px;min-width:0}
+.m24r-ok{justify-self:start;font-size:12px;font-weight:600;line-height:1;color:#3F6647;background:#E9F1EA;border-radius:4px;padding:5px 8px}
 .m24r-ftx{all:unset;cursor:pointer;font-size:15px;line-height:1.6;color:#3A3235;white-space:pre-line;overflow-wrap:anywhere;display:-webkit-box;-webkit-line-clamp:6;-webkit-box-orient:vertical;overflow:hidden}
 .m24r-thumbs{grid-area:p;display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
 .m24r-thumbs::-webkit-scrollbar{display:none}
@@ -283,7 +284,7 @@
       var up = (r.up || 0), dn = (r.down || 0);
       return '<article class="m24r-fc" style="animation-delay:' + Math.min(i, 8) * 40 + 'ms">' +
         '<div class="m24r-h"><span class="m24r-ava">' + esc(name.charAt(0)) + '</span><span class="m24r-hn"><b>' + esc(name) + '</b><small>' + fmtD(r.created_at) + '</small></span>' + stars(+r.rating || 0) + '</div>' +
-        '<div class="m24r-t"><button type="button" class="m24r-ftx" data-i="' + i + '">' + esc(r.body) + '</button></div>' +
+        '<div class="m24r-t">' + (r.verified ? '<span class="m24r-ok">✓ Покупка підтверджена</span>' : '') + '<button type="button" class="m24r-ftx" data-i="' + i + '">' + esc(r.body) + '</button></div>' +
         (r._p.length ? '<div class="m24r-thumbs">' + r._p.map(function (u, k) { return '<button type="button" class="m24r-th" data-i="' + i + '" data-k="' + k + '" aria-label="Фото ' + (k + 1) + '">' + img(small(u), u) + '</button>'; }).join('') + '</div>' : '') +
         (r.reply_text ? '<div class="m24r-rp"><b>Відповідь Moda24</b>' + esc(r.reply_text) + '</div>' : '') +
         '<div class="m24r-ft"><span>Відгук корисний?</span>' +
@@ -316,7 +317,7 @@
   function openView(r, k) {
     cr = r; var name = (r.author_name || '').trim() || 'Покупець';
     vw.querySelector('.m24r-vtx').innerHTML = stars(+r.rating || 0) + '<div><div class="m24r-name">' + esc(name) + '</div><small style="font-size:12px;color:var(--soft)">' + fmtD(r.created_at) + '</small></div>' +
-      (r.verified ? '<div class="m24r-tags"><span>✓ Покупка підтверджена</span></div>' : '') +
+      (r.verified ? '<span class="m24r-ok">✓ Покупка підтверджена</span>' : '') +
       (r.title ? '<p style="font-weight:600">' + esc(r.title) + '</p>' : '') + '<p>' + esc(r.body) + '</p>' +
       (r.reply_text ? '<div class="m24r-reply"><b>Відповідь Moda24</b>' + esc(r.reply_text) + '</div>' : '');
     vw.querySelector('.m24r-view').classList.toggle('nop', !r._p.length);
