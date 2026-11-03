@@ -28,6 +28,9 @@
 .m24r-sum .m24r-st svg{width:14px;height:14px}
 .m24r-sum span{display:inline-flex;align-items:center;gap:6px}
 .m24r-sum em{font-style:normal;margin-left:6px}
+.m24r.is-empty{padding-top:28px;padding-bottom:36px}
+.m24r.is-empty .m24r-head{border-bottom:0;padding-bottom:0;align-items:center}
+.m24r.is-empty .m24r-sum{font-size:14px}
 .m24r-add{all:unset;box-sizing:border-box;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:8px;height:44px;padding:0 20px;border:1px solid var(--ink);border-radius:8px;font-size:14px;font-weight:600;color:var(--ink);transition:background .2s,color .2s}
 .m24r-add:hover{background:var(--ink);color:#fff}
 .m24r-add svg{width:16px;height:16px}
@@ -80,6 +83,7 @@
 
 @media (min-width:981px){
   .m24r{padding:80px 0 88px}
+  .m24r.is-empty{padding:48px 0 56px}
   .m24r-title{font-size:46px}
   .m24r-feed{margin-top:32px;gap:16px}
   .m24r-more{width:auto;padding:0 40px;margin:36px auto 0}
@@ -259,9 +263,13 @@
     var n = all.length;
     $('.m24r-n').textContent = n ? n : '';
     $('[data-add]').hidden = !n;
+    root.classList.toggle('is-empty', !n);
     if (!n) {
-      $('.m24r-sum').hidden = true;
-      $('.m24r-body').innerHTML = '<div class="m24r-empty">' + CAM + '<b>Відгуків поки немає</b><p>Поділіться враженням і фото — це допоможе іншим обрати розмір.</p><button type="button" class="m24r-add" data-add>Написати відгук</button></div>';
+      // відгуків ще немає — компактний рядок замість великого блоку, щоб не відсувати «З цим також купують»
+      $('.m24r-sum').innerHTML = '<span>Відгуків ще немає — ваш може стати першим</span>';
+      $('.m24r-sum').hidden = false;
+      $('[data-add]').hidden = false;
+      $('.m24r-body').innerHTML = '';
       return;
     }
     var sum = 0;
@@ -361,7 +369,7 @@
     '<div class="m24r-fh"><h3>Ваш відгук</h3>' + (PNAME ? '<p>' + esc(PNAME) + '</p>' : '') + '</div>' +
     '<div class="m24r-f" data-k="ph">Фото у виробі * <small>від 1 до ' + MAX_PHOTOS + '</small><div class="m24r-tiles"></div></div>' +
     '<div class="m24r-f" data-k="rate">Оцінка *<span class="m24r-rate">' + [1, 2, 3, 4, 5].map(function (n) { return '<button type="button" data-r="' + n + '" aria-label="' + n + ' з 5">' + STAR + '</button>'; }).join('') + '<em></em></span></div>' +
-    '<label class="m24r-f" data-k="b">Враження *<textarea name="b" maxlength="1400" placeholder="Тканина, посадка, як виглядає на вас"></textarea></label>' +
+    '<label class="m24r-f" data-k="b">Враження *<textarea name="b" maxlength="1400" placeholder="Якість, тканина, посадка — що варто знати іншим покупцям"></textarea></label>' +
     '<label class="m24r-f" data-k="n">Ім\'я *<input type="text" name="n" maxlength="60" autocomplete="given-name"></label>' +
     '<label class="m24r-f" data-k="ph2">Телефон <small>за бажанням</small><input type="tel" name="p" maxlength="20" inputmode="tel" autocomplete="tel" placeholder="+380"><small class="m24r-hint">Номер бачить лише магазин — на сайті він не публікується. Він допоможе підтвердити покупку й зв\'язатися з вами, якщо знадобиться.</small></label>' +
     '<input type="text" name="hp" class="m24r-hp" tabindex="-1" autocomplete="off" aria-hidden="true">' +
