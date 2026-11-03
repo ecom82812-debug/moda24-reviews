@@ -9,7 +9,11 @@
   if (window.__m24bt) return; window.__m24bt = 1;
   document.documentElement.classList.add('m24bt');
   var pal = '3';
-  try { pal = sessionStorage.getItem('m24bt') || '3'; } catch (e) {}
+  try {
+    var q = (location.search.match(/[?&]badges=(\w+)/) || [])[1];
+    if (q === 'test2' || q === 'test') sessionStorage.setItem('m24bt', q === 'test2' ? '2' : '3');
+    pal = sessionStorage.getItem('m24bt') === '2' ? '2' : '3';
+  } catch (e) {}
 
   var S = 'html.m24bt body .t-catalog__card ';
   var css = document.createElement('style');
