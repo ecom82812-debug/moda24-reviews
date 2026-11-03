@@ -185,9 +185,7 @@ Deno.serve(async (req) => {
         const b = await req.json().catch(() => ({}));
         if (b.hp || (typeof b.t === "number" && b.t < 3000)) return reply({ ok: true, id: null }, 200, origin);
 
-        const okHour = await db.rpc("api_hit", { p_key: `sub:h:${ipHash}`, p_limit: 3, p_window_seconds: 3600 });
-        const okDay = await db.rpc("api_hit", { p_key: `sub:d:${ipHash}`, p_limit: 8, p_window_seconds: 86400 });
-        if (okHour.data === false || okDay.data === false) return reply({ error: "rate_limited" }, 429, origin);
+        // ліміту кількості відгуків немає (власник прибрав); від ботів — пастка hp і мінімальний час заповнення, далі модерація
 
         const product_id = clean(b.product_id, 300);
         const author_name = clean(b.author_name, 60);
