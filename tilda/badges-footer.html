@@ -6,6 +6,15 @@ html body #allrecords .mblok-badge.mblok-badge--new{background:#4F7A57!important
 html body #allrecords .mblok-badge.mblok-badge--sale,html body #allrecords .mblok-badge.mblok-badge--disc{background:#B5303F!important;color:#fff!important}
 html body #allrecords .mblok-badge.mblok-badge--out{background:#8E2433!important;color:#fff!important}
 @media (min-width:961px){html body #allrecords .mblok-badge.mblok-badge{font-size:11px!important;padding:6px 9px 5px!important}}
+/* кошик: лічильник кількості по центру, логотип Нової Пошти в пропорції до Укрпошти */
+html.mbc .t706__product-minus,html.mbc .t706__product-plus{display:flex!important;align-items:center;justify-content:center;width:16px;height:16px}
+html.mbc .t706__product-plusminus img{position:static!important;display:block!important;height:14px!important}
+html.mbc .t706__product-plusminus,html.mbc .t706__product-amount{vertical-align:middle!important}
+html.mbc .mbd-seg button img[alt="Нова Пошта"]{height:32px!important;width:auto!important;max-height:none!important}
+@media (min-width:641px){html.mbc .t706__product.t706__product{display:flex!important;align-items:center!important}
+html.mbc .t706__product-thumb,html.mbc .t706__product-plusminus,html.mbc .t706__product-del-wrapper{flex:none}
+html.mbc .t706__product-title{flex:1 1 auto;min-width:0}
+html.mbc .t706__product-amount{flex:none;width:auto!important;min-width:80px}}
 </style>
 <script>
 /* РОЗПРОДАЖ — темніший за ЗНИЖКУ (у скрипті плашок обидві мають тип sale) */
